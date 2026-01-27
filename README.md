@@ -1,1 +1,15 @@
-[![Open in Visual Studio Code](https://classroom.github.com/assets/open-in-vscode-2e0aaae1b6195c2367325f4f02e2d04e9abb55f0b24a779b69b11b9e10269abc.svg)](https://classroom.github.com/online_ide?assignment_repo_id=22381432&assignment_repo_type=AssignmentRepo)
+[INIT] 프로젝트 초기 세팅(첫 셋업, 폴더, 씬, 패키지)
+
+[ADD] 기능/파일 추가(새 기능, 새 스크립트, 새 UI)  : 없던 기능이 생김
+
+[UPDATE] 기능 개선/변경(기존 기능 동작 변경, 밸런스 조정)  : 있던 기능의 동작이 바뀜
+
+[FIX] 버그 수정(동작 오류, 크래시, 예외) : 동작이 안되던걸 코드 정리만
+
+[REMOVE] 삭제(기능/파일 제거)
+
+[RENAME] 이름 변경(클래스/파일/폴더명)
+
+[REFACTOR] 리팩터(동작 동일, 구조만 개선) : 동작은 그대로, 코드 정리만 (함수 분리, 중복 제거)
+
+[DOCS] 문서/README/주석 정리
