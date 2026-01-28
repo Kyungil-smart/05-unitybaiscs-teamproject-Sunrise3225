@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Freeze1Sec_Item : MonoBehaviour
+public class Freeze1SecItem : MonoBehaviour
 {
     //[Tooltip("이동기능 스크립트를 추가해 주세요.")]
     //[SerializeField] private CharacterMovement _player;

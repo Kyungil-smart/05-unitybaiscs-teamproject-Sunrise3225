@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Ammo_Item : MonoBehaviour
+public class AmmoItem : MonoBehaviour
 {
     [Tooltip("탄창수 회복량")]
     [SerializeField] private int _ammoValue;

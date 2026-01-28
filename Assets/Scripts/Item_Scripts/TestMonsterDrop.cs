@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class TestMonsterDrop : MonoBehaviour
 {
-    [SerializeField] private Drop_Item _dropItem;
+    [SerializeField] private DropItem _dropItem;
 
     void Update()
     {

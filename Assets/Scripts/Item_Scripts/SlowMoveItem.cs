@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SlowMove_Item : MonoBehaviour
+public class SlowMoveItem : MonoBehaviour
 {
     [Tooltip("이동속도 디버프 수치를 넣어주세요.")]
     [SerializeField] private float _slowMoveVelue;

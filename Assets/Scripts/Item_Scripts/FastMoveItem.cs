@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FastMove_Item : MonoBehaviour
+public class FastMoveItem : MonoBehaviour
 {
     [Tooltip("이동속도 버프 수치를 넣어주세요.")]
     [SerializeField] private float _fastMoveVelue;

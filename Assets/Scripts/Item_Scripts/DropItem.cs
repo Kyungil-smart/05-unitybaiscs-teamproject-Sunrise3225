@@ -13,7 +13,7 @@ using UnityEngine;
 // Destroy();
 // 전에 호출 하도록 하면 작동할 것으로 예상.
 
-public class Drop_Item : MonoBehaviour
+public class DropItem : MonoBehaviour
 {
     [Tooltip("드랍될 아이템의 오브젝트를 등록해 주세요.")]
     [SerializeField] private GameObject[] _itemList;

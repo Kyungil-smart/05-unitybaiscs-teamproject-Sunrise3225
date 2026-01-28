@@ -1,9 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Playables;
 
-public class Heal_Item : MonoBehaviour
+public class HealItem : MonoBehaviour
 {
     [Tooltip("체력 회복량")]
     [SerializeField] private int _healingValue;
