@@ -16,7 +16,7 @@ public class MonsterController : MonoBehaviour
 
     public ObjectType objectType;
     protected MonsterState monsterState = MonsterState.Patrol;
-    public PlayerController Player; // 플레이어 연결
+    public CharacterController Player; // 플레이어 연결
     
 
     [Range(0.01f, 2f)] public float turnSmoothTime = 0.1f;
@@ -30,7 +30,7 @@ public class MonsterController : MonoBehaviour
     public LayerMask IsTarget;
     public LayerMask BlockMask;
     
-    List<PlayerController> lastAttackTargets = new List<PlayerController>();
+    List<CharacterController> lastAttackTargets = new List<CharacterController>();
 
     [Header("Attack Root")]
     public Transform attackRoot_R;
@@ -222,10 +222,10 @@ public class MonsterController : MonoBehaviour
 
             for (int i = 0; i < size; i++)
             {
-                PlayerController target = hits[i].collider.GetComponent<PlayerController>();
+                CharacterController target = hits[i].collider.GetComponent<CharacterController>();
                 if (target != null && !lastAttackTargets.Contains(target))
                 {
-                    target.OnDamage(gameObject, Attack);
+                    target.PlayerTakeDamage(Attack);
                     lastAttackTargets.Add(target);
                     break;
                 }
@@ -268,7 +268,7 @@ public class MonsterController : MonoBehaviour
                 {
                     if (!IsTargetOnSight(collider.transform)) continue;
 
-                    PlayerController target = collider.GetComponent<PlayerController>();
+                    CharacterController target = collider.GetComponent<CharacterController>();
                     if (target.isActiveAndEnabled && !target.IsDead)
                     {
                         Player = target;
@@ -325,9 +325,9 @@ public class MonsterController : MonoBehaviour
             return true;
         }
 
-        PlayerController player = null;
+        CharacterController player = null;
         if (damager != null)
-            player = damager.GetComponentInParent<PlayerController>();
+            player = damager.GetComponentInParent<CharacterController>();
 
         if (player != null && player.isActiveAndEnabled && !player.IsDead) // 공격 받으면 바로 플레이어에게 돌진
         {
@@ -403,7 +403,7 @@ public class MonsterController : MonoBehaviour
     }
     public virtual void OnCollisionEnter(Collision collision)
     {
-        PlayerController target = collision.collider.GetComponentInParent<PlayerController>();
+        CharacterController target = collision.collider.GetComponentInParent<CharacterController>();
         if (target == null) return;
         if (!target.isActiveAndEnabled) return;
         if (!isActiveAndEnabled) return;
@@ -415,7 +415,7 @@ public class MonsterController : MonoBehaviour
     }
     public virtual void OnCollisionExit(Collision collision)
     {
-        PlayerController target = collision.collider.GetComponent<PlayerController>();
+        CharacterController target = collision.collider.GetComponent<CharacterController>();
         if (target == null) return;
         if (!target.isActiveAndEnabled) return;
         if (!this.isActiveAndEnabled) return;
@@ -426,11 +426,11 @@ public class MonsterController : MonoBehaviour
         _coDotDamage = null;
     }
 
-    IEnumerator CoStartDotDamage(PlayerController target)
+    IEnumerator CoStartDotDamage(CharacterController target)
     {
         while (true)
         {
-            target.OnDamage(gameObject, Attack / 2f);
+            target.PlayerTakeDamage(Attack / 2f);
             yield return new WaitForSeconds(0.4f);
         }
     }

@@ -24,8 +24,8 @@ public class CharacterController : MonoBehaviour
 
      [SerializeField] private int _playerLife;
      private bool _isGrounded;
-     private int _currentHp;                                // 현재 체력
-     private bool _isDead = false;                          // 생존 여부
+     private float _currentHp;                                // 현재 체력
+     public bool IsDead = false;                          // 생존 여부
      
 
      private void Awake()
@@ -107,7 +107,7 @@ public class CharacterController : MonoBehaviour
          Cursor.visible = true;
      }
      
-     private void PlayerTakeDamage(int damage)
+     public void PlayerTakeDamage(float damage)
      {
          _currentHp -= damage;
          
@@ -118,7 +118,7 @@ public class CharacterController : MonoBehaviour
          }
          if (_playerLife <= 0)
          {
-             _isDead = true;
+             IsDead = true;
              GameOver();
          }
      }
