@@ -6,6 +6,8 @@ using UnityEngine.UIElements;
 
 public class CharacterMovement : MonoBehaviour
 {
+    public LayerMask GroundLayer;
+    
     [SerializeField] private Transform _cameraView;
     
     [SerializeField] private float _moveSpeed;
@@ -14,9 +16,16 @@ public class CharacterMovement : MonoBehaviour
     [SerializeField] private float _mouseSensitivity;
     [SerializeField] private float _pitchMin;
     [SerializeField] private float _pitchMax;
-    
+
+    public float GroundDistance = 0.1f;
+    private Rigidbody _rigidbody;
     private bool _isGrounded;
     private float _pitch;
+
+    public void Start()
+    {
+        _rigidbody = GetComponent<Rigidbody>();
+    }
 
     private void Update()
     {
@@ -49,12 +58,11 @@ public class CharacterMovement : MonoBehaviour
 
     private void Jump()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        _isGrounded = Physics.CheckSphere(_cameraView.position, GroundDistance, GroundLayer);
+        
+        if (Input.GetButtonDown("Jump") && _isGrounded)
         {
-            
-            
+            _rigidbody.AddForce(Vector3.up * _jumpForce, ForceMode.Impulse);
         }
-
     }
-
 }
