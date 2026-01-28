@@ -5,8 +5,6 @@ using UnityEngine;
 
 public class CharacterController : MonoBehaviour
 {
-
-    
      [SerializeField] private LayerMask GroundLayer;           // 레이어 "땅" 탐지
      [SerializeField] private int _maxHp = 100;                      // 플레이어의 최대체력
      [SerializeField] private float _attackRange;           // 사거리
@@ -127,6 +125,4 @@ public class CharacterController : MonoBehaviour
      {
         _rigidbody.AddForce(Vector3.up * _jumpForce, ForceMode.Impulse);
      }
-     
-     
 }
