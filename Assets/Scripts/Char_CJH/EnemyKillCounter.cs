@@ -6,12 +6,12 @@ public class EnemyKillCounter : MonoBehaviour
 {
     private int _killCount;
 
-    // TODO 적 처치 시 Counter 메서드 추가해 주세요.
     public int Counter
     {
         get { return _killCount; }
     }
     
+    // TODO 적 처치 시 AddKill 메서드 추가해 주세요.
     public void AddKill()
     {
         _killCount++;
