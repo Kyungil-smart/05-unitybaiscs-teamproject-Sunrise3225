@@ -4,15 +4,24 @@ using UnityEngine;
 
 public class Freeze1Sec_Item : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    [Tooltip("이동기능 스크립트를 추가해 주세요.")]
+    [SerializeField] private CharacterMovement _player;
+
+    private void OnTriggerEnter(Collider other)
     {
-        
+        if (!other.CompareTag("Player")) return;
+
+        if (_player.enabled == true)
+        {
+            StartCoroutine(Freeze1SecMove());
+        }
     }
 
-    // Update is called once per frame
-    void Update()
+    private IEnumerator Freeze1SecMove()
     {
-        
+        _player.enabled = false;
+        yield return new WaitForSeconds(1f);
+        _player.enabled = true;
+        Destroy(gameObject);
     }
 }
