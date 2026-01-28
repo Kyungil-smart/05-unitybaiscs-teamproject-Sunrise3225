@@ -6,7 +6,7 @@ using UnityEngine;
 // 이 스크립트를 컴포넌트한 오브젝트를 몬스터 프리펩의 자식 오브젝트로 등록
 // 죽음 관련 함수 스크립트에서
 // [SerializeField] private Drop_Item _dropItem;
-// 선언
+// 필드로 선언
 // 몬스터 죽음 관련 함수에(혹은 코드에) 
 // _dropItem.MakeDropItem();
 // 메서드를
