@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Ammo_Item : MonoBehaviour
 {
+    [Tooltip("탄창수 회복량")]
     [SerializeField] private int _ammoValue;
 
     //private void OnTriggerEnter(Collider other)
