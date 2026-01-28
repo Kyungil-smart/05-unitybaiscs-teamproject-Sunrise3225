@@ -6,7 +6,7 @@ using UnityEngine.UIElements;
 
 public class CharacterMovement : MonoBehaviour
 {
-    [SerializeField] private Transform _cameraView;
+    public Transform _cameraView;
     
     [SerializeField] private float _moveSpeed;
     

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BombFunction : MonoBehaviour
+public class BombObject : MonoBehaviour
 {
     private int _health;
 
