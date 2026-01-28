@@ -5,6 +5,7 @@ using UnityEngine.Playables;
 
 public class Heal_Item : MonoBehaviour
 {
+    [Tooltip("체력 회복량")]
     [SerializeField] private int _healingValue;
 
     //private void OnTriggerEnter(Collider other)
