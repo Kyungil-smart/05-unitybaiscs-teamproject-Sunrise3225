@@ -5,8 +5,8 @@ using UnityEngine;
 
 public class CharacterController : MonoBehaviour
 {
-     [SerializeField] private LayerMask GroundLayer;           // 레이어 "땅" 탐지
-     [SerializeField] private int _maxHp = 100;                      // 플레이어의 최대체력
+     [SerializeField] private LayerMask GroundLayer;        // 레이어 "땅" 탐지
+     [SerializeField] private int _maxHp = 100;             // 플레이어의 최대체력
      [SerializeField] private float _attackRange;           // 사거리
      [SerializeField] private float _jumpForce;             // 점프력
      [SerializeField] private int _attackDamage;            // 데미지 입히기
@@ -19,6 +19,10 @@ public class CharacterController : MonoBehaviour
      private IDamageable _targetDamageable;
      private Transform _targetTransform;
      private Camera _camera;
+     
+     [SerializeField] private Transform _rayStartPoint;
+     [SerializeField] private Transform _rayDirPoint;
+     private Ray _ray;
 
      [SerializeField] private int _playerLife;
      private bool _isGrounded;
@@ -39,7 +43,7 @@ public class CharacterController : MonoBehaviour
 
      private void Update()
      {
-         // DetectTarget();
+         DetectTarget();
          
          Vector3 rayStartPos = transform.position + Vector3.up * 0.1f;
          _isGrounded = Physics.Raycast(rayStartPos, Vector3.down, 0.2f, GroundLayer);
@@ -49,7 +53,6 @@ public class CharacterController : MonoBehaviour
          if (Input.GetMouseButtonDown(0)) Fire();
          
          if (Input.GetKeyDown(KeyCode.Space) && _isGrounded) Jump();
-         
          // RefreshMagazineUI();
      }
 
@@ -64,6 +67,27 @@ public class CharacterController : MonoBehaviour
      {
      }
 
+     private void DetectTarget()
+     {
+         Vector3 direction = GetDirection();
+         _ray = new Ray(_rayStartPoint.position, direction);
+         RaycastHit hit;
+
+         if (Physics.Raycast(_ray, out hit, _attackRange, _attackTargetLayer))
+         {
+             if (_targetTransform == hit.transform) return;
+             _targetTransform = hit.transform;
+             _targetDamageable = hit.transform.GetComponent<IDamageable>();
+             _targetDamageable?.LockOn(true);
+         }
+         else
+         {
+             _targetDamageable?.LockOn(false);
+             _targetDamageable = null;
+             _targetTransform = null;
+         }
+     }
+     
      private void Fire()
      {
          _currentMagazine--;
@@ -73,29 +97,9 @@ public class CharacterController : MonoBehaviour
          _targetDamageable.TakeDamage(_attackDamage); 
      }
 
-     private void DetectTarget()
-     {
-         Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
-         RaycastHit hit;
-
-         if (Physics.Raycast(ray, out hit, _attackRange, _attackTargetLayer))
-         {
-             if (_targetTransform == hit.transform) return;
-             _targetTransform = hit.transform;
-             _targetDamageable = hit.transform.GetComponent<IDamageable>();
-             _targetDamageable.LockOn(true);
-         }
-         else
-         {
-             _targetDamageable?.LockOn(false);
-             _targetDamageable = null;
-             _targetTransform = null;
-         }
-     }
-
      private void CursorLock(bool isLocked)
      {
-         Cursor.lockState = isLocked ? CursorLockMode.None : CursorLockMode.Locked;
+         Cursor.lockState = isLocked ? CursorLockMode.Locked : CursorLockMode.None;
          Cursor.visible = !isLocked;
      }
 
@@ -124,5 +128,17 @@ public class CharacterController : MonoBehaviour
      private void Jump()
      {
         _rigidbody.AddForce(Vector3.up * _jumpForce, ForceMode.Impulse);
+     }
+
+     private Vector3 GetDirection()
+     {
+         return (_rayDirPoint.position - _rayStartPoint.position).normalized;
+     }
+
+     private void OnDrawGizmos()
+     {
+         Vector3 direction = GetDirection();
+         Gizmos.color = Color.red;
+         Gizmos.DrawRay(_ray.origin, _ray.direction * _attackRange);
      }
 }
