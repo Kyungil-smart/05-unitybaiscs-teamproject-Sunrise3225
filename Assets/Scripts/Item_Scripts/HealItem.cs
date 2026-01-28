@@ -11,11 +11,11 @@ public class HealItem : MonoBehaviour
     //{
     //    if (!other.CompareTag("Player")) return;
 
-    //    플레이어능력치 player = other.GetComponent<플레이어능력치>();
+    //    CharacterController player = other.GetComponent<CharacterController>();
 
     //    if (player == null) return;
 
-    //    player.플레이어채력 += _healingValue;
+    //    player._currentHp += _healingValue;
 
     //    if (player.플레이어채력 > player.플레이어최대채력)
     //    {
