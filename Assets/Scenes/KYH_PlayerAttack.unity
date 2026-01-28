@@ -345,14 +345,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cbcdfdcdd70c52447ad72d7c33498cd0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _spawnPrefab: {fileID: 7377295920680937982, guid: 1e8d60c00e1bf9f42877741041485204, type: 3}
+  _spawnPrefabs:
+  - {fileID: 7377295920680937982, guid: 1e8d60c00e1bf9f42877741041485204, type: 3}
+  - {fileID: 5316347590048543990, guid: 5bcb11b53e6352b4fb41f1d4fd4a050d, type: 3}
   _spawnPositions:
-  - {x: 9.01, y: 0, z: 0}
+  - {x: 11.41, y: 0, z: 1.67}
   - {x: 5.72, y: 0, z: 24.2}
   - {x: 7.04, y: 0, z: 12.09}
-  - {x: 33.6, y: 0, z: 3.08}
-  - {x: 34, y: 4.5, z: 15.16}
-  - {x: 34, y: 9, z: 15.16}
+  - {x: 10.82, y: 0, z: 12.09}
+  - {x: 11.09, y: 0.03, z: 26.5}
+  - {x: 8.15, y: 0, z: 18.98}
+  - {x: 8.47, y: 0, z: 6.4}
+  - {x: 6.95, y: 0, z: 2.56}
   _spawnDelay: 2
   _spawnInterval: 1
   _maxSpawnCount: 10

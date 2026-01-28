@@ -6,18 +6,31 @@ using Random = UnityEngine.Random;
 
 public class MonsterSpawn : MonoBehaviour
 {
-    [SerializeField] private GameObject _spawnPrefab;
+    [SerializeField] private List<GameObject> _spawnPrefabs = new List<GameObject>();
     [SerializeField] private List<Vector3> _spawnPositions = new List<Vector3>();
+    
+    // 코루틴 접근 필드
     [SerializeField] private float _spawnDelay;
     [SerializeField] private float _spawnInterval;
-    [SerializeField] private int _maxSpawnCount;
     
+    // 생성 위치를 랜덤으로 설정하기 위한 인덱스
+    private int _randPositionSelect; 
     private Vector3 _spawnPosition;
-    private int _randomSelect; // 생성 위치를 랜덤으로 설정하기 위한 정수형 변수
-    private int _spawnCount;
     
+    // 생성 몬스터를 랜덤으로 설정하기 위한 인덱스
+    private int _randMonsterSelect; 
+    private GameObject _spawnPrefab;
+    
+    // 최대 생성 몬스터를 설정하기 위한 필드
+    [SerializeField] private int _maxSpawnCount;
+    private int _spawnCount;
 
-    private void OnEnable()
+    private void Awake()
+    {
+        Init();
+    }
+
+    private void Start()
     {
         StartCoroutine(Spawn());
     }
@@ -27,15 +40,18 @@ public class MonsterSpawn : MonoBehaviour
         RandomSpawn();
     }
 
-    private void OnDisable()
+    private void Init()
     {
-        StopCoroutine(Spawn());
+        RandomSpawn();
     }
-
+    
     private void RandomSpawn()
     {
-        _randomSelect = Random.Range(0, _spawnPositions.Count);
-        _spawnPosition = _spawnPositions[_randomSelect];
+        _randPositionSelect = Random.Range(0, _spawnPositions.Count);
+        _spawnPosition = _spawnPositions[_randPositionSelect];
+        
+        _randMonsterSelect = Random.Range(0, _spawnPrefabs.Count);
+        _spawnPrefab = _spawnPrefabs[_randMonsterSelect];
     }
 
     private IEnumerator Spawn()
@@ -43,6 +59,7 @@ public class MonsterSpawn : MonoBehaviour
         while (_spawnCount < _maxSpawnCount)
         {
             Instantiate(_spawnPrefab, _spawnPosition, Quaternion.identity);
+            _spawnCount++;
             yield return new WaitForSeconds(_spawnDelay);
         }
     }
