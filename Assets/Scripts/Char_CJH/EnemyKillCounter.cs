@@ -4,10 +4,15 @@ using UnityEngine;
 
 public class EnemyKillCounter : MonoBehaviour
 {
-    private float _killCount;
+    private int _killCount;
 
-    // TODO 적 처치 시 KillCounter 메서드 추가해 주세요.
-    public void KillCounter()
+    // TODO 적 처치 시 Counter 메서드 추가해 주세요.
+    public int Counter
+    {
+        get { return _killCount; }
+    }
+    
+    public void AddKill()
     {
         _killCount++;
         Debug.Log($"처치 수 = {_killCount}");
