@@ -11,7 +11,6 @@ public class CharacterMovement : MonoBehaviour
     [SerializeField] private Transform _cameraView;
     
     [SerializeField] private float _moveSpeed;
-    [SerializeField] private float _jumpForce;
     
     [SerializeField] private float _mouseSensitivity;
     [SerializeField] private float _pitchMin;
@@ -31,7 +30,6 @@ public class CharacterMovement : MonoBehaviour
     {
         Rotation();
         Move();
-        Jump();
     }
 
     private void Rotation()
@@ -54,15 +52,5 @@ public class CharacterMovement : MonoBehaviour
         
         Vector3 movement = (transform.right * x + transform.forward * z).normalized;
         transform.position += movement * (_moveSpeed * Time.deltaTime);
-    }
-
-    private void Jump()
-    {
-        _isGrounded = Physics.CheckSphere(_cameraView.position, GroundDistance, GroundLayer);
-        
-        if (Input.GetButtonDown("Jump") && _isGrounded)
-        {
-            _rigidbody.AddForce(Vector3.up * _jumpForce, ForceMode.Impulse);
-        }
     }
 }
