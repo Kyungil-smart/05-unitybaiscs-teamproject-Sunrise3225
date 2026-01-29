@@ -18,7 +18,7 @@ public class CharacterController : MonoBehaviour
      private Rigidbody _rigidbody;
      private IDamageable _targetDamageable;
      private Transform _targetTransform;
-     private Camera _camera;
+     //private Camera _camera;
      
      [SerializeField] private Transform _rayStartPoint;
      [SerializeField] private Transform _rayDirPoint;
@@ -67,7 +67,7 @@ public class CharacterController : MonoBehaviour
 
      private void Init()
      {
-         _camera = Camera.main;
+         //_camera = Camera.main;
          _currentMagazine = _maxMagazine;
          _currentHp = _maxHp;
      }
