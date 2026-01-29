@@ -10,9 +10,4 @@ public class TestMons : MonoBehaviour, IDamageable
     {
         _health -= damage;
     }
-
-    public void LockOn(bool isLockOn)
-    {
-        
-    }
 }

@@ -78,11 +78,9 @@ public class CharacterController : MonoBehaviour
              if (_targetTransform == hit.transform) return;
              _targetTransform = hit.transform;
              _targetDamageable = hit.transform.GetComponent<IDamageable>();
-             _targetDamageable?.LockOn(true);
          }
          else
          {
-             _targetDamageable?.LockOn(false);
              _targetDamageable = null;
              _targetTransform = null;
          }
