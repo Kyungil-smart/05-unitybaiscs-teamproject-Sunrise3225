@@ -35,8 +35,8 @@ public class MonsterController : MonoBehaviour
     [Header("Attack Root")]
     public Transform attackRoot_R;
     public Transform attackRoot_L;
-    private Transform _attackRoot;
-    private bool _nextRight = true; // 왼손 오른손 번갈아가며 공격
+    protected Transform _attackRoot;
+    protected bool NextRight = true; // 왼손 오른손 번갈아가며 공격
 
     public Transform eyeTransform;
 
@@ -52,10 +52,10 @@ public class MonsterController : MonoBehaviour
     Coroutine _coDotDamage;
     Coroutine _coMove;
 
-    private Animator anim;
+    [HideInInspector] public Animator Anim;
+    [HideInInspector] public NavMeshAgent agent;   // 경로 계산 AI
     private Rigidbody rigid;
     private Collider coll;
-    NavMeshAgent agent;   // 경로 계산 AI
 
     public bool IsDead;
     private bool _init = false;
@@ -167,13 +167,13 @@ public class MonsterController : MonoBehaviour
         if (CanAutoAttack())
             UpdateAttack();
 
-        anim.SetFloat("Speed", agent.desiredVelocity.magnitude);
+        Anim.SetFloat("Speed", agent.desiredVelocity.magnitude);
     }
     private void Awake()
     {
         Init();
     }
-    public bool Init()
+    public virtual bool Init()
     {
         if (_init) return false;
         _init = true;
@@ -185,7 +185,7 @@ public class MonsterController : MonoBehaviour
         audioPlayer = GetComponent<AudioSource>();
 
         if (coll != null) coll.enabled = true;
-        anim = GetComponentInChildren<Animator>();
+        Anim = GetComponentInChildren<Animator>();
 
         InitStats(); // 스텟 초기화
         
@@ -195,7 +195,7 @@ public class MonsterController : MonoBehaviour
         monsterState = MonsterState.Patrol;
         transform.localScale = new Vector3(1f, 1f, 1f);
 
-        _attackRoot = (_nextRight ? attackRoot_R : attackRoot_L);
+        _attackRoot = (NextRight ? attackRoot_R : attackRoot_L);
 
         return true;
     }
@@ -243,6 +243,12 @@ public class MonsterController : MonoBehaviour
                     monsterState = MonsterState.Chase;
                     agent.speed = chaseSpeed;
                 }
+                if (!agent.enabled || !agent.isOnNavMesh)
+                {
+                    yield return null;
+                    continue;
+                }
+
                 // 추적 대상이 존재하면 경로 갱신하고 이동을 진행
                 agent.SetDestination(Player.transform.position);
             }
@@ -283,14 +289,14 @@ public class MonsterController : MonoBehaviour
     {
         monsterState = MonsterState.AttackBegin;
 
-        bool useRight = _nextRight;             
+        bool useRight = NextRight;             
         _attackRoot = useRight ? attackRoot_R : attackRoot_L;
-        _nextRight = !_nextRight;         
+        NextRight = !NextRight;         
 
         agent.isStopped = true;
-        anim.applyRootMotion = false;
+        Anim.applyRootMotion = false;
 
-        anim.SetTrigger(GetAttackTrigger(useRight));
+        Anim.SetTrigger(GetAttackTrigger(useRight));
     }
 
     #region Animation Event
@@ -366,8 +372,8 @@ public class MonsterController : MonoBehaviour
         _coKnockback = null;
         agent.enabled = false;
         if (deathClip != null) audioPlayer.PlayOneShot(deathClip, volumeScale: 0.1f); // 사망시 효과음
-        anim.applyRootMotion = true;
-        anim.SetTrigger("Die");
+        Anim.applyRootMotion = true;
+        Anim.SetTrigger("Die");
     }
     
     IEnumerator CoKnockBack()
