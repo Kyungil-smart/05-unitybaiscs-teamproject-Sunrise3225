@@ -2,32 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BombObject : MonoBehaviour
+public class BombObject : MonoBehaviour, IDamageable
 {
-    private int _health;
-
-    public int Health
-    {
-        get => _health;
-        set
-        {
-            _health = value;
-        }
-    }
+    [SerializeField] private int _health;
     
     [SerializeField] [Range(0, 10)] private float _explosionRange;
-    private bool _isExploded = false;
+    [SerializeField] private int _explosionDamage;
     
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (_health <= 0)
         {
             ActiveBomb();
-        }
-
-        if (_isExploded)
-        {
-            Destroy(gameObject);
         }
     }
     
@@ -37,20 +23,25 @@ public class BombObject : MonoBehaviour
 
         foreach (Collider hit in hitColliders)
         {
-            MonsterController monster = hit.GetComponent<MonsterController>();
+            TestMons monster = hit.GetComponent<TestMons>();
 
             if (monster != null)
             {
-                Debug.Log($"{monster.gameObject.name} 데미지 입힘");
+                monster.TakeDamage(_explosionDamage);
             }
         }
         
-        _isExploded = true;
+        Destroy(gameObject, 0.5f);
     }
 
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, _explosionRange);
+    }
+    
+    public void TakeDamage(int damage)
+    {
+        _health -= damage;
     }
 }
