@@ -20446,7 +20446,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d23f482415758940a65d2812d1caf68, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _characterController: {fileID: 0}
+  _characterController: {fileID: 2066873725}
   _scoreManager: {fileID: 174739850}
   _enemyKillCounter: {fileID: 174739851}
   _hpText: {fileID: 1865874596}
@@ -52912,6 +52912,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8250113047921840432, guid: b76f846b3379607468a593969b575654, type: 3}
   m_PrefabInstance: {fileID: 2065870463}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &2066873725 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2787498028150819556, guid: 9a51330422da0c74ba83bdd5b260ab9c, type: 3}
+  m_PrefabInstance: {fileID: 3199675426171395164}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 73a11576cda66cf468c79aada847b868, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &2070794096
 PrefabInstance:
   m_ObjectHideFlags: 0
