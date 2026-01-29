@@ -1779,7 +1779,7 @@ GameObject:
   - component: {fileID: 1035387163138594388}
   - component: {fileID: 8191766930187972817}
   - component: {fileID: 5339209593826852962}
-  - component: {fileID: 5970597918326514679}
+  - component: {fileID: 7588846302068294787}
   m_Layer: 0
   m_Name: Monster_02
   m_TagString: Untagged
@@ -1994,7 +1994,7 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &5970597918326514679
+--- !u!114 &7588846302068294787
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2003,7 +2003,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 8580151715974210510}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cfae43926a7eb1247950f602dc3f507f, type: 3}
+  m_Script: {fileID: 11500000, guid: 8af21d8cc6d3aee4ba401f1f1ed7d469, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   objectType: 0
@@ -2019,7 +2019,7 @@ MonoBehaviour:
   fieldOfView: 95
   viewDistance: 17
   eyeTransform: {fileID: 8763981328542420963}
-  turnSmoothTime: 0.1
+  turnSmoothTime: 0.03
   attackRadius: 0.25
   attackRoot_R: {fileID: 8388791706271094970}
   attackRoot_L: {fileID: 6804648703493459404}

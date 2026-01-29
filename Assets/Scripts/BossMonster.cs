@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 using static BossSkill_ApproachMelee;
@@ -16,9 +15,9 @@ public class BossMonster : MonsterController
     };
     [Header("Skill Timing")]
     public float skillGap = 0.35f;
-    // 1번 스킬 : 플레이어 접근 후 공격
+    [Header("Approach Melee Skill Setting")]
     public float approachMaxTime = 5.0f; // 이 시간에 못 붙으면 다음 스킬로 넘어감
-    // 2번 스킬 : 바닥 찍기 공격
+    [Header("Slam Skill Setting")]
     public float slamWindup = 1.3f;
     public float slamRadius = 20f;
     public float slamDamageMul = 1.5f;
@@ -29,8 +28,6 @@ public class BossMonster : MonsterController
 
     // 스킬 보관
     Dictionary<BossSkillType, BossSkill> _skills;
-    public MonsterState State { get => monsterState; set => monsterState = value; }
-    public NavMeshAgent Agent => agent;
 
     protected override bool CanAutoAttack() => false;
 

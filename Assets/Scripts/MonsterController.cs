@@ -351,7 +351,7 @@ public class MonsterController : MonoBehaviour
             player = damager.GetComponentInParent<CharacterController>();
 
         // 공격 받으면 바로 플레이어에게 돌진
-        if (player != null && player.isActiveAndEnabled && !player.IsDead) 
+        if (player != null && player.isActiveAndEnabled && !player.IsDead)
         {
             Player = player;
             if (monsterState == MonsterState.Patrol)

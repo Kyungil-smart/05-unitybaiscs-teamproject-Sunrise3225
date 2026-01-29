@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using static Define;
 
@@ -56,6 +55,23 @@ public class BossSkill_ApproachMelee : BossSkill
 
         public override IEnumerator Execute(BossMonster boss)
         {
+            float time = 0f;
+
+            while (time < boss.approachMaxTime && !boss.IsDead)
+            {
+                CharacterController player = boss.Player;
+                if (player == null || player.IsDead) yield break;
+
+                boss.agent.SetDestination(player.transform.position);
+
+                float dir = Vector3.Distance(player.transform.position, boss.transform.position);
+                if (dir <= boss.AttackDistance)
+                    break;
+
+                time += 0.1f;
+                yield return new WaitForSeconds(0.1f);
+            }
+
             boss.monsterState = MonsterState.AttackBegin;
             boss.agent.isStopped = true;
 

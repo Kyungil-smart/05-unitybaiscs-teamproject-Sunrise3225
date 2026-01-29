@@ -2261,7 +2261,7 @@ MonoBehaviour:
   fieldOfView: 95
   viewDistance: 15
   eyeTransform: {fileID: 3604987272824599576}
-  turnSmoothTime: 0.05
+  turnSmoothTime: 0.02
   attackRadius: 0.25
   attackRoot_R: {fileID: 4048077254118820450}
   attackRoot_L: {fileID: 2632531933954584243}

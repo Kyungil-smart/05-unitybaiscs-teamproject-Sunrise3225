@@ -461,6 +461,30 @@ PrefabInstance:
       propertyPath: m_Name
       value: Boss_01
       objectReference: {fileID: 0}
+    - target: {fileID: 7749868617456329880, guid: b1bfffb0677d20947a502486dc57e5c1, type: 3}
+      propertyPath: pattern.Array.size
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 7749868617456329880, guid: b1bfffb0677d20947a502486dc57e5c1, type: 3}
+      propertyPath: pattern.Array.data[0]
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7749868617456329880, guid: b1bfffb0677d20947a502486dc57e5c1, type: 3}
+      propertyPath: pattern.Array.data[1]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7749868617456329880, guid: b1bfffb0677d20947a502486dc57e5c1, type: 3}
+      propertyPath: pattern.Array.data[2]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7749868617456329880, guid: b1bfffb0677d20947a502486dc57e5c1, type: 3}
+      propertyPath: pattern.Array.data[3]
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7749868617456329880, guid: b1bfffb0677d20947a502486dc57e5c1, type: 3}
+      propertyPath: pattern.Array.data[4]
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
