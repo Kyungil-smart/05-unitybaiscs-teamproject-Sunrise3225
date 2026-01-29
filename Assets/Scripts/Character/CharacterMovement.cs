@@ -13,10 +13,8 @@ public class CharacterMovement : MonoBehaviour
     [SerializeField] private float _mouseSensitivity;
     [SerializeField] private float _pitchMin;
     [SerializeField] private float _pitchMax;
-
-    public float GroundDistance = 0.1f;
+    
     private Rigidbody _rigidbody;
-    private bool _isGrounded;
     private float _pitch;
 
     public void Start()
