@@ -14,51 +14,61 @@ public class MonsterController : MonoBehaviour
     public event Action<MonsterController> MonsterInfoUpdate;
     #endregion
 
+    #region Creature State
     public ObjectType objectType;
-    protected MonsterState monsterState = MonsterState.Patrol;
-    public CharacterController Player; // 플레이어 연결
-    
+    public MonsterState monsterState = MonsterState.Patrol;
+    public bool IsDead;
+    private bool _init = false;
+    #endregion
 
+    #region Target
+    public CharacterController Player; // 플레이어 연결
+    public LayerMask IsTarget;         // 타겟이 되는 레이어
+    public LayerMask BlockMask;        // 시야를 막을수 있는 레이어
+    #endregion
+
+    #region Vision Detect
+    public float fieldOfView = 50f;    // 시야 각도
+    public float viewDistance = 10f;   // 시야 거리
+    public Transform eyeTransform;     // 시야 위치
+    RaycastHit[] hits = new RaycastHit[10];  // NonAlloc 버퍼
+    #endregion
+
+    #region Turn / Rotate
     [Range(0.01f, 2f)] public float turnSmoothTime = 0.1f;
     private float turnSmoothVelocity;
-    public float attackRadius = 2f;
-    private float attackDistance;
+    #endregion
 
-    public float fieldOfView = 50f;
-    public float viewDistance = 10f;
-
-    public LayerMask IsTarget;
-    public LayerMask BlockMask;
-    
-    List<CharacterController> lastAttackTargets = new List<CharacterController>();
+    #region Attack
+    public float attackRadius = 2f;  // 공격 범위
+    private float attackDistance;    // 공격 시작되는 거리
+    private Vector3 _attackForward;
+    private bool _lockAttackLook = false;
 
     [Header("Attack Root")]
     public Transform attackRoot_R;
     public Transform attackRoot_L;
     protected Transform _attackRoot;
-    protected bool NextRight = true; // 왼손 오른손 번갈아가며 공격
-
-    public Transform eyeTransform;
+    protected bool NextRight = true;   // 왼손 오른손 번갈아가며 공격
+    List<CharacterController> lastAttackTargets = new List<CharacterController>();
+    #endregion
 
     [Header("Audio Player")]
     AudioSource audioPlayer;
     public AudioClip hitClip;     // 피격시 사운드
     public AudioClip deathClip;   // 사망시 사운드
 
-    RaycastHit[] hits = new RaycastHit[10];
-
+    #region Coroutine
     Coroutine _coKnockback;
     Coroutine _deathMoveCoroutine;
     Coroutine _coDotDamage;
     Coroutine _coMove;
+    #endregion
 
     [HideInInspector] public Animator Anim;
     [HideInInspector] public NavMeshAgent agent;   // 경로 계산 AI
     private Rigidbody rigid;
     private Collider coll;
-
-    public bool IsDead;
-    private bool _init = false;
 
 #if UNITY_EDITOR
 
@@ -206,16 +216,9 @@ public class MonsterController : MonoBehaviour
         if (IsDead || !this.gameObject.activeSelf) return;
         if (Player == null || !Player.isActiveAndEnabled) return;
 
-        if (monsterState == MonsterState.AttackBegin || monsterState == MonsterState.Attack)
-        {
-            Quaternion lookRotation = Quaternion.LookRotation(Player.transform.position - transform.position, Vector3.up);
-            float targetAngleY = lookRotation.eulerAngles.y;
-            transform.eulerAngles = Vector3.up * Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngleY, ref turnSmoothVelocity, turnSmoothTime);
-        }
-
         if (monsterState == MonsterState.Attack)
         {
-            Vector3 dir = transform.forward;
+            Vector3 dir = _lockAttackLook ? _attackForward : transform.forward;
             float deltaDistance = agent.velocity.magnitude * Time.deltaTime;
 
             int size = Physics.SphereCastNonAlloc(_attackRoot.position, attackRadius, dir, hits, deltaDistance, IsTarget);
@@ -248,7 +251,6 @@ public class MonsterController : MonoBehaviour
                     yield return null;
                     continue;
                 }
-
                 // 추적 대상이 존재하면 경로 갱신하고 이동을 진행
                 agent.SetDestination(Player.transform.position);
             }
@@ -263,7 +265,7 @@ public class MonsterController : MonoBehaviour
                     agent.speed = patrolSpeed;
                 }
 
-                if (agent.remainingDistance <= 2.5f)
+                if (agent.remainingDistance <= 3.0f)
                 {
                     Vector3 patrolPosition = Utils.GetRandomPointOnNavMesh(transform.position, 8f, NavMesh.AllAreas);
                     agent.SetDestination(patrolPosition);
@@ -293,22 +295,34 @@ public class MonsterController : MonoBehaviour
         _attackRoot = useRight ? attackRoot_R : attackRoot_L;
         NextRight = !NextRight;         
 
+        if (Player != null && Player.isActiveAndEnabled && !Player.IsDead)
+        {
+            Vector3 dir = Player.transform.position - transform.position;
+            dir.y = 0f;
+            if (dir.sqrMagnitude > 0.0001f)
+                transform.rotation = Quaternion.LookRotation(dir, Vector3.up);
+            _attackForward = transform.forward;
+            _lockAttackLook = true;
+        }
         agent.isStopped = true;
-        Anim.applyRootMotion = false;
+        agent.updateRotation = false;  // 몬스터 회전 방지
 
+        Anim.applyRootMotion = false;
         Anim.SetTrigger(GetAttackTrigger(useRight));
     }
 
     #region Animation Event
-    public virtual void EnableAttack()
+    public virtual void EnableAttack()  // 공격이 활성화 될 때
     {
         monsterState = MonsterState.Attack;
         lastAttackTargets.Clear();
     }
-    public virtual void DisableAttack()
+    public virtual void DisableAttack() // 공격이 끝났을 때
     {
         monsterState = MonsterState.Chase;
         agent.isStopped = false;
+        _lockAttackLook = false;
+        agent.updateRotation = true;
     }
     public void OnDieAnimEnd() // 죽는 애니메이션 이벤트
     {
@@ -319,6 +333,7 @@ public class MonsterController : MonoBehaviour
 
     public bool OnDamaged(GameObject damager, float amount)
     {
+        // TODO : IDamagable 을 상속받아서 함수명 수정 예정
         if (IsDead || damager == gameObject || !this.isActiveAndEnabled)
             return false;
 
@@ -335,7 +350,8 @@ public class MonsterController : MonoBehaviour
         if (damager != null)
             player = damager.GetComponentInParent<CharacterController>();
 
-        if (player != null && player.isActiveAndEnabled && !player.IsDead) // 공격 받으면 바로 플레이어에게 돌진
+        // 공격 받으면 바로 플레이어에게 돌진
+        if (player != null && player.isActiveAndEnabled && !player.IsDead)
         {
             Player = player;
             if (monsterState == MonsterState.Patrol)
@@ -344,6 +360,7 @@ public class MonsterController : MonoBehaviour
         }
 
         InvokeMonsterData();
+        // 공격중엔 넉백이 되지 않음
         if (objectType == ObjectType.Monster && monsterState != MonsterState.Attack)
         {
             if (_coKnockback == null)
@@ -351,7 +368,8 @@ public class MonsterController : MonoBehaviour
         }
         // TODO : 이펙트 추가해서 넣기
 
-        if (hitClip != null) audioPlayer.PlayOneShot(hitClip, volumeScale: 0.5f);
+        if (hitClip != null) 
+            audioPlayer.PlayOneShot(hitClip, volumeScale: 0.5f);
 
         return true;
     }
@@ -365,7 +383,7 @@ public class MonsterController : MonoBehaviour
             return;
         else
         {
-            // 골드나 아이템 같은거 드랍
+            // TODO : 골드나 아이템 같은거 드랍
         }
 
         StopAllCoroutines();
@@ -373,7 +391,7 @@ public class MonsterController : MonoBehaviour
         agent.enabled = false;
         if (deathClip != null) audioPlayer.PlayOneShot(deathClip, volumeScale: 0.1f); // 사망시 효과음
         Anim.applyRootMotion = true;
-        Anim.SetTrigger("Die");
+        Anim.SetTrigger("Die"); // 애니메이션 재생
     }
     
     IEnumerator CoKnockBack()

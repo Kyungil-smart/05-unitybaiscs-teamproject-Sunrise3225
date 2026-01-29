@@ -25,7 +25,6 @@ public class Define
     public enum BossSkillType
     {
         ApproachMelee,  // 접근하다가 근처면 공격, 아니면 스킵
-        JumpAttack,     // 플레이어 위치로 점프 후 공격
         SlamAttack,     // 제자리 광역 내려찍기
     }
 
