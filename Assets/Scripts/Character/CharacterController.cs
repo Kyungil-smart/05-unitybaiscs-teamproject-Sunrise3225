@@ -18,7 +18,7 @@ public class CharacterController : MonoBehaviour
      private Rigidbody _rigidbody;
      private IDamageable _targetDamageable;
      private Transform _targetTransform;
-     private Camera _camera;
+     //private Camera _camera;
      
      [SerializeField] private Transform _rayStartPoint;
      [SerializeField] private Transform _rayDirPoint;
@@ -29,6 +29,15 @@ public class CharacterController : MonoBehaviour
      private float _currentHp;                                // 현재 체력
      public bool IsDead = false;                          // 생존 여부
      
+     // UI 프로퍼티
+     // HP
+     public float CurrentHp { get {return _currentHp; } }
+     public int MaxHp { get {return _maxHp; } }
+     // Magazine
+     public int CurrentMagazine { get {return _currentMagazine; } }
+     public int MaxMagazine { get {return _maxMagazine; } }
+     // Player Life
+     public int PlayerLife { get {return _playerLife; } }
 
      private void Awake()
      {
@@ -58,7 +67,7 @@ public class CharacterController : MonoBehaviour
 
      private void Init()
      {
-         _camera = Camera.main;
+         //_camera = Camera.main;
          _currentMagazine = _maxMagazine;
          _currentHp = _maxHp;
      }
