@@ -306,7 +306,7 @@ MonoBehaviour:
   GroundLayer:
     serializedVersion: 2
     m_Bits: 128
-  _maxHp: 100
+  _maxHp: 999999
   _attackRange: 0
   _jumpForce: 6
   _attackDamage: 0
@@ -317,7 +317,7 @@ MonoBehaviour:
   GroundDistance: 0.5
   _rayStartPoint: {fileID: 7606827090828501918}
   _rayDirPoint: {fileID: 7606827090828501918}
-  _playerLife: 0
+  _playerLife: 10
   IsDead: 0
 --- !u!95 &590422000361599741
 Animator:

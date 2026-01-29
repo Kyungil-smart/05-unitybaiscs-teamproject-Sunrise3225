@@ -105,11 +105,15 @@ public class MonsterSpawn : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        if (!other.CompareTag("Player")) return;
+
+        _player = other.GetComponentInParent<CharacterController>();
+
         if (other.gameObject.CompareTag("Player"))
         {
-            _player = other.gameObject.GetComponent<CharacterController>();
             _isPlayerInside = true;
             _timeCount = 0f;
+            Debug.Log($"{_player}");
         }
     }
 
@@ -160,7 +164,7 @@ public class MonsterSpawn : MonoBehaviour
         _aliveMonsterCount++;
         Debug.Log($"생성된 몬스터 수 : {_aliveMonsterCount}");
 
-        monster.GetComponent<TestMons>().Init(this);
+        monster.GetComponent<MonsterController>().Init(this);
     }
 
     public void OnMonsterSpawn()

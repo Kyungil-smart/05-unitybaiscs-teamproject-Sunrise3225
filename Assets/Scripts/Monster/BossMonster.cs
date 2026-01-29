@@ -56,9 +56,9 @@ public class BossMonster : MonsterController
         }
     }
 
-    public override bool Init()
+    public override bool Init(MonsterSpawn monsterSpawn)
     {
-        base.Init();
+        base.Init(monsterSpawn);
         transform.localScale = new Vector3(1.8f, 1.8f, 1.8f);
         BuildSkills();
         return true;
