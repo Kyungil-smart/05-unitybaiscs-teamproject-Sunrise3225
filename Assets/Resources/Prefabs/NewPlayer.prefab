@@ -313,7 +313,7 @@ MonoBehaviour:
   _attackTargetLayer:
     serializedVersion: 2
     m_Bits: 0
-  _maxMagazine: 0
+  _maxMagazine: 500
   GroundDistance: 0.5
   _rayStartPoint: {fileID: 7606827090828501918}
   _rayDirPoint: {fileID: 7606827090828501918}
