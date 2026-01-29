@@ -7,10 +7,7 @@ public class ScoreManager : MonoBehaviour
     [SerializeField] private int _pointsPerKill = 10;
     private int _score;
 
-    public int Score
-    {
-        get{return _score;}
-    }
+    public int Score { get{return _score;} }
     
     public void AddKillScore()
     {

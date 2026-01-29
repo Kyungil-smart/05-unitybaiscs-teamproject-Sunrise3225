@@ -7,16 +7,18 @@ using Unity.VisualScripting;
 public class UIManager : MonoBehaviour
 {
     [SerializeField] private CharacterController _characterController;
+    [SerializeField] private ScoreManager _scoreManager;
+    [SerializeField] private EnemyKillCounter _enemyKillCounter;
     
     [SerializeField] private TextMeshProUGUI _hpText;
     [SerializeField] private TextMeshProUGUI _magazineText;
     [SerializeField] private TextMeshProUGUI _lifeText;
+    [SerializeField] private TextMeshProUGUI _killCountText;
+    [SerializeField] private TextMeshProUGUI _scoreText;
     
     [SerializeField] private TextMeshProUGUI _waveText;
     [SerializeField] private TextMeshProUGUI _goldText;
-    [SerializeField] private TextMeshProUGUI _scoreText;
     [SerializeField] private TextMeshProUGUI _enemyLeftText;
-    [SerializeField] private TextMeshProUGUI _killCountText;
 
     private void Update()
     {
@@ -28,6 +30,8 @@ public class UIManager : MonoBehaviour
         RefreshHpUI();
         RefreshMagazineUI();
         RefreshLifeUI();
+        RefreshKillCountUI();
+        RefreshScoreUI();
     }
     
     private void RefreshHpUI()
@@ -43,5 +47,15 @@ public class UIManager : MonoBehaviour
     private void RefreshLifeUI()
     {
         _lifeText.text = $"LIFE : {_characterController.PlayerLife}";
+    }
+
+    private void RefreshKillCountUI()
+    {
+        _killCountText.text = $"{_enemyKillCounter.Counter} : Kill";
+    }
+
+    private void RefreshScoreUI()
+    {
+        _scoreText.text = $"Score : {_scoreManager.Score}";
     }
 }
