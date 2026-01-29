@@ -70,6 +70,8 @@ public class MonsterController : MonoBehaviour, IDamageable
     private Rigidbody rigid;
     private Collider coll;
 
+    public MonsterSpawn monsterSpawn;
+
 #if UNITY_EDITOR
 
     private void OnDrawGizmosSelected()
@@ -181,9 +183,9 @@ public class MonsterController : MonoBehaviour, IDamageable
     }
     private void Awake()
     {
-        Init();
+        Init(monsterSpawn);
     }
-    public virtual bool Init()
+    public virtual bool Init(MonsterSpawn ms)
     {
         if (_init) return false;
         _init = true;
@@ -206,7 +208,7 @@ public class MonsterController : MonoBehaviour, IDamageable
         transform.localScale = new Vector3(1f, 1f, 1f);
 
         _attackRoot = (NextRight ? attackRoot_R : attackRoot_L);
-
+        ms = monsterSpawn;
         return true;
     }
 
