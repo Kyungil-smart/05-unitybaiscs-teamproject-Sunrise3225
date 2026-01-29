@@ -6,16 +6,16 @@ using UnityEngine.UIElements;
 
 public class CharacterMovement : MonoBehaviour
 {
-    public Transform _cameraView;
+    // public Transform _cameraView;
     
     [SerializeField] private float _moveSpeed;
     
-    [SerializeField] private float _mouseSensitivity;
-    [SerializeField] private float _pitchMin;
-    [SerializeField] private float _pitchMax;
+    // [SerializeField] private float _mouseSensitivity;
+    // [SerializeField] private float _pitchMin;
+    // [SerializeField] private float _pitchMax;
     
     private Rigidbody _rigidbody;
-    private float _pitch;
+    // private float _pitch;
 
     public void Start()
     {
@@ -24,22 +24,22 @@ public class CharacterMovement : MonoBehaviour
 
     private void Update()
     {
-        Rotation();
+        // Rotation();
         Move();
     }
 
-    private void Rotation()
-    {
-        float x = Input.GetAxisRaw("Mouse X") * _mouseSensitivity * Time.deltaTime;
-        float y = Input.GetAxisRaw("Mouse Y") * _mouseSensitivity * Time.deltaTime;
-        
-        transform.Rotate(Vector3.up, x);
-
-        _pitch -= y;
-        _pitch = Mathf.Clamp(_pitch, _pitchMin, _pitchMax);
-        
-        _cameraView.localRotation = Quaternion.Euler(_pitch, 0, 0);
-    }
+    // private void Rotation()
+    // {
+    //     float x = Input.GetAxisRaw("Mouse X") * _mouseSensitivity * Time.deltaTime;
+    //     float y = Input.GetAxisRaw("Mouse Y") * _mouseSensitivity * Time.deltaTime;
+    //     
+    //     transform.Rotate(Vector3.up, x);
+// 
+    //     _pitch -= y;
+    //     _pitch = Mathf.Clamp(_pitch, _pitchMin, _pitchMax);
+    //     
+    //     _cameraView.localRotation = Quaternion.Euler(_pitch, 0, 0);
+    // }
 
     private void Move()
     {
