@@ -7,7 +7,7 @@ using UnityEngine.AI;
 using static Define;
 
 
-public class MonsterController : MonoBehaviour
+public class MonsterController : MonoBehaviour, IDamageable
 {
     #region Action
     public event Action OnBossDead;   // 보스가 있을 경우에
@@ -329,31 +329,22 @@ public class MonsterController : MonoBehaviour
         Destroy(gameObject);
     }
     #endregion
-    
 
-    public bool OnDamaged(GameObject damager, float amount)
+
+    public void TakeDamage(int damage)
     {
-        // TODO : IDamagable 을 상속받아서 함수명 수정 예정
-        if (IsDead || damager == gameObject || !this.isActiveAndEnabled)
-            return false;
-
-        hp -= Mathf.RoundToInt(amount);
+        hp -= Mathf.RoundToInt(damage);
 
         if (hp <= 0)
         {
             IsDead = true;
             OnDead();
-            return true;
+            return;
         }
 
-        CharacterController player = null;
-        if (damager != null)
-            player = damager.GetComponentInParent<CharacterController>();
-
         // 공격 받으면 바로 플레이어에게 돌진
-        if (player != null && player.isActiveAndEnabled && !player.IsDead)
+        if (Player != null && Player.isActiveAndEnabled && !Player.IsDead)
         {
-            Player = player;
             if (monsterState == MonsterState.Patrol)
                 monsterState = MonsterState.Chase;
             agent.SetDestination(Player.transform.position);
@@ -368,10 +359,8 @@ public class MonsterController : MonoBehaviour
         }
         // TODO : 이펙트 추가해서 넣기
 
-        if (hitClip != null) 
+        if (hitClip != null)
             audioPlayer.PlayOneShot(hitClip, volumeScale: 0.5f);
-
-        return true;
     }
     public virtual void OnDead()
     {
@@ -485,4 +474,6 @@ public class MonsterController : MonoBehaviour
         if (this.isActiveAndEnabled && gameObject.activeInHierarchy && objectType != ObjectType.Monster)
             MonsterInfoUpdate?.Invoke(this);
     }
+
+    
 }
