@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8145482991042197023}
   - component: {fileID: 6262231255020647131}
   - component: {fileID: 8464875272596449544}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Capsule
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -93,7 +93,8 @@ GameObject:
   m_Component:
   - component: {fileID: 7296939989564436880}
   - component: {fileID: 8075405183365396295}
-  m_Layer: 0
+  - component: {fileID: -525686532909874578}
+  m_Layer: 9
   m_Name: TestMons2_KYH
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -139,3 +140,16 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 1, z: 0}
+--- !u!114 &-525686532909874578
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5316347590048543990}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ce2a19fe90a677246943fa70d9f3f171, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _health: 30
