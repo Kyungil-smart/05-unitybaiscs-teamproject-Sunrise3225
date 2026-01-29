@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
+using static BossSkill_ApproachMelee;
 using static Define;
 
 public class BossMonster : MonsterController
@@ -11,21 +12,25 @@ public class BossMonster : MonsterController
     public List<BossSkillType> pattern = new List<BossSkillType>()
     {
         BossSkillType.ApproachMelee,
-        BossSkillType.JumpAttack,
         BossSkillType.SlamAttack,
     };
     [Header("Skill Timing")]
     public float skillGap = 0.35f;
-    // 1번 스킬
+    // 1번 스킬 : 플레이어 접근 후 공격
     public float approachMaxTime = 5.0f; // 이 시간에 못 붙으면 다음 스킬로 넘어감
-    // 3번 스킬
-    public float slamWindup = 1.0f;
-    public float slamRadius = 3.5f;
+    // 2번 스킬 : 바닥 찍기 공격
+    public float slamWindup = 1.3f;
+    public float slamRadius = 20f;
     public float slamDamageMul = 1.5f;
 
     Coroutine _coPattern;
     int _patternIndex = 0;
     bool _doingSkill = false;
+
+    // 스킬 보관
+    Dictionary<BossSkillType, BossSkill> _skills;
+    public MonsterState State { get => monsterState; set => monsterState = value; }
+    public NavMeshAgent Agent => agent;
 
     protected override bool CanAutoAttack() => false;
 
@@ -34,7 +39,7 @@ public class BossMonster : MonsterController
         PatrolSpeed = 2.5f;
         ChaseSpeed = 4.2f;
         Attack = 50f;
-        Hp = 300f;
+        Hp = 5000f;
         AttackDistance = 3.0f;
     }
 
@@ -57,25 +62,44 @@ public class BossMonster : MonsterController
     public override bool Init()
     {
         base.Init();
-        transform.localScale = new Vector3(1.6f, 1.6f, 1.6f);
+        transform.localScale = new Vector3(1.8f, 1.8f, 1.8f);
+        BuildSkills();
         return true;
+    }
+#if UNITY_EDITOR
+    private void OnDrawGizmosSelected()
+    {
+        // Slam 범위
+        Gizmos.color = new Color(1f, 0.5f, 0f, 0.25f); 
+        Gizmos.DrawSphere(transform.position, slamRadius);
+
+        Gizmos.color = new Color(1f, 0.5f, 0f, 0.9f);
+        Gizmos.DrawWireSphere(transform.position, slamRadius);
+
+        // Windup 동안 "현재 범위" 확인용 텍스트
+        UnityEditor.Handles.color = new Color(1f, 0.8f, 0.2f, 1f);
+        UnityEditor.Handles.Label(transform.position + Vector3.up * 2.0f,
+            $"SLAM R={slamRadius:0.0}  Windup={slamWindup:0.0}s  Dmg={Attack * slamDamageMul:0}");
+    }
+#endif
+
+    void BuildSkills()
+    {
+        if (_skills != null) return;
+
+        _skills = new Dictionary<BossSkillType, BossSkill>(4)
+        {
+            {BossSkillType.ApproachMelee, new BossSkill_ApproachMelee() },
+            {BossSkillType.SlamAttack, new BossSkill_SlamAttack() },
+        };
     }
     protected override string GetAttackTrigger(bool useRight)
     {
-        return useRight ? "MeleeAttack" : "MeleeAttack";
+        return base.GetAttackTrigger(useRight);
     }
     public override void UpdateAttack()
     {
-        monsterState = MonsterState.AttackBegin;
-
-        bool useRight = NextRight;
-        _attackRoot = useRight ? attackRoot_R : attackRoot_L;
-        NextRight = !NextRight;
-
-        agent.isStopped = true;
-        Anim.applyRootMotion = false;
-
-        Anim.SetTrigger(GetAttackTrigger(false));
+        base.UpdateAttack();
     }
 
     #region Skill Sequence
@@ -123,74 +147,16 @@ public class BossMonster : MonsterController
     }
     IEnumerator ExeCuteSkill(BossSkillType skill)
     {
-        switch (skill)
-        {
-            case BossSkillType.ApproachMelee:
-                yield return Skill_ApproachMelee();
-                break;
-            case BossSkillType.SlamAttack:
-                yield return Skill_SlamAttack();
-                break;
-        }
+        if (_skills == null) BuildSkills();
+
+        if (_skills.TryGetValue(skill, out BossSkill bossSkill) == false || bossSkill == null)
+            yield break;
+
+        yield return bossSkill.Execute(this);
     }
     #endregion
 
-    IEnumerator Skill_ApproachMelee()
-    {
-        // 접근하다가 붙으면 기본 공격 트리거, 못붙으면 스킵
-        float time = 0f;
-
-        monsterState = MonsterState.Chase;
-        agent.isStopped = false;
-        agent.speed = ChaseSpeed;
-
-        while (time < approachMaxTime && !IsDead)
-        {
-            if (Player == null || Player.IsDead) yield break;
-
-            agent.SetDestination(Player.transform.position);
-
-            float dir = Vector3.Distance(Player.transform.position, transform.position);
-            if (dir <= AttackDistance)
-                break;
-
-            time += 0.1f;
-            yield return new WaitForSeconds(0.1f);
-        }
-
-        // 붙었으면 공격 한번
-        if (Player != null && !Player.IsDead &&
-            Vector3.Distance(Player.transform.position, transform.position) <= AttackDistance)
-        {
-            UpdateAttack();
-
-            float wait = 0f;
-            while (!IsDead && wait < 2f && monsterState != MonsterState.Chase)
-            {
-                wait += Time.deltaTime;
-                yield return null;
-            }
-        }
-    }
-    
-    IEnumerator Skill_SlamAttack()
-    {
-        // 3번 : 제자리 내려찍기
-        monsterState = MonsterState.AttackBegin;
-        agent.isStopped = true;
-
-        Anim.SetTrigger("Slam");
-
-        yield return new WaitForSeconds(slamWindup);
-
-        DoAoeDamage(transform.position, slamRadius, Attack * slamDamageMul);
-
-        yield return new WaitForSeconds(2.2f);
-        monsterState = MonsterState.Chase;
-        agent.isStopped = false;
-    }
-
-    void DoAoeDamage(Vector3 center, float radius, float damage)
+    public void DoAoeDamage(Vector3 center, float radius, float damage)
     {
         Collider[] cols = Physics.OverlapSphere(center, radius, IsTarget);
         for (int i = 0; i < cols.Length; i++)

@@ -1873,7 +1873,7 @@ NavMeshAgent:
   m_AutoRepath: 1
   m_Height: 1.91
   m_BaseOffset: 0
-  m_WalkableMask: 4294967295
+  m_WalkableMask: 5
   m_ObstacleAvoidanceType: 4
 --- !u!136 &8191766930187972817
 CapsuleCollider:
@@ -2007,22 +2007,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   objectType: 0
-  turnSmoothTime: 0.1
-  attackRadius: 0.25
-  fieldOfView: 95
-  viewDistance: 17
+  monsterState: 0
+  IsDead: 0
+  Player: {fileID: 0}
   IsTarget:
     serializedVersion: 2
     m_Bits: 256
   BlockMask:
     serializedVersion: 2
     m_Bits: 1024
+  fieldOfView: 95
+  viewDistance: 17
+  eyeTransform: {fileID: 8763981328542420963}
+  turnSmoothTime: 0.1
+  attackRadius: 0.25
   attackRoot_R: {fileID: 8388791706271094970}
   attackRoot_L: {fileID: 6804648703493459404}
-  eyeTransform: {fileID: 8763981328542420963}
   hitClip: {fileID: 0}
   deathClip: {fileID: 0}
-  IsDead: 0
+  Anim: {fileID: 0}
+  agent: {fileID: 0}
 --- !u!1 &8995592070519785529
 GameObject:
   m_ObjectHideFlags: 0
