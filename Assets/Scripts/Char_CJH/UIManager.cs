@@ -18,9 +18,30 @@ public class UIManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _enemyLeftText;
     [SerializeField] private TextMeshProUGUI _killCountText;
 
+    private void Update()
+    {
+        RefreshAll();
+    }
+    
+    private void RefreshAll()
+    {
+        RefreshHpUI();
+        RefreshMagazineUI();
+        RefreshLifeUI();
+    }
+    
     private void RefreshHpUI()
     {
-        _hpText.text = $"HP : {(int)_characterController.CurrentHp} / {_characterController.MaxHp}";
+        _hpText.text = $"HP : {(int)_characterController.CurrentHp}";
+    }
+    
+    private void RefreshMagazineUI()
+    {
+        _magazineText.text = $"AMMO : {_characterController.CurrentMagazine} / {_characterController.MaxMagazine}";
     }
 
+    private void RefreshLifeUI()
+    {
+        _lifeText.text = $"LIFE : {_characterController.PlayerLife}";
+    }
 }
