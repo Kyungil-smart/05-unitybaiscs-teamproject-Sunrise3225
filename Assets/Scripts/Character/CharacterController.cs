@@ -57,7 +57,7 @@ public class CharacterController : MonoBehaviour
          
          // Debug.DrawRay(rayStartPos, Vector3.down * 0.2f, _isGrounded ? Color.green : Color.red);
          
-         if (Input.GetMouseButtonDown(0)) Fire();
+         if (Input.GetMouseButton(0)) Fire();
          
          if (Input.GetKeyDown(KeyCode.Space) && _isGrounded) Jump();
          // RefreshMagazineUI();
@@ -134,12 +134,7 @@ public class CharacterController : MonoBehaviour
      {
         _rigidbody.AddForce(Vector3.up * _jumpForce, ForceMode.Impulse);
      }
-
-     private Vector3 GetDirection()
-     {
-         return (_rayDirPoint.position - _rayStartPoint.position).normalized;
-     }
-
+     
     #region HealItem
     public void Heal(int healingValue)
     {
