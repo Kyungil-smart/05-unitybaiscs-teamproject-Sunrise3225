@@ -30,6 +30,8 @@ public class CharacterController : MonoBehaviour
      private float _currentHp;                                // 현재 체력
      public bool IsDead = false;                          // 생존 여부
      
+     [SerializeField] private bool _useAnimationTimingFire = true;
+     
      // UI 프로퍼티
      // HP
      public float CurrentHp { get {return _currentHp; } }
@@ -44,17 +46,30 @@ public class CharacterController : MonoBehaviour
 
      private void Awake()
      {
-          Init();
+         _rigidbody = GetComponent<Rigidbody>();
+         _cameraController = GetComponent<CameraController>();
+         
+         Init();
+         
+         if (_rayStartPoint == null)
+             _rayStartPoint = transform;
+
+         if (_rayEndPoint == null)
+             _rayEndPoint = transform;
      }
 
      private void Start()
      {
          CursorLock(true);
-         _rigidbody = GetComponent<Rigidbody>();
+         
+         if (_rigidbody == null)
+             _rigidbody = GetComponent<Rigidbody>();
      }
 
      private void Update()
      {
+         if (IsDead) return;
+         
          DetectTarget();
          
          Vector3 rayStartPos = transform.position + Vector3.up * 0.1f;
@@ -62,7 +77,11 @@ public class CharacterController : MonoBehaviour
          
          // Debug.DrawRay(rayStartPos, Vector3.down * 0.2f, _isGrounded ? Color.green : Color.red);
          
-         if (Input.GetMouseButton(0)) Fire();
+         if (!_useAnimationTimingFire)
+         {
+             if (Input.GetMouseButtonDown(0)) Fire();
+         }
+         // if (Input.GetMouseButtonDown(0)) Fire();
          
          if (Input.GetKeyDown(KeyCode.Space) && _isGrounded) Jump();
          // RefreshMagazineUI();
@@ -70,19 +89,28 @@ public class CharacterController : MonoBehaviour
 
      private void Init()
      {
+         _maxHp = Mathf.Max(0, _maxHp);
+         _maxMagazine = Mathf.Max(0, _maxMagazine);
+         _playerLife = Mathf.Max(0, _playerLife);
+
          _currentMagazine = _maxMagazine;
          _currentHp = _maxHp;
-         _cameraController = GetComponent<CameraController>();
+         
+         _money = Mathf.Max(0, _money);
      }
      
-     private void RefreshMagazineUI()     // 탄창 UI 인데 일단 TMPro 아까 겹치면 터질수도있을거 같다해서 안썼습니다.
-     {
-     }
-
      private void DetectTarget()
      {
+         if (_rayStartPoint == null || _rayEndPoint == null)
+         {
+             _targetDamageable = null;
+             _targetTransform = null;
+             return;
+         }
+         
          Vector3 dir = GetDirection(_rayStartPoint, _rayEndPoint);
          _ray = new Ray(_rayStartPoint.position, dir);
+         
          RaycastHit hit;
 
          if (Physics.Raycast(_ray, out hit, _attackRange, _attackTargetLayer))
@@ -101,10 +129,17 @@ public class CharacterController : MonoBehaviour
      
      private void Fire()
      {
-         _currentMagazine--;
+         if (_currentMagazine <= 0)
+         {
+             _currentMagazine = 0;
+             return;
+         }
+         
+         _currentMagazine = Mathf.Max(0, _currentMagazine - 1);
          //Debug.Log(_currentMagazine);
          
          if (_targetDamageable == null) return;
+         
          _targetDamageable.TakeDamage(_attackDamage); 
      }
 
@@ -122,18 +157,37 @@ public class CharacterController : MonoBehaviour
 
      private Vector3 GetDirection(Transform start, Transform end)
      {
-         return (end.position - start.position).normalized;
+         Vector3 diff = (end.position - start.position);
+
+         // start == end면 normalized가 (0,0,0) 나올 수 있으니 보정
+         if (diff.sqrMagnitude <= 0.000001f)
+             return start.forward;
+
+         return diff.normalized;
      }
      
      public void PlayerTakeDamage(float damage)
      {
+         if (IsDead) return;
+
+         // 음수 데미지 들어오면 회복이 되므로(의도 아니면) 하한 0 처리
+         damage = Mathf.Max(0f, damage);
+
          _currentHp -= damage;
-         
-         if (_currentHp <= 0)
+         _currentHp = Mathf.Max(0f, _currentHp);
+
+         if (_currentHp <= 0f)
          {
-             _playerLife--;
-             _currentHp = 100; 
+             // 라이프 0 밑으로 떨어지지 않게 고정
+             _playerLife = Mathf.Max(0, _playerLife - 1);
+
+             if (_playerLife > 0)
+             {
+                 // 리스폰 체력: 100 고정 대신 maxHp로 복구(일관성)
+                 _currentHp = _maxHp;
+             }
          }
+
          if (_playerLife <= 0)
          {
              IsDead = true;
@@ -143,7 +197,8 @@ public class CharacterController : MonoBehaviour
 
      private void Jump()
      {
-        _rigidbody.AddForce(Vector3.up * _jumpForce, ForceMode.Impulse);
+         if (_rigidbody == null) return; 
+         _rigidbody.AddForce(Vector3.up * _jumpForce, ForceMode.Impulse);
      }
      
     #region HealItem
@@ -165,8 +220,13 @@ public class CharacterController : MonoBehaviour
     #endregion
 
     private void OnDrawGizmos()
-     {
-         Gizmos.color = Color.red;
-         Gizmos.DrawRay(_ray.origin, _ray.direction * _attackRange);
-     }
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawRay(_ray.origin, _ray.direction * _attackRange);
+    }
+    
+    public void FireFromTiming()
+    {
+        Fire();
+    }
 }
