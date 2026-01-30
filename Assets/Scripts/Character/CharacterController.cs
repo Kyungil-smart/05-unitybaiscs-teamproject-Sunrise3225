@@ -19,7 +19,9 @@ public class CharacterController : MonoBehaviour
      private IDamageable _targetDamageable;
      private Transform _targetTransform;
      private CameraController _cameraController;
-     
+
+     [SerializeField] private Transform _rayStartPoint;
+     [SerializeField] private Transform _rayEndPoint;
      private Ray _ray;
 
      [SerializeField] private int _playerLife;
@@ -76,7 +78,8 @@ public class CharacterController : MonoBehaviour
 
      private void DetectTarget()
      {
-         _ray = _cameraController._camera.ScreenPointToRay(Input.mousePosition);
+         Vector3 dir = GetDirection(_rayStartPoint, _rayEndPoint);
+         _ray = new Ray(_rayStartPoint.position, dir);
          RaycastHit hit;
 
          if (Physics.Raycast(_ray, out hit, _attackRange, _attackTargetLayer))
@@ -112,6 +115,11 @@ public class CharacterController : MonoBehaviour
      {
          Cursor.lockState = CursorLockMode.None;
          Cursor.visible = true;
+     }
+
+     private Vector3 GetDirection(Transform start, Transform end)
+     {
+         return (end.position - start.position).normalized;
      }
      
      public void PlayerTakeDamage(float damage)
