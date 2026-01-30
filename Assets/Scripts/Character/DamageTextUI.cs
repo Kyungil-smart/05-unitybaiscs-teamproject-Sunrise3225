@@ -14,9 +14,9 @@ public class DamageTextUI : MonoBehaviour
 
     private void Start()
     {
+        _textMoveSpeed = 2.0f;
         _textAlphaSpeed = 2.0f;
-        _textAlphaSpeed = 2.0f;
-        _textAlphaSpeed = 2.0f;
+        _textDestroyTime = 2.0f;
         
         _damageText = GetComponent<TextMeshPro>();
         alphaColor = _damageText.color;
