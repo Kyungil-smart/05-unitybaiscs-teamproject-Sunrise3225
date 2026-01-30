@@ -20,7 +20,7 @@ public class Freeze1SecItem : MonoBehaviour
     private IEnumerator Freeze1SecMove()
     {
         _player.enabled = false;
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(2f);
         _player.enabled = true;
         Destroy(gameObject);
     }
