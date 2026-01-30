@@ -18,14 +18,12 @@ public class CharacterController : MonoBehaviour
      private Rigidbody _rigidbody;
      private IDamageable _targetDamageable;
      private Transform _targetTransform;
-     //private Camera _camera;
+     private CameraController _cameraController;
      
-     [SerializeField] private Transform _rayStartPoint;
-     [SerializeField] private Transform _rayDirPoint;
      private Ray _ray;
 
      [SerializeField] private int _playerLife;
-     private bool _isGrounded;
+     public bool _isGrounded;
      private float _currentHp;                                // 현재 체력
      public bool IsDead = false;                          // 생존 여부
      
@@ -67,9 +65,9 @@ public class CharacterController : MonoBehaviour
 
      private void Init()
      {
-         //_camera = Camera.main;
          _currentMagazine = _maxMagazine;
          _currentHp = _maxHp;
+         _cameraController = GetComponent<CameraController>();
      }
      
      private void RefreshMagazineUI()     // 탄창 UI 인데 일단 TMPro 아까 겹치면 터질수도있을거 같다해서 안썼습니다.
@@ -78,8 +76,7 @@ public class CharacterController : MonoBehaviour
 
      private void DetectTarget()
      {
-         Vector3 direction = GetDirection();
-         _ray = new Ray(_rayStartPoint.position, direction);
+         _ray = _cameraController._camera.ScreenPointToRay(Input.mousePosition);
          RaycastHit hit;
 
          if (Physics.Raycast(_ray, out hit, _attackRange, _attackTargetLayer))
@@ -87,6 +84,7 @@ public class CharacterController : MonoBehaviour
              if (_targetTransform == hit.transform) return;
              _targetTransform = hit.transform;
              _targetDamageable = hit.transform.GetComponent<IDamageable>();
+             Debug.Log("타겟 발견");
          }
          else
          {
@@ -162,7 +160,6 @@ public class CharacterController : MonoBehaviour
 
     private void OnDrawGizmos()
      {
-         Vector3 direction = GetDirection();
          Gizmos.color = Color.red;
          Gizmos.DrawRay(_ray.origin, _ray.direction * _attackRange);
      }

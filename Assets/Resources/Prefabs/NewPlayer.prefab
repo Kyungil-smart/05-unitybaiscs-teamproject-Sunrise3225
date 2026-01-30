@@ -179,13 +179,13 @@ GameObject:
   m_Component:
   - component: {fileID: 2957438258204489918}
   - component: {fileID: 4976330790009623312}
-  - component: {fileID: 2403575372112708557}
   - component: {fileID: 5459941232374973860}
   - component: {fileID: 766561110497250422}
   - component: {fileID: 2787498028150819556}
   - component: {fileID: 590422000361599741}
   - component: {fileID: 4382367302188423897}
   - component: {fileID: 990556830483233344}
+  - component: {fileID: 6054406545752589210}
   m_Layer: 8
   m_Name: NewPlayer
   m_TagString: Player
@@ -219,7 +219,7 @@ Rigidbody:
   m_GameObject: {fileID: 7152837385196687413}
   serializedVersion: 4
   m_Mass: 1
-  m_Drag: 0
+  m_Drag: 1
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
@@ -235,29 +235,8 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 90
+  m_Constraints: 112
   m_CollisionDetection: 0
---- !u!65 &2403575372112708557
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7152837385196687413}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 2, z: 1}
-  m_Center: {x: 0, y: 1, z: 0}
 --- !u!114 &5459941232374973860
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -275,9 +254,10 @@ MonoBehaviour:
   _cameraTargetLayer:
     serializedVersion: 2
     m_Bits: 1024
-  _mouseSensitivity: 700
+  _mouseSensitivity: 200
   _pitchMin: -30
   _pitchMax: 50
+  _camera: {fileID: 0}
 --- !u!114 &766561110497250422
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -307,17 +287,16 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 128
   _maxHp: 999999
-  _attackRange: 0
+  _attackRange: 20
   _jumpForce: 6
-  _attackDamage: 0
+  _attackDamage: 10
   _attackTargetLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 512
   _maxMagazine: 500
   GroundDistance: 0.5
-  _rayStartPoint: {fileID: 7606827090828501918}
-  _rayDirPoint: {fileID: 7606827090828501918}
   _playerLife: 10
+  _isGrounded: 0
   IsDead: 0
 --- !u!95 &590422000361599741
 Animator:
@@ -376,6 +355,29 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _animator: {fileID: 590422000361599741}
+--- !u!136 &6054406545752589210
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7152837385196687413}
+  m_Material: {fileID: 13400000, guid: 473e873cd6238c346a46fb06a00af9bd, type: 2}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Height: 2
+  m_Direction: 1
+  m_Center: {x: 0, y: 1, z: 0}
 --- !u!1 &8596732018836340853
 GameObject:
   m_ObjectHideFlags: 0
