@@ -6,6 +6,7 @@ public class PlayerDeathRespawnDriver : MonoBehaviour
     [SerializeField] private global::CharacterController _characterController;
     [SerializeField] private CharacterMovement _characterMovement;
     [SerializeField] private AnimationController _animationController;
+    [SerializeField] private CameraController _cameraController;
 
     [Header("Respawn")]
     [SerializeField] private float _respawnDelaySeconds = 3f;
@@ -29,6 +30,9 @@ public class PlayerDeathRespawnDriver : MonoBehaviour
 
         if (_animationController == null)
             _animationController = GetComponent<AnimationController>();
+        
+        if (_cameraController == null)
+            _cameraController = GetComponent<CameraController>();
     }
 
     private void Start()
@@ -64,7 +68,10 @@ public class PlayerDeathRespawnDriver : MonoBehaviour
 
         // 죽음 애니메이션
         if (_animationController != null)
+        {
+            _animationController.SetGameOver(true);
             _animationController.TriggerDie();
+        }
 
         // 죽음 연출 대기
         yield return new WaitForSeconds(_respawnDelaySeconds);
@@ -80,7 +87,11 @@ public class PlayerDeathRespawnDriver : MonoBehaviour
             Vector3 pos = transform.position;
             pos.y += _respawnLiftY;
             transform.position = pos;
-
+            
+            // 부활: 애니 게임오버 false
+            if (_animationController != null)
+                _animationController.SetGameOver(false);
+            
             // 이동 / 입력 복구
             SetControllersEnabled(true);
 
@@ -104,6 +115,9 @@ public class PlayerDeathRespawnDriver : MonoBehaviour
 
         if (_characterMovement != null)
             _characterMovement.enabled = enabled;
+        
+        if (_cameraController != null)
+            _cameraController.enabled = enabled;
     }
 
     private IEnumerator CoBlink()
