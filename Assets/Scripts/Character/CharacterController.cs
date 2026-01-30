@@ -20,8 +20,6 @@ public class CharacterController : MonoBehaviour
      private Transform _targetTransform;
      private CameraController _cameraController;
      
-     [SerializeField] private Transform _rayStartPoint;
-     [SerializeField] private Transform _rayDirPoint;
      private Ray _ray;
 
      [SerializeField] private int _playerLife;

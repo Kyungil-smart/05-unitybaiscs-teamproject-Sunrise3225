@@ -134,7 +134,7 @@ GameObject:
   - component: {fileID: 932071749}
   - component: {fileID: 932071748}
   - component: {fileID: 932071747}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -539,7 +539,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _spawnPrefabs:
-  - {fileID: 5316347590048543990, guid: 5bcb11b53e6352b4fb41f1d4fd4a050d, type: 3}
+  - {fileID: 7024364664093282279, guid: 959886e1c3128a0419adbf4aa4dd872f, type: 3}
   _spawnPositions:
   - {x: 20, y: 0, z: 0}
   - {x: -20, y: 0, z: 0}

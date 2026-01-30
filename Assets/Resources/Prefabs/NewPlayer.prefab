@@ -254,7 +254,7 @@ MonoBehaviour:
   _cameraTargetLayer:
     serializedVersion: 2
     m_Bits: 1024
-  _mouseSensitivity: 700
+  _mouseSensitivity: 200
   _pitchMin: -30
   _pitchMax: 50
   _camera: {fileID: 0}
@@ -295,8 +295,6 @@ MonoBehaviour:
     m_Bits: 512
   _maxMagazine: 500
   GroundDistance: 0.5
-  _rayStartPoint: {fileID: 7606827090828501918}
-  _rayDirPoint: {fileID: 7606827090828501918}
   _playerLife: 10
   _isGrounded: 0
   IsDead: 0
