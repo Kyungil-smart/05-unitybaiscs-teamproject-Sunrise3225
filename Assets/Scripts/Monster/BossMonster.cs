@@ -13,6 +13,7 @@ public class BossMonster : MonsterController
         BossSkillType.ApproachMelee,
         BossSkillType.SlamAttack,
     };
+
     [Header("Skill Timing")]
     public float skillGap = 0.35f;
     [Header("Approach Melee Skill Setting")]

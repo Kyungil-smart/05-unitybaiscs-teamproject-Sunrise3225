@@ -5,11 +5,15 @@ using UnityEngine.SceneManagement;
 
 public class SceneManagement : MonoBehaviour
 {
-    public SceneManagement Instance { get; private set; }
+    public static SceneManagement Instance { get; private set; }
 
-    private int _sceneIndex;
-    private int _currentSceneIndex;
+    [Header("Scene Name")]
+    [SerializeField] private string gameSceneName;
+    [SerializeField] private string shopSceneName;
 
+    [Header("UI Popup")]
+    [SerializeField] private UI_IntroPopup introPopupPrefab;
+    [SerializeField] private UI_TitlePopup titlePopupPrefab;
     void Awake()
     {
         if (Instance != null &&  Instance != this)
@@ -20,22 +24,28 @@ public class SceneManagement : MonoBehaviour
 
         Instance = this;
         DontDestroyOnLoad(gameObject);
-        _currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
-        _sceneIndex = _currentSceneIndex;
+    }
+    private void Start()
+    {
+        if (titlePopupPrefab != null)
+            titlePopupPrefab = Instantiate(titlePopupPrefab, null);
+    }
+    public void LoadGameScene()
+    {
+        UI_IntroPopup popup = Instantiate(introPopupPrefab, null);
+        popup.gameObject.SetActive(true);
+
+        popup.SetInfo(0, 2, () =>
+        {
+            if (!string.IsNullOrEmpty(gameSceneName))
+                SceneManager.LoadScene(gameSceneName);
+        });
+    }
+    public void LoadShopScene()
+    {
+        if (!string.IsNullOrEmpty(shopSceneName))
+            SceneManager.LoadScene(shopSceneName);
     }
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            SceneLoad();
-        }
-    }
-    
-    public void SceneLoad()
-    {
-        _currentSceneIndex = SceneManager.GetActiveScene().buildIndex + 1;
-        _sceneIndex = _currentSceneIndex;
-        SceneManager.LoadScene(_sceneIndex);
-    }
+    public void SceneLoad(string sceneName) => SceneManager.LoadScene(sceneName);
 }
