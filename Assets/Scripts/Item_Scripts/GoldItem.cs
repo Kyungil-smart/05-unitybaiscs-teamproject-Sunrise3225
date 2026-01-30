@@ -18,6 +18,4 @@ public class GoldItem : MonoBehaviour
         gold.RefillAmmo(_moneyValue);
         Destroy(gameObject);
     }
-
-
 }
