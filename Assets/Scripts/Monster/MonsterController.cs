@@ -360,10 +360,15 @@ public class MonsterController : MonoBehaviour, IDamageable
                 _coKnockback = StartCoroutine(CoKnockBack());
         }
         // TODO : 이펙트 추가해서 넣기
+        Vector3 pos = transform.position + Vector3.up * 0.5f;
+        Vector3 normal = transform.position - Player.transform.position;
+        Quaternion rot = Quaternion.LookRotation(normal.normalized);
+        TestEffectManager.Instance.SpawnEffect(TestEffectManager.EffectType.Blood, pos, rot, transform);
 
         if (hitClip != null)
             audioPlayer.PlayOneShot(hitClip, volumeScale: 0.5f);
     }
+
     public virtual void OnDead()
     {
         OnBossDead?.Invoke();
@@ -476,6 +481,4 @@ public class MonsterController : MonoBehaviour, IDamageable
         if (this.isActiveAndEnabled && gameObject.activeInHierarchy && objectType != ObjectType.Monster)
             MonsterInfoUpdate?.Invoke(this);
     }
-
-    
 }
