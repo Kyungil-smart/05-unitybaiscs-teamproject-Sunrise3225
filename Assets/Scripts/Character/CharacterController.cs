@@ -12,6 +12,7 @@ public class CharacterController : MonoBehaviour
      [SerializeField] private int _attackDamage;            // 데미지 입히기
      [SerializeField] private LayerMask _attackTargetLayer; // 적 레이어 
      [SerializeField] private int _maxMagazine;             // 탄창 수
+    [SerializeField] private int _money;
      private int _currentMagazine;                          // 잔탄 수 
 
      public float GroundDistance = 0.5f;
@@ -32,12 +33,14 @@ public class CharacterController : MonoBehaviour
      // UI 프로퍼티
      // HP
      public float CurrentHp { get {return _currentHp; } }
-     public int MaxHp { get {return _maxHp; } }
+     public int MaxHp { get { return _maxHp; } set => _maxHp = value; }
      // Magazine
      public int CurrentMagazine { get {return _currentMagazine; } }
-     public int MaxMagazine { get {return _maxMagazine; } }
+     public int MaxMagazine { get { return _maxMagazine; } set => _maxMagazine = value; }
      // Player Life
      public int PlayerLife { get {return _playerLife; } }
+    public int Attack { get => _attackDamage; set => _attackDamage = value; }
+    public int Money { get => _money; set => _money = value; }
 
      private void Awake()
      {
