@@ -134,8 +134,31 @@ public class CharacterController : MonoBehaviour
      {
         _rigidbody.AddForce(Vector3.up * _jumpForce, ForceMode.Impulse);
      }
-     
-     private void OnDrawGizmos()
+
+     private Vector3 GetDirection()
+     {
+         return (_rayDirPoint.position - _rayStartPoint.position).normalized;
+     }
+
+    #region HealItem
+    public void Heal(int healingValue)
+    {
+        _currentHp += healingValue;
+        if (_currentHp > _maxHp)
+            _currentHp = _maxHp;
+    }
+    #endregion
+
+    #region AmmoItem
+    public void RefillAmmo(int ammoValue)
+    {
+        _currentMagazine += ammoValue;
+        if (_currentMagazine > _maxMagazine)
+            _currentMagazine = _maxMagazine;
+    }
+    #endregion
+
+    private void OnDrawGizmos()
      {
          Gizmos.color = Color.red;
          Gizmos.DrawRay(_ray.origin, _ray.direction * _attackRange);
