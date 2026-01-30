@@ -28,6 +28,12 @@ public class Define
         SlamAttack,     // 제자리 광역 내려찍기
     }
 
+    public enum StatType
+    {
+        Attack,
+        MaxMagazine,
+        MaxHp,
+    }
     #region 넉백 데이터
     public static float KNOCKBACK_TIME = 0.2f;        // 밀려나는 시간
     public static float KNOCKBACK_SPEED = 10;        // 밀려나는 속도
