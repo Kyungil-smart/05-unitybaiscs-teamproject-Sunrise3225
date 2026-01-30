@@ -15,7 +15,7 @@ public class CameraController : MonoBehaviour
     private float _pitch;
     private Ray _ray;
     private float _rayDistance;
-    private Camera _camera;
+    public Camera _camera;
     private float _maxCameraDistance;
     private float _cameraTargetDistance;
     private float _currentCameraDistance;

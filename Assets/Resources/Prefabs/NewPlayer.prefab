@@ -257,6 +257,7 @@ MonoBehaviour:
   _mouseSensitivity: 700
   _pitchMin: -30
   _pitchMax: 50
+  _camera: {fileID: 0}
 --- !u!114 &766561110497250422
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -286,12 +287,12 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 128
   _maxHp: 999999
-  _attackRange: 0
+  _attackRange: 20
   _jumpForce: 6
-  _attackDamage: 0
+  _attackDamage: 10
   _attackTargetLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 512
   _maxMagazine: 500
   GroundDistance: 0.5
   _rayStartPoint: {fileID: 7606827090828501918}
