@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2238517965552425661}
   - component: {fileID: 7991226134026594744}
+  - component: {fileID: 3507984664513967334}
   m_Layer: 0
   m_Name: HealingKit
   m_TagString: Untagged
@@ -54,6 +55,19 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.7, y: 0.28, z: 0.479}
   m_Center: {x: 0, y: 0.14, z: 0}
+--- !u!114 &3507984664513967334
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5416913622167093794}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a81a5e7e584c94743a143c410eb4fce6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _healingValue: 30
 --- !u!1001 &4917866505083419945
 PrefabInstance:
   m_ObjectHideFlags: 0

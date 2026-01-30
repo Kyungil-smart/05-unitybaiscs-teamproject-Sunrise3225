@@ -142,7 +142,25 @@ public class CharacterController : MonoBehaviour
          return (_rayDirPoint.position - _rayStartPoint.position).normalized;
      }
 
-     private void OnDrawGizmos()
+    #region HealItem
+    public void Heal(int healingValue)
+    {
+        _currentHp += healingValue;
+        if (_currentHp > _maxHp)
+            _currentHp = _maxHp;
+    }
+    #endregion
+
+    #region AmmoItem
+    public void RefillAmmo(int ammoValue)
+    {
+        _currentMagazine += ammoValue;
+        if (_currentMagazine > _maxMagazine)
+            _currentMagazine = _maxMagazine;
+    }
+    #endregion
+
+    private void OnDrawGizmos()
      {
          Vector3 direction = GetDirection();
          Gizmos.color = Color.red;
