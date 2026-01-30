@@ -25,7 +25,7 @@ public class CharacterController : MonoBehaviour
      private Ray _ray;
 
      [SerializeField] private int _playerLife;
-     private bool _isGrounded;
+     public bool _isGrounded;
      private float _currentHp;                                // 현재 체력
      public bool IsDead = false;                          // 생존 여부
      

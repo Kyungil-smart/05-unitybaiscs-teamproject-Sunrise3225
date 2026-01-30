@@ -15,17 +15,44 @@ public class CharacterMovement : MonoBehaviour
     // [SerializeField] private float _pitchMax;
     
     private Rigidbody _rigidbody;
+    private CharacterController _characterController;
+
+    private Vector3 movement;
+
+    private bool _isWall;
     // private float _pitch;
 
     public void Start()
     {
         _rigidbody = GetComponent<Rigidbody>();
+        _characterController = GetComponent<CharacterController>();
     }
 
     private void Update()
     {
         // Rotation();
         Move();
+    }
+
+    private void FixedUpdate()
+    {
+        _rigidbody.MovePosition(transform.position + movement * _moveSpeed * Time.fixedDeltaTime);
+    }
+
+    private void OnCollisionStay(Collision other)
+    {
+        if (other.gameObject.CompareTag("Wall"))
+        {
+            _isWall = true;
+        }
+    }
+
+    private void OnCollisionExit(Collision other)
+    {
+        if (other.gameObject.CompareTag("Wall"))
+        {
+            _isWall = false;
+        }
     }
 
     // private void Rotation()
@@ -46,7 +73,12 @@ public class CharacterMovement : MonoBehaviour
         float x = Input.GetAxisRaw("Horizontal");
         float z = Input.GetAxisRaw("Vertical");
         
-        Vector3 movement = (transform.right * x + transform.forward * z).normalized;
-        transform.position += movement * (_moveSpeed * Time.deltaTime);
+        movement = (transform.right * x + transform.forward * z).normalized;
+
+        if (_isWall && !_characterController._isGrounded)
+        {
+            movement *= 0.05f;
+        }
+        // transform.position += movement * (_moveSpeed * Time.deltaTime);
     }
 }
