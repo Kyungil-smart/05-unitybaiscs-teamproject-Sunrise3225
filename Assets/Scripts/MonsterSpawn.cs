@@ -11,7 +11,6 @@ public class MonsterSpawn : MonoBehaviour
     [SerializeField] private List<Vector3> _spawnPositions = new List<Vector3>();
     
     // 코루틴 접근 필드
-    [SerializeField] private float _waveDelay;
     [SerializeField] private float _spawnDelay;
     
     // 생성 위치를 랜덤으로 설정하기 위한 인덱스
@@ -31,11 +30,13 @@ public class MonsterSpawn : MonoBehaviour
     [SerializeField] private float _waveStartTime;
     private float _timeCount;
     
+    // 콜라이더 충돌 확인하기 위한 필드
     private CharacterController _player;
     private SphereCollider _collider;
     private bool _isPlayerInside;
-
-
+    private bool _onMonsterWave;
+    private bool _isFirstWave = true;
+    
     // 현재 씬에 남아있는 몬스터 수를 확인하기 위한 필드
     private int _aliveMonsterCount;
     public int AliveMonsterCount
@@ -71,21 +72,20 @@ public class MonsterSpawn : MonoBehaviour
             _timeCount += Time.deltaTime;
             if (_timeCount >= _waveStartTime)
             {
-                WaveStart();
-                _isPlayerInside = false;
+                if (_isFirstWave)
+                {
+                    WaveStart();
+                    _isFirstWave = false;
+                }
+                
                 _collider.enabled = false;
+                _isPlayerInside = false;
+                _onMonsterWave = true;
             }
         }
         
         RandomSpawn();
-
-        //if (_player.CurrentHealth <= 0)
-        //{
-        //    WaveStop();
-        //    _waveCount = 0;
-        //    _spawnCount = 0;
-        //    _maxSpawnCount = 10;
-        //}
+        
     }
 
     private void Init()
@@ -152,9 +152,11 @@ public class MonsterSpawn : MonoBehaviour
 
             yield return new WaitUntil(() => _aliveMonsterCount <= 0);
         
+            _onMonsterWave = false;
+            _collider.enabled = true;
             _maxSpawnCount = (int)(_maxSpawnCount * 1.5f);
             _spawnCount = 0;
-            yield return new WaitForSeconds(_waveDelay);
+            yield return new WaitUntil(() => _onMonsterWave);
         }
     }
 
@@ -162,7 +164,6 @@ public class MonsterSpawn : MonoBehaviour
     {
         GameObject monster = Instantiate(_spawnPrefab, _spawnPosition, Quaternion.identity);
         _aliveMonsterCount++;
-        Debug.Log($"생성된 몬스터 수 : {_aliveMonsterCount}");
 
         monster.GetComponent<MonsterController>().Init(this);
     }
@@ -170,7 +171,6 @@ public class MonsterSpawn : MonoBehaviour
     public void OnMonsterSpawn()
     {
         _aliveMonsterCount--;
-        Debug.Log($" 현재 남은 몬스터 수 : {_aliveMonsterCount}");
     }
 
     private void OnDrawGizmos()

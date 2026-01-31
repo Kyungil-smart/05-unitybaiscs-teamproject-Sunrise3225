@@ -122,6 +122,11 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!4 &905928537 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1978809354600836703, guid: 9a51330422da0c74ba83bdd5b260ab9c, type: 3}
+  m_PrefabInstance: {fileID: 1006553536}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1006553536
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -133,7 +138,7 @@ PrefabInstance:
     - target: {fileID: 2787498028150819556, guid: 9a51330422da0c74ba83bdd5b260ab9c, type: 3}
       propertyPath: _rayStartPoint
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 905928537}
     - target: {fileID: 2957438258204489918, guid: 9a51330422da0c74ba83bdd5b260ab9c, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -444,11 +449,10 @@ MonoBehaviour:
   - {x: -20, y: 0, z: 0}
   - {x: 0, y: 0, z: 20}
   - {x: 0, y: 0, z: -20}
-  _waveDelay: 5
   _spawnDelay: 1
   _maxSpawnCount: 10
   _waveStartTime: 3
-  _maxWaveCount: 2
+  _maxWaveCount: 3
 --- !u!4 &1894091473
 Transform:
   m_ObjectHideFlags: 0

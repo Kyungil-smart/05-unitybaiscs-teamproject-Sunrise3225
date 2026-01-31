@@ -327,6 +327,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 512
   _maxMagazine: 500
+  _money: 0
   GroundDistance: 0.5
   _rayStartPoint: {fileID: 1978809354600836703}
   _rayEndPoint: {fileID: 3768590805595408670}
