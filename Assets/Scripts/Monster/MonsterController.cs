@@ -363,8 +363,6 @@ public class MonsterController : MonoBehaviour, IDamageable
         hp -= Mathf.RoundToInt(damage);
         OnTakeDamage?.Invoke(damage); // 몬스터가 맞은 경우 신호 전달
         
-        
-
         // 몬스터 공격 당하면 바로 쫓아가게 설정 
         if (Player == null)
         {
