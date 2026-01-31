@@ -1254,6 +1254,37 @@ Transform:
   - {fileID: 837003454317226397}
   m_Father: {fileID: 7043340734614254894}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &5084187695088241464
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3453685622789670920}
+  m_Layer: 9
+  m_Name: DMGTextWindow
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3453685622789670920
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5084187695088241464}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.095, y: 1.463, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6485097702358327000}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5596344872901122023
 GameObject:
   m_ObjectHideFlags: 0
@@ -1780,6 +1811,7 @@ GameObject:
   - component: {fileID: 8191766930187972817}
   - component: {fileID: 5339209593826852962}
   - component: {fileID: 7588846302068294787}
+  - component: {fileID: 1280235895670846773}
   m_Layer: 9
   m_Name: Monster_02
   m_TagString: Monster
@@ -1803,6 +1835,7 @@ Transform:
   - {fileID: 5737813166712917007}
   - {fileID: 2263399362251722487}
   - {fileID: 8763981328542420963}
+  - {fileID: 3453685622789670920}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &5990487773885719261
@@ -2008,6 +2041,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   objectType: 0
   monsterState: 0
+  OnTakeDamage:
+    m_PersistentCalls:
+      m_Calls: []
   IsDead: 0
   Player: {fileID: 0}
   IsTarget:
@@ -2028,6 +2064,20 @@ MonoBehaviour:
   Anim: {fileID: 0}
   agent: {fileID: 0}
   monsterSpawn: {fileID: 0}
+--- !u!114 &1280235895670846773
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8580151715974210510}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f98844f555f15ad47ac6b92e1d276215, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hudDamageText: {fileID: 565716195302112302, guid: 1ff5516a56bc10d41aa32ce45f8392df, type: 3}
+  hudPos: {fileID: 3453685622789670920}
 --- !u!1 &8995592070519785529
 GameObject:
   m_ObjectHideFlags: 0
