@@ -1,23 +1,23 @@
 using UnityEngine;
 using static Define;
 
-// ÀÌ ½ºÅ©¸³Æ®¸¦ ÄÄÆ÷³ÍÆ®ÇÑ ¿ÀºêÁ§Æ®¸¦ ¸ó½ºÅÍ ÇÁ¸®ÆéÀÇ ÀÚ½Ä ¿ÀºêÁ§Æ®·Î µî·Ï
-// Á×À½ °ü·Ã ÇÔ¼ö ½ºÅ©¸³Æ®¿¡¼­
+// ì´ ìŠ¤í¬ë¦½íŠ¸ë¥¼ ì»´í¬ë„ŒíŠ¸í•œ ì˜¤ë¸Œì íŠ¸ë¥¼ ëª¬ìŠ¤í„° í”„ë¦¬í©ì˜ ìì‹ ì˜¤ë¸Œì íŠ¸ë¡œ ë“±ë¡
+// ì£½ìŒ ê´€ë ¨ í•¨ìˆ˜ ìŠ¤í¬ë¦½íŠ¸ì—ì„œ
 // [SerializeField] private DropItem _dropItem;
-// ÇÊµå·Î ¼±¾ğ
-// ¸ó½ºÅÍ Á×À½ °ü·Ã ÇÔ¼ö¿¡(È¤Àº ÄÚµå¿¡) 
+// í•„ë“œë¡œ ì„ ì–¸
+// ëª¬ìŠ¤í„° ì£½ìŒ ê´€ë ¨ í•¨ìˆ˜ì—(í˜¹ì€ ì½”ë“œì—) 
 // _dropItem.MakeDropItem();
-// ¸Ş¼­µå¸¦
+// ë©”ì„œë“œë¥¼
 // Destroy();
-// Àü¿¡ È£Ãâ ÇÏµµ·Ï ÇÏ¸é ÀÛµ¿ÇÒ °ÍÀ¸·Î ¿¹»ó.
+// ì „ì— í˜¸ì¶œ í•˜ë„ë¡ í•˜ë©´ ì‘ë™í•  ê²ƒìœ¼ë¡œ ì˜ˆìƒ.
 
 public class DropItem : MonoBehaviour
 {
-    [SerializeField] private GameObject _goldPrefab; // µ·Àº ¹«Á¶°Ç µå¶ø
+    [SerializeField] private GameObject _goldPrefab; // ëˆì€ ë¬´ì¡°ê±´ ë“œë
 
-    [Tooltip("µå¶øµÉ ¾ÆÀÌÅÛÀÇ ¿ÀºêÁ§Æ®¸¦ µî·ÏÇØ ÁÖ¼¼¿ä.")]
+    [Tooltip("ë“œëë  ì•„ì´í…œì˜ ì˜¤ë¸Œì íŠ¸ë¥¼ ë“±ë¡í•´ ì£¼ì„¸ìš”.")]
     [SerializeField] private GameObject[] _itemList;
-    [Tooltip("¾ÆÀÌÅÛ µå¶ø È®·üÀ» Á¶Á¤ÇØ ÁÖ¼¼¿ä.")]
+    [Tooltip("ì•„ì´í…œ ë“œë í™•ë¥ ì„ ì¡°ì •í•´ ì£¼ì„¸ìš”.")]
     [SerializeField][Range(0, 1)] private float _dropPercent;
 
     public void MakeDropItem(Vector3 pos)
@@ -34,7 +34,7 @@ public class DropItem : MonoBehaviour
 
         GameObject prefab = FindPrefabType(type);
         if (prefab == null)
-            return; // ÇØ´ç Å¸ÀÔ ÇÁ¸®ÆÕ ¾øÀ¸¸é ±×³É ½ºÅµ
+            return; // í•´ë‹¹ íƒ€ì… í”„ë¦¬íŒ¹ ì—†ìœ¼ë©´ ê·¸ëƒ¥ ìŠ¤í‚µ
 
         Instantiate(prefab, pos, Quaternion.identity);
     }
@@ -47,7 +47,7 @@ public class DropItem : MonoBehaviour
             GameObject prefab = _itemList[i];
             if (prefab == null) continue;
 
-            // ÇÁ¸®ÆÕ¿¡ ºÙ¾îÀÖ´Â ¾ÆÀÌÅÛ ½ºÅ©¸³Æ®¿¡¼­ ItemType ÇÁ·ÎÆÛÆ¼ ÀĞ±â
+            // í”„ë¦¬íŒ¹ì— ë¶™ì–´ìˆëŠ” ì•„ì´í…œ ìŠ¤í¬ë¦½íŠ¸ì—ì„œ ItemType í”„ë¡œí¼í‹° ì½ê¸°
             AmmoItem ammo = prefab.GetComponent<AmmoItem>();
             if (ammo != null && ammo.ItemType == type) 
                 return prefab;

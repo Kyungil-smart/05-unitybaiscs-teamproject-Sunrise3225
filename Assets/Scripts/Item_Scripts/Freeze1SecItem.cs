@@ -5,7 +5,7 @@ using static Define;
 
 public class Freeze1SecItem : MonoBehaviour
 {
-    [Tooltip("ÀÌµ¿±â´É ½ºÅ©¸³Æ®¸¦ Ãß°¡ÇØ ÁÖ¼¼¿ä.")]
+    [Tooltip("ï¿½Ìµï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Å©ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ß°ï¿½ï¿½ï¿½ ï¿½Ö¼ï¿½ï¿½ï¿½.")]
     [SerializeField] private CharacterMovement _player;
 
     [SerializeField] private ItemType itemType = ItemType.FreezeItem;
@@ -15,17 +15,18 @@ public class Freeze1SecItem : MonoBehaviour
     {
         if (!other.CompareTag("Player")) return;
 
-        if (_player.enabled == true)
-        {
-            StartCoroutine(Freeze1SecMove());
-        }
+        var player = other.GetComponent<CharacterMovement>();
+        if (player == null || !player.enabled) return;
+        
+            StartCoroutine(Freeze1SecMove(player));
+        
     }
 
-    private IEnumerator Freeze1SecMove()
+    private IEnumerator Freeze1SecMove(CharacterMovement player)
     {
-        _player.enabled = false;
-        yield return new WaitForSeconds(1f);
-        _player.enabled = true;
+        player.enabled = false;
+        yield return new WaitForSeconds(2f);
+        player.enabled = true;
         Destroy(gameObject);
     }
 }
