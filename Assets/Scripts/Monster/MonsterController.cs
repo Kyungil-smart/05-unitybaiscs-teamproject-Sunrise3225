@@ -10,6 +10,19 @@ using static Define;
 
 public class MonsterController : MonoBehaviour, IDamageable
 {
+    #region onDamageColor
+    [Tooltip("데미지를 받았을 때 색상을 선택하세요.")]
+    [SerializeField] private Color _onDamageColor = new Color(1f, 0f, 0f, 1f);
+    [Tooltip("데미지를 받았을 때 색상이 변하는 지속시간을 입력하세요.")]
+    [SerializeField] private float _colorChangeTime = 0.1f;
+
+    private Renderer[] _renderers;
+    private MaterialPropertyBlock _mpb;
+    private Coroutine _damageCoroutine;
+
+    private static readonly int ColorID = Shader.PropertyToID("_BaseColor");
+    #endregion
+
     #region Action
     public event Action OnBossDead;   // ������ ���� ��쿡
     public event Action<MonsterController> MonsterInfoUpdate;
@@ -199,8 +212,12 @@ public class MonsterController : MonoBehaviour, IDamageable
         _dropItem = GetComponent<DropItem>();
         if (coll != null) coll.enabled = true;
         Anim = GetComponentInChildren<Animator>();
+        // changes color when damaged
+        _renderers = GetComponentsInChildren<Renderer>();
+        _mpb = new MaterialPropertyBlock();
 
-        InitStats(); // ���� �ʱ�ȭ
+
+        InitStats();
         
         agent.stoppingDistance = attackDistance - 0.2f;
         agent.speed = patrolSpeed;
@@ -316,13 +333,20 @@ public class MonsterController : MonoBehaviour, IDamageable
     #region Animation Event
     public virtual void EnableAttack()
     {
+        if (IsDead) return;
+
         monsterState = MonsterState.Attack;
         lastAttackTargets.Clear();
     }
     public virtual void DisableAttack()
     {
+        if (IsDead) return;
+
         monsterState = MonsterState.Chase;
-        agent.isStopped = false;
+
+        if (agent != null && agent.enabled && agent.isOnNavMesh)
+            agent.isStopped = false;
+
         _lockAttackLook = false;
         agent.updateRotation = true;
     }
@@ -339,13 +363,6 @@ public class MonsterController : MonoBehaviour, IDamageable
         hp -= Mathf.RoundToInt(damage);
         OnTakeDamage?.Invoke(damage); // 몬스터가 맞은 경우 신호 전달
         
-        if (hp <= 0)
-        {
-            IsDead = true;
-            OnDead();
-            return;
-        }
-
         // 몬스터 공격 당하면 바로 쫓아가게 설정 
         if (Player == null)
         {
@@ -360,16 +377,37 @@ public class MonsterController : MonoBehaviour, IDamageable
 
             agent.SetDestination(Player.transform.position);
         }
+        // Change color when receiving monster damage
+        if (_damageCoroutine != null)
+            StopCoroutine(_damageCoroutine);
+        _damageCoroutine = StartCoroutine(CoChangeColor());
 
         InvokeMonsterData();
-        // 몬스터 넉백
+        // Monster Kockback
         if (objectType == ObjectType.Monster && monsterState != MonsterState.Attack)
         {
             if (_coKnockback == null)
                 _coKnockback = StartCoroutine(CoKnockBack());
         }
-        // TODO : Effect Add
+        // Monster Damage Effect
+        float yOffset = (objectType == ObjectType.Boss) ? 2.0f : 1.4f;
+        Vector3 fxPos = transform.position + Vector3.up * yOffset;
+        Quaternion rot = Quaternion.identity;
+        if (Player != null)
+        {
+            Vector3 dir = Player.transform.position - fxPos;
+            dir.y = 0f;
+            if (dir.sqrMagnitude > 0.0001f)
+                rot = Quaternion.LookRotation(dir.normalized);
+        }
+        EffectManager.Instance.SpawnEffect(EffectManager.EffectType.Blood, fxPos, rot, transform);
 
+        if (hp <= 0)
+        {
+            IsDead = true;
+            OnDead();
+            return;
+        }
         if (hitClip != null)
             audioPlayer.PlayOneShot(hitClip, volumeScale: 0.5f);
     }
@@ -427,6 +465,24 @@ public class MonsterController : MonoBehaviour, IDamageable
         _coKnockback = null;
         agent.isStopped = false;
         yield break;
+    }
+    private IEnumerator CoChangeColor()
+    {
+        foreach (var r in _renderers)
+        {
+            r.GetPropertyBlock(_mpb);
+            _mpb.SetColor(ColorID, _onDamageColor);
+            r.SetPropertyBlock(_mpb);
+        }
+
+        yield return new WaitForSeconds(_colorChangeTime);
+
+        foreach (var r in _renderers)
+        {
+            r.SetPropertyBlock(null);
+        }
+
+        _damageCoroutine = null;
     }
     public virtual void OnCollisionEnter(Collision collision)
     {

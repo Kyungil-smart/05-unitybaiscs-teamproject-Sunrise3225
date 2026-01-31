@@ -65,7 +65,7 @@ public class DropItem : MonoBehaviour
                 return prefab;
 
             SlowMoveItem slow = prefab.GetComponent<SlowMoveItem>();
-            if (fast != null && fast.ItemType == type)
+            if (slow != null && slow.ItemType == type)
                 return prefab;
         }
 
