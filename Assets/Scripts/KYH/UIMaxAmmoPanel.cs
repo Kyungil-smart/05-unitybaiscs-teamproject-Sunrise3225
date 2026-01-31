@@ -5,11 +5,11 @@ using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UIAttackPanel : MonoBehaviour, IUIPanel
+public class UIMaxAmmoPanel : MonoBehaviour, IUIPanel
 {
     [SerializeField] private CharacterController _characterController;
-    [SerializeField] private TextMeshProUGUI _attackIncrease;
-    [SerializeField] private TextMeshProUGUI _attackPrice;
+    [SerializeField] private TextMeshProUGUI _maxAmmoIncrease;
+    [SerializeField] private TextMeshProUGUI _maxAmmoPrice;
     [SerializeField] private Button _purchaseButton;
     
     private ShopPanelManager _uiPanelManager;
@@ -21,7 +21,7 @@ public class UIAttackPanel : MonoBehaviour, IUIPanel
 
     private void Start()
     {
-        _purchaseButton.onClick.AddListener(AttackPriceButtonClick);
+        _purchaseButton.onClick.AddListener(MaxAmmoPriceButtonClick);
     }
 
     private void Update()
@@ -32,14 +32,14 @@ public class UIAttackPanel : MonoBehaviour, IUIPanel
     
     public void RefreshPanelText()
     {
-        _attackIncrease.text = $"{_characterController.AttackDamage}" +
-                               $"-> {_characterController.AttackDamage + _uiPanelManager.IncreaseAttackDamageAmount}";
-        _attackPrice.text = $"{_uiPanelManager.AttackPrice}";
+        _maxAmmoIncrease.text = $"{_characterController.MaxMagazine} " +
+                                $"-> {_characterController.MaxMagazine + _uiPanelManager.IncreaseMaxAmmoAmount}";
+        _maxAmmoPrice.text = $"{_uiPanelManager.MaxAmmoPrice}";
     }
 
     public void ButtonInteractable()
     {
-        if (_characterController.Money >= _uiPanelManager.AttackPrice)
+        if (_characterController.Money >= _uiPanelManager.MaxAmmoPrice)
         {
             _purchaseButton.interactable = true;
         }
@@ -49,10 +49,10 @@ public class UIAttackPanel : MonoBehaviour, IUIPanel
         }
     }
 
-    public void AttackPriceButtonClick()
+    public void MaxAmmoPriceButtonClick()
     {
-        _characterController.Money -= _uiPanelManager.AttackPrice;
-        _characterController.AttackDamage += _uiPanelManager.IncreaseAttackDamageAmount;
-        _uiPanelManager.AttackPrice += _uiPanelManager.IncreaseAttackPrice;
+        _characterController.Money -= _uiPanelManager.MaxAmmoPrice;
+        _characterController.MaxMagazine += _uiPanelManager.IncreaseMaxAmmoAmount;
+        _uiPanelManager.MaxAmmoPrice += _uiPanelManager.IncreaseMaxAmmoPrice;
     }
 }

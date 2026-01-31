@@ -70,7 +70,7 @@ public class UI_StatItem : MonoBehaviour
                     player.MaxHp += value;
                     break;
                 case StatType.Attack:
-                    player.Attack += value;
+                    player.AttackDamage += value;
                     break;
                 case StatType.MaxMagazine:
                     player.MaxMagazine += value;
@@ -91,11 +91,11 @@ public class UI_StatItem : MonoBehaviour
         switch (type)
         {
             case StatType.MaxHp:
-                return new StatUpgradeInfo { title = "ÃÖ´ë Ã¼·Â", price = 100, increase = 10 };
+                return new StatUpgradeInfo { title = "ï¿½Ö´ï¿½ Ã¼ï¿½ï¿½", price = 100, increase = 10 };
             case StatType.Attack:
-                return new StatUpgradeInfo { title = "°ø°Ý·Â", price = 200, increase = 5 };
+                return new StatUpgradeInfo { title = "ï¿½ï¿½ï¿½Ý·ï¿½", price = 200, increase = 5 };
             case StatType.MaxMagazine:
-                return new StatUpgradeInfo { title = "ÃÖ´ë ÅºÃ¢", price = 130, increase = 10 };
+                return new StatUpgradeInfo { title = "ï¿½Ö´ï¿½ ÅºÃ¢", price = 130, increase = 10 };
         }
         return default;
     }
@@ -107,7 +107,7 @@ public class UI_StatItem : MonoBehaviour
             case StatType.MaxHp:
                 return player.MaxHp;
             case StatType.Attack:
-                return player.Attack;
+                return player.AttackDamage;
             case StatType.MaxMagazine:
                 return player.MaxMagazine;
         }

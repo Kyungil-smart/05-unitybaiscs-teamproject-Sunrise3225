@@ -5,11 +5,11 @@ using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UIAttackPanel : MonoBehaviour, IUIPanel
+public class UIMaxHPPanel : MonoBehaviour, IUIPanel
 {
     [SerializeField] private CharacterController _characterController;
-    [SerializeField] private TextMeshProUGUI _attackIncrease;
-    [SerializeField] private TextMeshProUGUI _attackPrice;
+    [SerializeField] private TextMeshProUGUI _maxHpIncrease;
+    [SerializeField] private TextMeshProUGUI _maxHpPrice;
     [SerializeField] private Button _purchaseButton;
     
     private ShopPanelManager _uiPanelManager;
@@ -21,7 +21,7 @@ public class UIAttackPanel : MonoBehaviour, IUIPanel
 
     private void Start()
     {
-        _purchaseButton.onClick.AddListener(AttackPriceButtonClick);
+        _purchaseButton.onClick.AddListener(MaxHpPriceButtonClick);
     }
 
     private void Update()
@@ -32,14 +32,14 @@ public class UIAttackPanel : MonoBehaviour, IUIPanel
     
     public void RefreshPanelText()
     {
-        _attackIncrease.text = $"{_characterController.AttackDamage}" +
-                               $"-> {_characterController.AttackDamage + _uiPanelManager.IncreaseAttackDamageAmount}";
-        _attackPrice.text = $"{_uiPanelManager.AttackPrice}";
+        _maxHpIncrease.text = $"{_characterController.MaxHp}" +
+                              $"-> {_characterController.MaxHp + _uiPanelManager.IncreaseMaxHpAmount}";
+        _maxHpPrice.text = $"{_uiPanelManager.MaxHpPrice}";
     }
 
     public void ButtonInteractable()
     {
-        if (_characterController.Money >= _uiPanelManager.AttackPrice)
+        if (_characterController.Money >= _uiPanelManager.MaxHpPrice)
         {
             _purchaseButton.interactable = true;
         }
@@ -49,10 +49,10 @@ public class UIAttackPanel : MonoBehaviour, IUIPanel
         }
     }
 
-    public void AttackPriceButtonClick()
+    private void MaxHpPriceButtonClick()
     {
-        _characterController.Money -= _uiPanelManager.AttackPrice;
-        _characterController.AttackDamage += _uiPanelManager.IncreaseAttackDamageAmount;
-        _uiPanelManager.AttackPrice += _uiPanelManager.IncreaseAttackPrice;
+        _characterController.Money -= _uiPanelManager.MaxHpPrice;
+        _characterController.MaxHp += _uiPanelManager.IncreaseMaxHpAmount;
+        _uiPanelManager.MaxHpPrice += _uiPanelManager.IncreaseMaxHpPrice;
     }
 }

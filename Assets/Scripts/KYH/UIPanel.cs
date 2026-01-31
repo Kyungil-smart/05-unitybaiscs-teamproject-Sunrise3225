@@ -6,4 +6,5 @@ using UnityEngine;
 public interface IUIPanel
 {
     public void RefreshPanelText();
+    public void ButtonInteractable();
 }
