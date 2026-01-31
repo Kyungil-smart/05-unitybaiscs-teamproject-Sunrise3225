@@ -2022,6 +2022,7 @@ GameObject:
   - component: {fileID: 6759590785944342813}
   - component: {fileID: 8426524650643394084}
   - component: {fileID: 6412755294140480135}
+  - component: {fileID: -7317302816219613735}
   m_Layer: 9
   m_Name: Monster_01
   m_TagString: Monster
@@ -2270,6 +2271,23 @@ MonoBehaviour:
   Anim: {fileID: 0}
   agent: {fileID: 0}
   monsterSpawn: {fileID: 0}
+--- !u!114 &-7317302816219613735
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7024364664093282279}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 46a1463357a67444690f5168320bf60e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _itemList:
+  - {fileID: 5416913622167093794, guid: 7f65e11ce323a654d9e4ae3b03a06678, type: 3}
+  - {fileID: 5763018426558098922, guid: 61fc3835efe4ce648b36e4ed3499ccf4, type: 3}
+  - {fileID: 6274776712118073419, guid: 4946694cc27b4194e817866a1ca830b4, type: 3}
+  _dropPercent: 0.6
 --- !u!1 &7057061280205685587
 GameObject:
   m_ObjectHideFlags: 0

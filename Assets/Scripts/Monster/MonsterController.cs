@@ -67,10 +67,10 @@ public class MonsterController : MonoBehaviour, IDamageable
 
     [HideInInspector] public Animator Anim;
     [HideInInspector] public NavMeshAgent agent;   // 경로 계산 AI
+    [HideInInspector] public MonsterSpawn monsterSpawn;
     private Rigidbody rigid;
     private Collider coll;
-
-    public MonsterSpawn monsterSpawn;
+    private DropItem _dropItem;
 
 #if UNITY_EDITOR
 
@@ -195,7 +195,7 @@ public class MonsterController : MonoBehaviour, IDamageable
         coll = GetComponent<Collider>();
         agent = GetComponent<NavMeshAgent>();
         audioPlayer = GetComponent<AudioSource>();
-
+        _dropItem = GetComponent<DropItem>(); // 드랍아이템 스크립트 선언
         if (coll != null) coll.enabled = true;
         Anim = GetComponentInChildren<Animator>();
 
@@ -293,9 +293,9 @@ public class MonsterController : MonoBehaviour, IDamageable
     {
         monsterState = MonsterState.AttackBegin;
 
-        bool useRight = NextRight;             
+        bool useRight = NextRight;
         _attackRoot = useRight ? attackRoot_R : attackRoot_L;
-        NextRight = !NextRight;         
+        NextRight = !NextRight;
 
         if (Player != null && Player.isActiveAndEnabled && !Player.IsDead)
         {
@@ -335,6 +335,7 @@ public class MonsterController : MonoBehaviour, IDamageable
 
     public void TakeDamage(int damage)
     {
+        if (IsDead) return;
         hp -= Mathf.RoundToInt(damage);
 
         if (hp <= 0)
@@ -376,6 +377,7 @@ public class MonsterController : MonoBehaviour, IDamageable
         else
         {
             // TODO : 골드나 아이템 같은거 드랍
+            _dropItem.MakeDropItem();
         }
 
         StopAllCoroutines();

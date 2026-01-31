@@ -1780,6 +1780,7 @@ GameObject:
   - component: {fileID: 8191766930187972817}
   - component: {fileID: 5339209593826852962}
   - component: {fileID: 7588846302068294787}
+  - component: {fileID: -8515053611913392721}
   m_Layer: 9
   m_Name: Monster_02
   m_TagString: Monster
@@ -1796,7 +1797,7 @@ Transform:
   m_GameObject: {fileID: 8580151715974210510}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 31.914776, y: -0.00000035762787, z: 8.233561}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2028,6 +2029,23 @@ MonoBehaviour:
   Anim: {fileID: 0}
   agent: {fileID: 0}
   monsterSpawn: {fileID: 0}
+--- !u!114 &-8515053611913392721
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8580151715974210510}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 46a1463357a67444690f5168320bf60e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _itemList:
+  - {fileID: 5763018426558098922, guid: 61fc3835efe4ce648b36e4ed3499ccf4, type: 3}
+  - {fileID: 5416913622167093794, guid: 7f65e11ce323a654d9e4ae3b03a06678, type: 3}
+  - {fileID: 6274776712118073419, guid: 4946694cc27b4194e817866a1ca830b4, type: 3}
+  _dropPercent: 0.686
 --- !u!1 &8995592070519785529
 GameObject:
   m_ObjectHideFlags: 0
