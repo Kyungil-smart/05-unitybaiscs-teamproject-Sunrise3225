@@ -35,10 +35,12 @@ public class CharacterController : MonoBehaviour
      
      [SerializeField] private GameObject _shopPanel;
      private bool _onShopPanel;
-     
-     // UI 프로퍼티
-     // HP
-     public float CurrentHp { get {return _currentHp; } }
+
+    [SerializeField] private onDamageColor _damageColor; // Hit Flash(맞으면 붉은색)
+
+    // UI 프로퍼티
+    // HP
+    public float CurrentHp { get {return _currentHp; } }
      public int MaxHp { get { return _maxHp; } set => _maxHp = value; }
      // Magazine
      public int CurrentMagazine { get {return _currentMagazine; } }
@@ -52,8 +54,11 @@ public class CharacterController : MonoBehaviour
      {
          _rigidbody = GetComponent<Rigidbody>();
          _cameraController = GetComponent<CameraController>();
-         
-         Init();
+
+        if (_damageColor == null)                         // Hit Flash(맞으면 붉은색)
+            _damageColor = GetComponent<onDamageColor>(); // Hit Flash(맞으면 붉은색)
+
+        Init();
          
          if (_rayStartPoint == null)
              _rayStartPoint = transform;
@@ -191,7 +196,9 @@ public class CharacterController : MonoBehaviour
          // 음수 데미지 들어오면 회복이 되므로(의도 아니면) 하한 0 처리
          damage = Mathf.Max(0f, damage);
 
-         _currentHp -= damage;
+        if (_damageColor != null) _damageColor.OnDamage(); // Hit Flash(맞으면 붉은색)
+
+        _currentHp -= damage;
          _currentHp = Mathf.Max(0f, _currentHp);
 
          if (_currentHp <= 0f)
