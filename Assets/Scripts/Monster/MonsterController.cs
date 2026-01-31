@@ -69,10 +69,10 @@ public class MonsterController : MonoBehaviour, IDamageable
 
     [HideInInspector] public Animator Anim;
     [HideInInspector] public NavMeshAgent agent;   // ��� ��� AI
+    [HideInInspector] public MonsterSpawn monsterSpawn;
     private Rigidbody rigid;
     private Collider coll;
-
-    public MonsterSpawn monsterSpawn;
+    private DropItem _dropItem;
 
 #if UNITY_EDITOR
 
@@ -197,7 +197,7 @@ public class MonsterController : MonoBehaviour, IDamageable
         coll = GetComponent<Collider>();
         agent = GetComponent<NavMeshAgent>();
         audioPlayer = GetComponent<AudioSource>();
-
+        _dropItem = GetComponent<DropItem>(); // ��������� ��ũ��Ʈ ����
         if (coll != null) coll.enabled = true;
         Anim = GetComponentInChildren<Animator>();
 
@@ -288,16 +288,16 @@ public class MonsterController : MonoBehaviour, IDamageable
                     }
                 }
             }
-            yield return new WaitForSeconds(0.2f);
+            yield return new WaitForSeconds(0.2f); // 0.2�� ���� �ڷ�ƾ ����
         }
     }
     public virtual void UpdateAttack()
     {
         monsterState = MonsterState.AttackBegin;
 
-        bool useRight = NextRight;             
+        bool useRight = NextRight;
         _attackRoot = useRight ? attackRoot_R : attackRoot_L;
-        NextRight = !NextRight;         
+        NextRight = !NextRight;
 
         if (Player != null && Player.isActiveAndEnabled && !Player.IsDead)
         {
@@ -337,6 +337,7 @@ public class MonsterController : MonoBehaviour, IDamageable
 
     public void TakeDamage(int damage)
     {
+        if (IsDead) return;
         hp -= Mathf.RoundToInt(damage);
         OnTakeDamage?.Invoke(damage); // 몬스터가 맞은 경우 신호 전달
         
@@ -379,6 +380,11 @@ public class MonsterController : MonoBehaviour, IDamageable
         else
         {
             // TODO : ��峪 ������ ������ ���
+            Vector3 dropPos;
+            if (Utils.RandomDropPointOnNavMesh(transform.position, 0.1f, 0.4f, out dropPos))
+                _dropItem.MakeDropItem(dropPos);
+            else
+                _dropItem.MakeDropItem(transform.position);
         }
 
         StopAllCoroutines();

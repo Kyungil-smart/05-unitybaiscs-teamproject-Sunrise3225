@@ -67,6 +67,7 @@ public class BossMonster : MonsterController
     public override bool Init(MonsterSpawn monsterSpawn)
     {
         base.Init(monsterSpawn);
+        objectType = ObjectType.Boss;
         transform.localScale = new Vector3(1.8f, 1.8f, 1.8f);
         BuildSkills();
         return true;

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static Define;
 
 public class SlowMoveItem : MonoBehaviour
 {
@@ -8,6 +9,8 @@ public class SlowMoveItem : MonoBehaviour
     [SerializeField] private float _slowMoveVelue;
     [Tooltip("디버프 지속시간을 넣어주세요.")]
     [SerializeField] private float _debuffTime;
+    [SerializeField] private ItemType itemType = ItemType.SlowItem;
+    public ItemType ItemType => itemType;
     private bool _isSlowMove = false;
 
     //private void OnTriggerEnter(Collider other)

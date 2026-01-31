@@ -68,6 +68,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _player: {fileID: 0}
+  itemType: 4
 --- !u!1001 &2615551014814665328
 PrefabInstance:
   m_ObjectHideFlags: 0
