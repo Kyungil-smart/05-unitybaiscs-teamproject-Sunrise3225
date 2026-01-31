@@ -10,6 +10,7 @@ public class BTypeMonster : MonsterController
         ChaseSpeed = 4.2f;
         Attack = 14f;
         Hp = 60f;
+        MaxHp = 60f;
         AttackDistance = 1.8f;
     }
     protected override string GetAttackTrigger(bool useRight)

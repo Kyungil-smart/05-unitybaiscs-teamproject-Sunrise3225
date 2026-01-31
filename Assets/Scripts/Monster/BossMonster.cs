@@ -14,6 +14,11 @@ public class BossMonster : MonsterController
         BossSkillType.SlamAttack,
         BossSkillType.RushAttack,
     };
+    [Header("Intro")]
+    public string roarStateName = "BossRoaring";
+    public float introCamDistance = 6.0f;
+    public float introCamHeight = 2.2f;
+    public float camMoveTime = 0.45f;
 
     [Header("Skill Timing")]
     public float skillGap = 0.35f;
@@ -33,6 +38,7 @@ public class BossMonster : MonsterController
     Coroutine _coPattern;
     int _patternIndex = 0;
     bool _doingSkill = false;
+    bool _introPlaying = false;
 
     // 스킬 보관
     Dictionary<BossSkillType, BossSkill> _skills;
@@ -44,16 +50,17 @@ public class BossMonster : MonsterController
         PatrolSpeed = 2.5f;
         ChaseSpeed = 4.2f;
         Attack = 50f;
-        Hp = 5000f;
+        Hp = 200f;
+        MaxHp = 200f;
         AttackDistance = 3.0f;
     }
 
     private void Start()
     {
-        if (_coPattern != null)
-            StopCoroutine(_coPattern);
+        //if (_coPattern != null)
+        //    StopCoroutine(_coPattern);
 
-        _coPattern = StartCoroutine(CoPatternLoop());
+        //_coPattern = StartCoroutine(CoPatternLoop());
     }
     private void OnDestroy()
     {
@@ -62,6 +69,13 @@ public class BossMonster : MonsterController
             StopCoroutine(_coPattern);
             _coPattern = null;
         }
+    }
+    void StartPattern()
+    {
+        if (_coPattern != null)
+            StopCoroutine(_coPattern);
+        _coPattern = StartCoroutine(CoPatternLoop());
+        Anim.SetFloat("Speed", agent.desiredVelocity.magnitude);
     }
 
     public override bool Init(MonsterSpawn monsterSpawn)
@@ -109,6 +123,11 @@ public class BossMonster : MonsterController
         base.UpdateAttack();
     }
 
+    public override void OnDead()
+    {
+        base.OnDead();
+
+    }
     #region Skill Sequence
     IEnumerator CoPatternLoop()
     {
@@ -163,6 +182,152 @@ public class BossMonster : MonsterController
     }
     #endregion
 
+    #region Intro Scene
+    public IEnumerator CoSpawnIntro(Transform playerTransform = null)
+    {
+        _introPlaying = true;
+
+        Camera cam = Camera.main;
+        if (cam == null)
+        {
+            _introPlaying = false;
+            StartPattern();
+            yield break;
+        }
+
+        // 카메라 추적 스크립트 끄기(이게 있어야 카메라가 안 되돌아감)
+        CameraController camFollow = cam.GetComponent<CameraController>();
+        if (camFollow == null) 
+            camFollow = cam.GetComponentInParent<CameraController>();
+
+        bool prevCamFollow = (camFollow != null) ? camFollow.enabled : false;
+        if (camFollow != null) 
+            camFollow.enabled = false;
+
+        Vector3 camStartPos = cam.transform.position;
+        Quaternion camStartRot = cam.transform.rotation;
+
+        // 보스 고정(핵심: updatePosition = false)
+        bool prevRootMotion = false;
+        float prevSpeed = 0f;
+        if (Anim != null)
+        {
+            prevRootMotion = Anim.applyRootMotion;
+            prevSpeed = Anim.GetFloat("Speed");
+            Anim.applyRootMotion = false;
+            Anim.SetFloat("Speed", 0f);
+        }
+
+        bool prevStopped = false;
+        bool prevUpdatePos = true;
+        bool prevUpdateRot = true;
+
+        if (agent != null && agent.enabled)
+        {
+            prevStopped = agent.isStopped;
+            prevUpdatePos = agent.updatePosition;
+            prevUpdateRot = agent.updateRotation;
+
+            if (agent.isOnNavMesh)
+            {
+                agent.isStopped = true;
+                agent.ResetPath();
+                agent.velocity = Vector3.zero;
+            }
+
+            agent.updatePosition = false;   // 이게 있어야 Roaring 중에 안 밀림
+            agent.updateRotation = false;
+        }
+
+        // 현재 카메라가 있는 방향 기준으로 보스 쪽으로 붙여서, 보스만 바라보게
+        Vector3 flatDir = camStartPos - transform.position;
+        flatDir.y = 0f;
+        if (flatDir.sqrMagnitude < 0.0001f) flatDir = -transform.forward;
+        flatDir.Normalize();
+
+        Vector3 lookTarget = transform.position + Vector3.up * introCamHeight;
+        Vector3 camTargetPos = transform.position + flatDir * introCamDistance + Vector3.up * introCamHeight;
+        Quaternion camTargetRot = Quaternion.LookRotation((lookTarget - camTargetPos).normalized, Vector3.up);
+
+        yield return MoveCamera(cam.transform, camStartPos, camStartRot, camTargetPos, camTargetRot, camMoveTime);
+
+        // Roaring 재생
+        if (Anim != null)
+            Anim.Play(roarStateName, 0, 0f);
+
+        float roarLen = GetClipLength(roarStateName);
+        if (roarLen <= 0f) roarLen = 3.0f;
+        yield return new WaitForSeconds(roarLen);
+
+        // 카메라 복귀
+        yield return MoveCamera(cam.transform, cam.transform.position, cam.transform.rotation, camStartPos, camStartRot, camMoveTime);
+
+        // 원복
+        if (camFollow != null) camFollow.enabled = prevCamFollow;
+        if (Anim != null)
+        {
+            Anim.applyRootMotion = prevRootMotion;
+            Anim.SetFloat("Speed", prevSpeed);
+        }
+        if (agent != null && agent.enabled)
+        {
+            agent.updatePosition = prevUpdatePos;
+            agent.updateRotation = prevUpdateRot;
+            if (agent.isOnNavMesh) agent.isStopped = prevStopped;
+        }
+
+        //  패턴 시작 전에 Player 확보
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        if (player != null)
+        {
+            CharacterController pc = player.GetComponent<CharacterController>();
+            if (pc != null)
+            {
+                pc.enabled = true;
+                Player = pc;
+            }
+        }
+
+        _introPlaying = false;
+        StartPattern();
+    }
+    IEnumerator MoveCamera(Transform camTr, Vector3 fromPos, Quaternion fromRot, Vector3 toPos, Quaternion toRot, float moveTime)
+    {
+        if (moveTime <= 0f)
+        {
+            camTr.position = toPos;
+            camTr.rotation = toRot;
+            yield break;
+        }
+
+        float time = 0f;
+        while (time < moveTime)
+        {
+            time += Time.deltaTime;
+            float a = Mathf.Clamp01(time / moveTime);
+            camTr.position = Vector3.Lerp(fromPos, toPos, a);
+            camTr.rotation = Quaternion.Slerp(fromRot, toRot, a);
+            yield return null;
+        }
+
+        camTr.position = toPos;
+        camTr.rotation = toRot;
+    }
+    float GetClipLength(string clipName)
+    {
+        if (Anim == null || Anim.runtimeAnimatorController == null) return 0f;
+
+        AnimationClip[] clips = Anim.runtimeAnimatorController.animationClips;
+        if (clips == null) return 0f;
+
+        for (int i = 0; i < clips.Length; i++)
+        {
+            if (clips[i] != null && clips[i].name == clipName)
+                return clips[i].length;
+        }
+        return 0f;
+    }
+    #endregion
     public void DoAoeDamage(Vector3 center, float radius, float damage)
     {
         Collider[] cols = Physics.OverlapSphere(center, radius, IsTarget);

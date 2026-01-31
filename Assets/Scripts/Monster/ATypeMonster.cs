@@ -11,6 +11,7 @@ public class ATypeMonster : MonsterController
         ChaseSpeed = 4.2f;
         Attack = 14f;
         Hp = 100f;
+        MaxHp = 100f;
         AttackDistance = 1.8f;
     }
 }
