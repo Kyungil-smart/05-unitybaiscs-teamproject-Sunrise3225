@@ -4,24 +4,22 @@ using UnityEngine;
 
 public class Freeze1SecItem : MonoBehaviour
 {
-    [Tooltip("이동기능 스크립트를 추가해 주세요.")]
-    [SerializeField] private CharacterMovement _player;
-
     private void OnTriggerEnter(Collider other)
     {
         if (!other.CompareTag("Player")) return;
 
-        if (_player.enabled == true)
-        {
-            StartCoroutine(Freeze1SecMove());
-        }
+        var player = other.GetComponent<CharacterMovement>();
+        if (player == null || !player.enabled) return;
+        
+            StartCoroutine(Freeze1SecMove(player));
+        
     }
 
-    private IEnumerator Freeze1SecMove()
+    private IEnumerator Freeze1SecMove(CharacterMovement player)
     {
-        _player.enabled = false;
-        yield return new WaitForSeconds(1f);
-        _player.enabled = true;
+        player.enabled = false;
+        yield return new WaitForSeconds(2f);
+        player.enabled = true;
         Destroy(gameObject);
     }
 }

@@ -26,6 +26,7 @@ public class Define
     {
         ApproachMelee,  // 접근하다가 근처면 공격, 아니면 스킵
         SlamAttack,     // 제자리 광역 내려찍기
+        RushAttack      // 돌진공격 일단은 돌진공격 추후에 수정하자.
     }
 
     public enum StatType

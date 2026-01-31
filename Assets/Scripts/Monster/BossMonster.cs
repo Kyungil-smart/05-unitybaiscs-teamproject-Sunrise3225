@@ -12,6 +12,7 @@ public class BossMonster : MonsterController
     {
         BossSkillType.ApproachMelee,
         BossSkillType.SlamAttack,
+        BossSkillType.RushAttack,
     };
 
     [Header("Skill Timing")]
@@ -22,6 +23,12 @@ public class BossMonster : MonsterController
     public float slamWindup = 1.3f;
     public float slamRadius = 20f;
     public float slamDamageMul = 1.5f;
+    [Header("RushAttack")]
+    public float rushWindup = 1f;
+    public float rushDistance = 40f;
+    public float rushSpeed = 30f;
+    public float rushDamageMul = 3f;
+    public float launchForce = 0.1f;
 
     Coroutine _coPattern;
     int _patternIndex = 0;
@@ -43,7 +50,7 @@ public class BossMonster : MonsterController
 
     private void Start()
     {
-        if (_coPattern != null) 
+        if (_coPattern != null)
             StopCoroutine(_coPattern);
 
         _coPattern = StartCoroutine(CoPatternLoop());
@@ -68,7 +75,7 @@ public class BossMonster : MonsterController
     private void OnDrawGizmosSelected()
     {
         // Slam ¹üÀ§
-        Gizmos.color = new Color(1f, 0.5f, 0f, 0.25f); 
+        Gizmos.color = new Color(1f, 0.5f, 0f, 0.25f);
         Gizmos.DrawSphere(transform.position, slamRadius);
 
         Gizmos.color = new Color(1f, 0.5f, 0f, 0.9f);
@@ -89,6 +96,7 @@ public class BossMonster : MonsterController
         {
             {BossSkillType.ApproachMelee, new BossSkill_ApproachMelee() },
             {BossSkillType.SlamAttack, new BossSkill_SlamAttack() },
+            {BossSkillType.RushAttack, new BossSkill_RushAttack() },
         };
     }
     protected override string GetAttackTrigger(bool useRight)
@@ -164,6 +172,24 @@ public class BossMonster : MonsterController
             {
                 cc.PlayerTakeDamage(damage);
                 return;
+            }
+        }
+    }
+
+    public void DoRushDamage(Vector3 start, Vector3 direction, float distance, float damage)
+    {
+        if (Physics.Raycast(start + Vector3.up, direction, out RaycastHit hit, distance))
+        {
+            CharacterController cc = hit.collider.GetComponentInParent<CharacterController>();
+            if (cc != null && cc.isActiveAndEnabled && !cc.IsDead)
+            {
+                cc.PlayerTakeDamage(damage);
+                Rigidbody rb = hit.collider.GetComponentInParent<Rigidbody>();
+                if (rb != null)
+                {
+                    Vector3 force = (Vector3.up * 0.2f + direction).normalized * launchForce;
+                    rb.AddForce(force, ForceMode.Impulse);
+                }
             }
         }
     }
