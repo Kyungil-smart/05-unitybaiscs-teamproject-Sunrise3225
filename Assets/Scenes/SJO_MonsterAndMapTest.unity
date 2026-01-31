@@ -607,7 +607,7 @@ MonoBehaviour:
   - {fileID: 8580151715974210510, guid: cec8c74a560a7ef4381258b48eb3a97a, type: 3}
   _spawnPositions:
   - {x: 2.02, y: 0, z: 10.53}
-  - {x: 10.03, y: 0, z: -13.19}
+  - {x: 8.86, y: 0, z: 4.8}
   - {x: 9.7, y: 0, z: 16.8}
   _waveDelay: 5
   _spawnDelay: 1

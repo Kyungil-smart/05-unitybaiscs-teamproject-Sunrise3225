@@ -1,6 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using static Define;
 
 public class FastMoveItem : MonoBehaviour
 {
@@ -8,7 +7,10 @@ public class FastMoveItem : MonoBehaviour
     [SerializeField] private float _fastMoveVelue;
     [Tooltip("버프 지속시간을 넣어주세요.")]
     [SerializeField] private float _buffTime;
+
+    [SerializeField] private ItemType itemType = ItemType.FastItem;
     private bool _isFastMove = false;
+
 
     //private void OnTriggerEnter(Collider other)
     //{

@@ -1,11 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static Define;
 
 public class Freeze1SecItem : MonoBehaviour
 {
     [Tooltip("이동기능 스크립트를 추가해 주세요.")]
     [SerializeField] private CharacterMovement _player;
+
+    [SerializeField] private ItemType itemType = ItemType.FreezeItem;
 
     private void OnTriggerEnter(Collider other)
     {

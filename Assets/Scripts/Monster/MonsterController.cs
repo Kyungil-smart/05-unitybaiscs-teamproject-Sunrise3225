@@ -286,7 +286,7 @@ public class MonsterController : MonoBehaviour, IDamageable
                     }
                 }
             }
-            yield return new WaitForSeconds(0.2f);
+            yield return new WaitForSeconds(0.2f); // 0.2초 마다 코루틴 갱신
         }
     }
     public virtual void UpdateAttack()
@@ -377,7 +377,11 @@ public class MonsterController : MonoBehaviour, IDamageable
         else
         {
             // TODO : 골드나 아이템 같은거 드랍
-            _dropItem.MakeDropItem();
+            Vector3 dropPos;
+            if (Utils.RandomDropPointOnNavMesh(transform.position, 0.1f, 0.4f, out dropPos))
+                _dropItem.MakeDropItem(dropPos);
+            else
+                _dropItem.MakeDropItem(transform.position);
         }
 
         StopAllCoroutines();

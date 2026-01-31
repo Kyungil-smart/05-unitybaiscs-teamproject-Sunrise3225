@@ -2041,11 +2041,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46a1463357a67444690f5168320bf60e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _goldPrefab: {fileID: 0}
   _itemList:
   - {fileID: 5763018426558098922, guid: 61fc3835efe4ce648b36e4ed3499ccf4, type: 3}
   - {fileID: 5416913622167093794, guid: 7f65e11ce323a654d9e4ae3b03a06678, type: 3}
+  - {fileID: 6535657686057132526, guid: ad9cc8497902e874e98c3240ae85902a, type: 3}
+  - {fileID: 2636893168337905891, guid: ec46469b41673be47bd6624176cb2661, type: 3}
   - {fileID: 6274776712118073419, guid: 4946694cc27b4194e817866a1ca830b4, type: 3}
-  _dropPercent: 0.686
+  _dropPercent: 1
 --- !u!1 &8995592070519785529
 GameObject:
   m_ObjectHideFlags: 0

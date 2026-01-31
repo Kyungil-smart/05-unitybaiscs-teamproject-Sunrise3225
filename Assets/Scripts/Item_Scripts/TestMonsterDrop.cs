@@ -16,7 +16,8 @@ public class TestMonsterDrop : MonoBehaviour
 
     private void Dead()
     {
-        _dropItem.MakeDropItem();
+        Vector3 pos = transform.position;
+        _dropItem.MakeDropItem(pos);
         Destroy(gameObject);
     }
 }
