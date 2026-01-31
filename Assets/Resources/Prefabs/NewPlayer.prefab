@@ -477,6 +477,7 @@ GameObject:
   - component: {fileID: 990556830483233344}
   - component: {fileID: 6054406545752589210}
   - component: {fileID: 6740346796015178464}
+  - component: {fileID: 7412526397953319416}
   m_Layer: 8
   m_Name: NewPlayer
   m_TagString: Player
@@ -596,6 +597,7 @@ MonoBehaviour:
   IsDead: 0
   _useAnimationTimingFire: 1
   _shopPanel: {fileID: 0}
+  _damageColor: {fileID: 0}
 --- !u!95 &590422000361599741
 Animator:
   serializedVersion: 5
@@ -711,6 +713,20 @@ MonoBehaviour:
   - {fileID: 5268113041868873568}
   - {fileID: 5268113041868873582}
   - {fileID: 5268113041868873580}
+--- !u!114 &7412526397953319416
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7152837385196687413}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56aaad3809fdff14684accf3ba67ee5a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _onDamageColor: {r: 1, g: 0, b: 0, a: 1}
+  _colorChangeTime: 0.1
 --- !u!1 &9194531450300199534
 GameObject:
   m_ObjectHideFlags: 0
