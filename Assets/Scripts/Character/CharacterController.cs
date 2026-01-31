@@ -1,7 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-//using TMPro;
+using TMPro;
+using UnityEngine.Rendering;
 
 public class CharacterController : MonoBehaviour
 {
@@ -31,6 +32,9 @@ public class CharacterController : MonoBehaviour
      public bool IsDead = false;                          // 생존 여부
      
      [SerializeField] private bool _useAnimationTimingFire = true;
+     
+     [SerializeField] private GameObject _shopPanel;
+     private bool _onShopPanel;
      
      // UI 프로퍼티
      // HP
@@ -69,6 +73,19 @@ public class CharacterController : MonoBehaviour
      private void Update()
      {
          if (IsDead) return;
+
+         if (Input.GetKeyDown(KeyCode.K))
+         {
+             _shopPanel.SetActive(true);
+             _onShopPanel = true;
+             CursorLock(false);
+         }
+
+         if (_onShopPanel && Input.GetKeyDown(KeyCode.Escape))
+         {
+             _shopPanel.SetActive(false);
+             CursorLock(true);
+         }
          
          DetectTarget();
          
@@ -97,6 +114,7 @@ public class CharacterController : MonoBehaviour
          _currentHp = _maxHp;
          
          _money = Mathf.Max(0, _money);
+         _shopPanel.SetActive(false);
      }
      
      private void DetectTarget()
