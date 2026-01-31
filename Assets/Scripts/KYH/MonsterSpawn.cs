@@ -9,6 +9,9 @@ public class MonsterSpawn : MonoBehaviour
     // 몬스터 프리팹의 종류와 스폰 위치를 설정하는 리스트
     [SerializeField] private List<GameObject> _spawnPrefabs = new List<GameObject>();
     [SerializeField] private List<Vector3> _spawnPositions = new List<Vector3>();
+    // 보스 출현 테스트
+    [SerializeField] private GameObject _bossPrefab;
+    [SerializeField] private Transform _bossSpawnPos;
     
     // 코루틴 접근 필드
     [SerializeField] private float _spawnDelay;
@@ -63,6 +66,18 @@ public class MonsterSpawn : MonoBehaviour
     private void Awake()
     {
         Init();
+    }
+    private void Start()
+    {
+        GameObject go = Instantiate(_bossPrefab, _bossSpawnPos.position, _bossSpawnPos.rotation);
+        BossMonster boss = go.GetComponent<BossMonster>();
+        if (boss == null)
+        {
+            Debug.Log("[MonsterSpawn] BossPrefab에 BossMonster가 없습니다");
+            return;
+        }
+        boss.Init(this);
+        StartCoroutine(boss.CoSpawnIntro());
     }
 
     private void Update()

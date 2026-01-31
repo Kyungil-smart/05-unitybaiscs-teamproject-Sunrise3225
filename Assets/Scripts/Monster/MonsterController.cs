@@ -115,6 +115,7 @@ public class MonsterController : MonoBehaviour, IDamageable
         chaseSpeed = 2.8f;
         attack = 20f;
         hp = 100f;
+        maxHp = 100f;
         attackDistance = 1.8f;
     }
 
@@ -124,6 +125,7 @@ public class MonsterController : MonoBehaviour, IDamageable
     }
     #region Monster Stat
     private float hp;
+    private float maxHp;
     private float attack;
     private float chaseSpeed;
     private float patrolSpeed;
@@ -151,6 +153,11 @@ public class MonsterController : MonoBehaviour, IDamageable
     {
         get => attackDistance;
         set => attackDistance = value;
+    }
+    public float MaxHp
+    {
+        get => maxHp;
+        set => maxHp = value;
     }
     #endregion
     private void OnEnable()
