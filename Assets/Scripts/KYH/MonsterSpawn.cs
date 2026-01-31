@@ -69,6 +69,7 @@ public class MonsterSpawn : MonoBehaviour
     }
     private void Start()
     {
+        // 보스 출현 테스트
         GameObject go = Instantiate(_bossPrefab, _bossSpawnPos.position, _bossSpawnPos.rotation);
         BossMonster boss = go.GetComponent<BossMonster>();
         if (boss == null)

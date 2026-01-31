@@ -423,6 +423,7 @@ public class MonsterController : MonoBehaviour, IDamageable
     {
         OnBossDead?.Invoke();
         InvokeMonsterData();
+        Anim.SetTrigger("Die");
 
         if (objectType == ObjectType.Boss || objectType == ObjectType.EliteMonster)
             return;
@@ -440,7 +441,6 @@ public class MonsterController : MonoBehaviour, IDamageable
         agent.enabled = false;
         if (deathClip != null) audioPlayer.PlayOneShot(deathClip, volumeScale: 0.1f);
         Anim.applyRootMotion = true;
-        Anim.SetTrigger("Die");
     }
     
     IEnumerator CoKnockBack()

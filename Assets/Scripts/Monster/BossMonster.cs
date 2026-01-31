@@ -123,6 +123,11 @@ public class BossMonster : MonsterController
         base.UpdateAttack();
     }
 
+    public override void OnDead()
+    {
+        base.OnDead();
+
+    }
     #region Skill Sequence
     IEnumerator CoPatternLoop()
     {
