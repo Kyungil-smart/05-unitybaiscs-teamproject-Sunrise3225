@@ -5,13 +5,14 @@ using UnityEngine;
 public class ScoreManager : MonoBehaviour
 {
     [SerializeField] private int _pointsPerKill = 10;
-    private int _score;
+    [SerializeField] private EnemyKillCounter _enemyKillCounter;
 
-    public int Score { get{return _score;} }
-    
-    public void AddKillScore()
+    public int Score
     {
-        _score += _pointsPerKill;
-        Debug.Log($"점수 = {_score}");
+        get
+        {
+            if (_enemyKillCounter == null) return 0;
+            return _enemyKillCounter.Counter * _pointsPerKill;
+        }
     }
 }

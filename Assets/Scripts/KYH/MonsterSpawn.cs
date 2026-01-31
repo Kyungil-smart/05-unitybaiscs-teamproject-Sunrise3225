@@ -37,6 +37,18 @@ public class MonsterSpawn : MonoBehaviour
     private bool _onMonsterWave;
     private bool _isFirstWave = true;
     
+    // Kill을 스포너 기준으로 계산해주는 프로퍼티
+    private int _totalSpawnedCount;
+    public int TotalSpawnedCount
+    {
+        get { return _totalSpawnedCount; }
+        private set { _totalSpawnedCount = value; }
+    }
+    public int KillCount
+    {
+        get { return TotalSpawnedCount - AliveMonsterCount; }
+    }
+    
     // 현재 씬에 남아있는 몬스터 수를 확인하기 위한 필드
     private int _aliveMonsterCount;
     public int AliveMonsterCount
@@ -164,6 +176,7 @@ public class MonsterSpawn : MonoBehaviour
     {
         GameObject monster = Instantiate(_spawnPrefab, _spawnPosition, Quaternion.identity);
         _aliveMonsterCount++;
+        TotalSpawnedCount++;
 
         monster.GetComponent<MonsterController>().Init(this);
     }
