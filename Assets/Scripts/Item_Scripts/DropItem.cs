@@ -8,7 +8,7 @@ using UnityEngine;
 // [SerializeField] private DropItem _dropItem;
 // 필드로 선언
 // 몬스터 죽음 관련 함수에(혹은 코드에) 
-// _dropItem.MakeDropItem(this.transform);
+// _dropItem.MakeDropItem();
 // 메서드를
 // Destroy();
 // 전에 호출 하도록 하면 작동할 것으로 예상.
