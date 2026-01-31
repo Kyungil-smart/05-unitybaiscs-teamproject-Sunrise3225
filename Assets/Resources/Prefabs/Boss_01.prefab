@@ -423,6 +423,7 @@ GameObject:
   - component: {fileID: 5559156987816129371}
   - component: {fileID: 5673567363487037502}
   - component: {fileID: 7749868617456329880}
+  - component: {fileID: 3439211739925598100}
   m_Layer: 9
   m_Name: Boss_01
   m_TagString: Monster
@@ -446,6 +447,7 @@ Transform:
   - {fileID: 6417540959327236061}
   - {fileID: 53224800238915458}
   - {fileID: 1161693755418182757}
+  - {fileID: 6907462013810410545}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &4624392534131204405
@@ -553,8 +555,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a2f567d04a2a46d429905263945f5ca5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _onDamageColor: {r: 1, g: 0, b: 0, a: 1}
+  _colorChangeTime: 0.1
   objectType: 0
   monsterState: 0
+  OnTakeDamage:
+    m_PersistentCalls:
+      m_Calls: []
   IsDead: 0
   Player: {fileID: 0}
   IsTarget:
@@ -582,6 +589,25 @@ MonoBehaviour:
   slamWindup: 1.35
   slamRadius: 5
   slamDamageMul: 1.5
+  rushWindup: 1
+  rushDistance: 40
+  rushSpeed: 30
+  rushDamageMul: 3
+  launchForce: 0.1
+--- !u!114 &3439211739925598100
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3572656230780881251}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f98844f555f15ad47ac6b92e1d276215, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hudDamageText: {fileID: 565716195302112302, guid: 1ff5516a56bc10d41aa32ce45f8392df, type: 3}
+  hudPos: {fileID: 6907462013810410545}
 --- !u!1 &4013260471104419383
 GameObject:
   m_ObjectHideFlags: 0
@@ -1259,6 +1285,37 @@ Transform:
   - {fileID: 3064040736606724488}
   m_Father: {fileID: 2201115771147622100}
   m_LocalEulerAnglesHint: {x: 10.61095, y: 4.782113, z: -7.388758}
+--- !u!1 &8235172445086386458
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6907462013810410545}
+  m_Layer: 9
+  m_Name: DMGText
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6907462013810410545
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8235172445086386458}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.21, y: 1.526, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2590714636480516614}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8315576103798262152
 GameObject:
   m_ObjectHideFlags: 0

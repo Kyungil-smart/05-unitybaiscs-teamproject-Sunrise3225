@@ -102,7 +102,9 @@ public class EffectManager : MonoBehaviour
     public void ReturnEffect(EffectType effectType, GameObject effect)
     {
         if (!_effectPools.ContainsKey(effectType)) return;
+        if (effect == null) return;
 
+        effect.transform.SetParent(transform);
         effect.SetActive(false);
         _effectPools[effectType].Enqueue(effect);
     }

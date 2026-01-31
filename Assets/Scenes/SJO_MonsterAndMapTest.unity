@@ -581,8 +581,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1556436172}
-  - component: {fileID: 1556436171}
   - component: {fileID: 1556436173}
+  - component: {fileID: 1556436171}
   m_Layer: 0
   m_Name: MonsterSpawner
   m_TagString: Player
@@ -605,11 +605,11 @@ MonoBehaviour:
   _spawnPrefabs:
   - {fileID: 7024364664093282279, guid: 959886e1c3128a0419adbf4aa4dd872f, type: 3}
   - {fileID: 8580151715974210510, guid: cec8c74a560a7ef4381258b48eb3a97a, type: 3}
+  - {fileID: 3572656230780881251, guid: b1bfffb0677d20947a502486dc57e5c1, type: 3}
   _spawnPositions:
   - {x: 2.02, y: 0, z: 10.53}
   - {x: 8.86, y: 0, z: 4.8}
   - {x: 9.7, y: 0, z: 16.8}
-  _waveDelay: 5
   _spawnDelay: 1
   _maxSpawnCount: 20
   _waveStartTime: 0.5
@@ -849,7 +849,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 42acf6ff4bc88854faeea753c76575cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _effectList: []
+  _effectList:
+  - effectType: 4
+    effectObject: {fileID: 1218726591950707117, guid: 7fa07ad8afc788845a6ef5461d4f3d31, type: 3}
+    poolSize: 0
+  - effectType: 3
+    effectObject: {fileID: 2126182342079093085, guid: ba1cc4e5ec6c58c40b5524e19e62d829, type: 3}
+    poolSize: 0
 --- !u!4 &2125387422
 Transform:
   m_ObjectHideFlags: 0
