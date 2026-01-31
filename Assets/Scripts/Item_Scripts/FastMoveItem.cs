@@ -9,6 +9,8 @@ public class FastMoveItem : MonoBehaviour
     [SerializeField] private float _buffTime;
 
     [SerializeField] private ItemType itemType = ItemType.FastItem;
+    public ItemType ItemType => itemType;
+
     private bool _isFastMove = false;
 
 

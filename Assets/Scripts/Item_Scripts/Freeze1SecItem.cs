@@ -9,6 +9,7 @@ public class Freeze1SecItem : MonoBehaviour
     [SerializeField] private CharacterMovement _player;
 
     [SerializeField] private ItemType itemType = ItemType.FreezeItem;
+    public ItemType ItemType => itemType;
 
     private void OnTriggerEnter(Collider other)
     {

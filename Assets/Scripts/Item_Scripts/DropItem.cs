@@ -19,7 +19,6 @@ public class DropItem : MonoBehaviour
     [SerializeField] private GameObject[] _itemList;
     [Tooltip("아이템 드랍 확률을 조정해 주세요.")]
     [SerializeField][Range(0, 1)] private float _dropPercent;
-    private int _inDex;
 
     public void MakeDropItem(Vector3 pos)
     {
@@ -32,16 +31,47 @@ public class DropItem : MonoBehaviour
             return;
 
         ItemType type = GetRandomItem();
-        _inDex = (int)type;
 
-        if (_itemList == null || _inDex < 0 || _inDex >= _itemList.Length)
-            return;
+        GameObject prefab = FindPrefabType(type);
+        if (prefab == null)
+            return; // 해당 타입 프리팹 없으면 그냥 스킵
 
-        GameObject prefab = _itemList[_inDex];
-        if (prefab == null) return;
-
-        Instantiate(_itemList[_inDex], pos, Quaternion.identity);
+        Instantiate(prefab, pos, Quaternion.identity);
     }
+    private GameObject FindPrefabType(ItemType type)
+    {
+        if (_itemList == null) return null;
+
+        for (int i = 0; i < _itemList.Length; i++)
+        {
+            GameObject prefab = _itemList[i];
+            if (prefab == null) continue;
+
+            // 프리팹에 붙어있는 아이템 스크립트에서 ItemType 프로퍼티 읽기
+            AmmoItem ammo = prefab.GetComponent<AmmoItem>();
+            if (ammo != null && ammo.ItemType == type) 
+                return prefab;
+
+            HealItem heal = prefab.GetComponent<HealItem>();
+            if (heal != null && heal.ItemType == type) 
+                return prefab;
+
+            Freeze1SecItem freeze = prefab.GetComponent<Freeze1SecItem>();
+            if (freeze != null && freeze.ItemType == type) 
+                return prefab;
+
+            FastMoveItem fast = prefab.GetComponent<FastMoveItem>();
+            if (fast != null && fast.ItemType == type)
+                return prefab;
+
+            SlowMoveItem slow = prefab.GetComponent<SlowMoveItem>();
+            if (fast != null && fast.ItemType == type)
+                return prefab;
+        }
+
+        return null;
+    }
+
     public static ItemType GetRandomItem()
     {
         float randomValue = Random.value;
