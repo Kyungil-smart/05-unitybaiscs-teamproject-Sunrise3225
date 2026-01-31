@@ -4,14 +4,16 @@ using UnityEngine;
 
 public class EnemyKillCounter : MonoBehaviour
 {
-    private int _killCount;
+    [SerializeField] private MonsterSpawn _monsterSpawn;
 
-    public int Counter { get { return _killCount; } }
-    
-    // TODO 적 처치 시 AddKill 메서드 추가해 주세요.
-    public void AddKill()
+    public int Counter
     {
-        _killCount++;
-        Debug.Log($"처치 수 = {_killCount}");
+        get
+        {
+            if (_monsterSpawn == null)
+                return 0; // 웨이브 시작 전이면 0 표시
+
+            return _monsterSpawn.KillCount;
+        }
     }
 }
