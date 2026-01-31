@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 using static Define;
 
 public class FastMoveItem : MonoBehaviour
@@ -14,28 +15,28 @@ public class FastMoveItem : MonoBehaviour
     private bool _isFastMove = false;
 
 
-    //private void OnTriggerEnter(Collider other)
-    //{
-    //    if (!other.CompareTag("Player")) return;
+    private void OnTriggerEnter(Collider other)
+    {
+        if (!other.CompareTag("Player")) return;
 
-    //    플레이어능력치 player = other.GetComponent<플레이어능력치>();
+        CharacterMovement player = other.GetComponent<CharacterMovement>();
 
-    //    if (player == null) return;
+        if (player == null) return;
 
-    //    if (!_isFastMove)
-    //    {
-    //        StartCoroutine(FastMove());
-    //    }
+        if (!_isFastMove)
+        {
+            StartCoroutine(FastMove(player));
+        }
 
-    //    Destroy(gameObject);
-    //}
+        Destroy(gameObject);
+    }
 
-    //private IEnumerator FastMove()
-    //{
-    //    _isFastMove = true;
-    //    player.플레이어스피드 += _fastMoveVelue;
-    //    yield return new WaitForSeconds(_buffTime);
-    //    player.플레이어스피드 -= _fastMoveVelue;
-    //    _isFastMove = false;
-    //}
+    private IEnumerator FastMove(CharacterMovement player)
+    {
+        _isFastMove = true;
+        player.MoveSpeed += _fastMoveVelue;
+        yield return new WaitForSeconds(_buffTime);
+        player.MoveSpeed -= _fastMoveVelue;
+        _isFastMove = false;
+    }
 }

@@ -219,6 +219,13 @@ public class CharacterController : MonoBehaviour
     }
     #endregion
 
+    #region GoldItem
+    public void GoldPlus(int goldValue)
+    {
+        _money += goldValue;
+    }
+    #endregion
+
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;

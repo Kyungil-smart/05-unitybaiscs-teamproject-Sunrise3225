@@ -22,6 +22,10 @@ public class CharacterMovement : MonoBehaviour
     private bool _isWall;
     // private float _pitch;
 
+    // UI 프로퍼티
+    // Speed
+    public float MoveSpeed { get { return _moveSpeed;} set => _moveSpeed = value; }
+
     public void Start()
     {
         _rigidbody = GetComponent<Rigidbody>();
