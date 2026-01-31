@@ -101,4 +101,9 @@ public class UIManager : MonoBehaviour
     {
         _enemyLeftText.text = $"Enemy Left : {_monsterSpawn.AliveMonsterCount}";
     }
+    
+    private void RefreshMoneyUI()
+    {
+        _goldText.text = $"Money : {_characterController.Money}";
+    }
 }
