@@ -4,34 +4,36 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Events;
 using static Define;
 
 
 public class MonsterController : MonoBehaviour, IDamageable
 {
     #region Action
-    public event Action OnBossDead;   // º¸½º°¡ ÀÖÀ» °æ¿ì¿¡
+    public event Action OnBossDead;   // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ì¿¡
     public event Action<MonsterController> MonsterInfoUpdate;
     #endregion
 
     #region Creature State
     public ObjectType objectType;
     public MonsterState monsterState = MonsterState.Patrol;
+    public UnityEvent<int> OnTakeDamage; // ëª¬ìŠ¤í„°ê°€ ë§ìœ¼ë©´ ì‹ í˜¸ì „ë‹¬
     public bool IsDead;
     private bool _init = false;
     #endregion
 
     #region Target
-    public CharacterController Player; // ÇÃ·¹ÀÌ¾î ¿¬°á
-    public LayerMask IsTarget;         // Å¸°ÙÀÌ µÇ´Â ·¹ÀÌ¾î
-    public LayerMask BlockMask;        // ½Ã¾ß¸¦ ¸·À»¼ö ÀÖ´Â ·¹ÀÌ¾î
+    public CharacterController Player; // ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½ï¿½ï¿½
+    public LayerMask IsTarget;         // Å¸ï¿½ï¿½ï¿½ï¿½ ï¿½Ç´ï¿½ ï¿½ï¿½ï¿½Ì¾ï¿½
+    public LayerMask BlockMask;        // ï¿½Ã¾ß¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½Ì¾ï¿½
     #endregion
 
     #region Vision Detect
-    public float fieldOfView = 50f;    // ½Ã¾ß °¢µµ
-    public float viewDistance = 10f;   // ½Ã¾ß °Å¸®
-    public Transform eyeTransform;     // ½Ã¾ß À§Ä¡
-    RaycastHit[] hits = new RaycastHit[10];  // NonAlloc ¹öÆÛ
+    public float fieldOfView = 50f;    // ï¿½Ã¾ï¿½ ï¿½ï¿½ï¿½ï¿½
+    public float viewDistance = 10f;   // ï¿½Ã¾ï¿½ ï¿½Å¸ï¿½
+    public Transform eyeTransform;     // ï¿½Ã¾ï¿½ ï¿½ï¿½Ä¡
+    RaycastHit[] hits = new RaycastHit[10];  // NonAlloc ï¿½ï¿½ï¿½ï¿½
     #endregion
 
     #region Turn / Rotate
@@ -40,8 +42,8 @@ public class MonsterController : MonoBehaviour, IDamageable
     #endregion
 
     #region Attack
-    public float attackRadius = 2f;  // °ø°İ ¹üÀ§
-    private float attackDistance;    // °ø°İ ½ÃÀÛµÇ´Â °Å¸®
+    public float attackRadius = 2f;  // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+    private float attackDistance;    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ÛµÇ´ï¿½ ï¿½Å¸ï¿½
     private Vector3 _attackForward;
     private bool _lockAttackLook = false;
 
@@ -49,14 +51,14 @@ public class MonsterController : MonoBehaviour, IDamageable
     public Transform attackRoot_R;
     public Transform attackRoot_L;
     protected Transform _attackRoot;
-    protected bool NextRight = true;   // ¿Ş¼Õ ¿À¸¥¼Õ ¹ø°¥¾Æ°¡¸ç °ø°İ
+    protected bool NextRight = true;   // ï¿½Ş¼ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Æ°ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     List<CharacterController> lastAttackTargets = new List<CharacterController>();
     #endregion
 
     [Header("Audio Player")]
     AudioSource audioPlayer;
-    public AudioClip hitClip;     // ÇÇ°İ½Ã »ç¿îµå
-    public AudioClip deathClip;   // »ç¸Á½Ã »ç¿îµå
+    public AudioClip hitClip;     // ï¿½Ç°İ½ï¿½ ï¿½ï¿½ï¿½ï¿½
+    public AudioClip deathClip;   // ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 
     #region Coroutine
     Coroutine _coKnockback;
@@ -66,7 +68,7 @@ public class MonsterController : MonoBehaviour, IDamageable
     #endregion
 
     [HideInInspector] public Animator Anim;
-    [HideInInspector] public NavMeshAgent agent;   // °æ·Î °è»ê AI
+    [HideInInspector] public NavMeshAgent agent;   // ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ AI
     private Rigidbody rigid;
     private Collider coll;
 
@@ -169,7 +171,7 @@ public class MonsterController : MonoBehaviour, IDamageable
     {
         if (IsDead) return;
 
-        // ÀÌµ¿ ¹æÇâ °»½Å
+        // ï¿½Ìµï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         Vector3 velocity = agent.desiredVelocity;
         velocity.y = 0f;
 
@@ -199,7 +201,7 @@ public class MonsterController : MonoBehaviour, IDamageable
         if (coll != null) coll.enabled = true;
         Anim = GetComponentInChildren<Animator>();
 
-        InitStats(); // ½ºÅİ ÃÊ±âÈ­
+        InitStats(); // ï¿½ï¿½ï¿½ï¿½ ï¿½Ê±ï¿½È­
         
         agent.stoppingDistance = attackDistance - 0.2f;
         agent.speed = patrolSpeed;
@@ -253,7 +255,7 @@ public class MonsterController : MonoBehaviour, IDamageable
                     yield return null;
                     continue;
                 }
-                // ÃßÀû ´ë»óÀÌ Á¸ÀçÇÏ¸é °æ·Î °»½ÅÇÏ°í ÀÌµ¿À» ÁøÇà
+                // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï¸ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï°ï¿½ ï¿½Ìµï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
                 agent.SetDestination(Player.transform.position);
             }
             else
@@ -307,26 +309,26 @@ public class MonsterController : MonoBehaviour, IDamageable
             _lockAttackLook = true;
         }
         agent.isStopped = true;
-        agent.updateRotation = false;  // ¸ó½ºÅÍ È¸Àü ¹æÁö
+        agent.updateRotation = false;  // ï¿½ï¿½ï¿½ï¿½ È¸ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 
         Anim.applyRootMotion = false;
         Anim.SetTrigger(GetAttackTrigger(useRight));
     }
 
     #region Animation Event
-    public virtual void EnableAttack()  // °ø°İÀÌ È°¼ºÈ­ µÉ ¶§
+    public virtual void EnableAttack()  // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ È°ï¿½ï¿½È­ ï¿½ï¿½ ï¿½ï¿½
     {
         monsterState = MonsterState.Attack;
         lastAttackTargets.Clear();
     }
-    public virtual void DisableAttack() // °ø°İÀÌ ³¡³µÀ» ¶§
+    public virtual void DisableAttack() // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
     {
         monsterState = MonsterState.Chase;
         agent.isStopped = false;
         _lockAttackLook = false;
         agent.updateRotation = true;
     }
-    public void OnDieAnimEnd() // Á×´Â ¾Ö´Ï¸ŞÀÌ¼Ç ÀÌº¥Æ®
+    public void OnDieAnimEnd() // ï¿½×´ï¿½ ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½ ï¿½Ìºï¿½Æ®
     {
         Destroy(gameObject);
     }
@@ -336,7 +338,8 @@ public class MonsterController : MonoBehaviour, IDamageable
     public void TakeDamage(int damage)
     {
         hp -= Mathf.RoundToInt(damage);
-
+        OnTakeDamage?.Invoke(damage); // ëª¬ìŠ¤í„°ê°€ ë§ì€ ê²½ìš° ì‹ í˜¸ ì „ë‹¬
+        
         if (hp <= 0)
         {
             IsDead = true;
@@ -344,7 +347,7 @@ public class MonsterController : MonoBehaviour, IDamageable
             return;
         }
 
-        // °ø°İ ¹ŞÀ¸¸é ¹Ù·Î ÇÃ·¹ÀÌ¾î¿¡°Ô µ¹Áø
+        // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ù·ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾î¿¡ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         if (Player != null && Player.isActiveAndEnabled && !Player.IsDead)
         {
             if (monsterState == MonsterState.Patrol)
@@ -353,13 +356,13 @@ public class MonsterController : MonoBehaviour, IDamageable
         }
 
         InvokeMonsterData();
-        // °ø°İÁß¿£ ³Ë¹éÀÌ µÇÁö ¾ÊÀ½
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ß¿ï¿½ ï¿½Ë¹ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         if (objectType == ObjectType.Monster && monsterState != MonsterState.Attack)
         {
             if (_coKnockback == null)
                 _coKnockback = StartCoroutine(CoKnockBack());
         }
-        // TODO : ÀÌÆåÆ® Ãß°¡ÇØ¼­ ³Ö±â
+        // TODO : ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ß°ï¿½ï¿½Ø¼ï¿½ ï¿½Ö±ï¿½
 
         if (hitClip != null)
             audioPlayer.PlayOneShot(hitClip, volumeScale: 0.5f);
@@ -369,28 +372,28 @@ public class MonsterController : MonoBehaviour, IDamageable
     {
         OnBossDead?.Invoke();
         InvokeMonsterData();
-        // TODO : ¸ó½ºÅÍ Á×ÀÏ¶§ »ó½ÂÇÏ´Â µ¥ÀÌÅÍ (¸ó½ºÅÍ Å³¼ö, ½ºÄÚ¾î µî)
+        // TODO : ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ï¶ï¿½ ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ (ï¿½ï¿½ï¿½ï¿½ Å³ï¿½ï¿½, ï¿½ï¿½ï¿½Ú¾ï¿½ ï¿½ï¿½)
 
         if (objectType == ObjectType.Boss || objectType == ObjectType.EliteMonster)
             return;
         else
         {
-            // TODO : °ñµå³ª ¾ÆÀÌÅÛ °°Àº°Å µå¶ø
+            // TODO : ï¿½ï¿½å³ª ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
         }
 
         StopAllCoroutines();
         _coKnockback = null;
         agent.enabled = false;
-        if (deathClip != null) audioPlayer.PlayOneShot(deathClip, volumeScale: 0.1f); // »ç¸Á½Ã È¿°úÀ½
+        if (deathClip != null) audioPlayer.PlayOneShot(deathClip, volumeScale: 0.1f); // ï¿½ï¿½ï¿½ï¿½ï¿½ È¿ï¿½ï¿½ï¿½ï¿½
         Anim.applyRootMotion = true;
-        Anim.SetTrigger("Die"); // ¾Ö´Ï¸ŞÀÌ¼Ç Àç»ı
+        Anim.SetTrigger("Die"); // ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½ ï¿½ï¿½ï¿½
     }
     
     IEnumerator CoKnockBack()
     {
         monsterState = MonsterState.OnDamage;
 
-        // ³Ë¹é µ¿¾È agent ¸ØÃß±â
+        // ï¿½Ë¹ï¿½ ï¿½ï¿½ï¿½ï¿½ agent ï¿½ï¿½ï¿½ß±ï¿½
         agent.isStopped = true;
         agent.velocity = Vector3.zero;
         agent.ResetPath();
@@ -399,19 +402,19 @@ public class MonsterController : MonoBehaviour, IDamageable
         while (true)
         {
             elapsed += Time.deltaTime;
-            if (elapsed > KNOCKBACK_TIME) // ³Ë¹é µÇ´Â ½Ã°£
+            if (elapsed > KNOCKBACK_TIME) // ï¿½Ë¹ï¿½ ï¿½Ç´ï¿½ ï¿½Ã°ï¿½
                 break;
 
             Vector3 dir = _moveDir * -1f;
-            Vector3 nextVec = dir.normalized * KNOCKBACK_SPEED * Time.deltaTime; // ³Ë¹é µÇ´Â ¼Óµµ
+            Vector3 nextVec = dir.normalized * KNOCKBACK_SPEED * Time.deltaTime; // ï¿½Ë¹ï¿½ ï¿½Ç´ï¿½ ï¿½Óµï¿½
             rigid.MovePosition(rigid.position + nextVec);
 
             yield return null;
         }
-        agent.Warp(rigid.position);  // agent À§Ä¡¸¦ ÇöÀç À§Ä¡·Î µ¿±âÈ­
+        agent.Warp(rigid.position);  // agent ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½È­
 
         monsterState = MonsterState.Chase;
-        yield return new WaitForSeconds(KNOCKBACK_COOLTIME); // ³Ë¹éÀÌ ³Ê¹« ÀÚÁÖ µÇÁö ¾Êµµ·Ï ¼³Á¤
+        yield return new WaitForSeconds(KNOCKBACK_COOLTIME); // ï¿½Ë¹ï¿½ï¿½ï¿½ ï¿½Ê¹ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Êµï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 
         _coKnockback = null;
         agent.isStopped = false;
