@@ -7,7 +7,7 @@ public class BTypeMonster : MonsterController
     protected override void InitStats()
     {
         PatrolSpeed = 2.5f;
-        ChaseSpeed = 3.2f;
+        ChaseSpeed = 4.2f;
         Attack = 14f;
         Hp = 60f;
         AttackDistance = 1.8f;

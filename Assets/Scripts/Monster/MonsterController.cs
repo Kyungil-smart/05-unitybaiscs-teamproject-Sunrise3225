@@ -57,8 +57,8 @@ public class MonsterController : MonoBehaviour, IDamageable
 
     [Header("Audio Player")]
     AudioSource audioPlayer;
-    public AudioClip hitClip;     // �ǰݽ� ����
-    public AudioClip deathClip;   // ����� ����
+    public AudioClip hitClip;
+    public AudioClip deathClip;
 
     #region Coroutine
     Coroutine _coKnockback;
@@ -68,7 +68,7 @@ public class MonsterController : MonoBehaviour, IDamageable
     #endregion
 
     [HideInInspector] public Animator Anim;
-    [HideInInspector] public NavMeshAgent agent;   // ��� ��� AI
+    [HideInInspector] public NavMeshAgent agent;
     [HideInInspector] public MonsterSpawn monsterSpawn;
     private Rigidbody rigid;
     private Collider coll;
@@ -171,7 +171,6 @@ public class MonsterController : MonoBehaviour, IDamageable
     {
         if (IsDead) return;
 
-        // �̵� ���� ����
         Vector3 velocity = agent.desiredVelocity;
         velocity.y = 0f;
 
@@ -197,7 +196,7 @@ public class MonsterController : MonoBehaviour, IDamageable
         coll = GetComponent<Collider>();
         agent = GetComponent<NavMeshAgent>();
         audioPlayer = GetComponent<AudioSource>();
-        _dropItem = GetComponent<DropItem>(); // ��������� ��ũ��Ʈ ����
+        _dropItem = GetComponent<DropItem>();
         if (coll != null) coll.enabled = true;
         Anim = GetComponentInChildren<Animator>();
 
@@ -255,7 +254,6 @@ public class MonsterController : MonoBehaviour, IDamageable
                     yield return null;
                     continue;
                 }
-                // ���� ����� �����ϸ� ��� �����ϰ� �̵��� ����
                 agent.SetDestination(Player.transform.position);
             }
             else
@@ -288,7 +286,7 @@ public class MonsterController : MonoBehaviour, IDamageable
                     }
                 }
             }
-            yield return new WaitForSeconds(0.2f); // 0.2�� ���� �ڷ�ƾ ����
+            yield return new WaitForSeconds(0.2f);
         }
     }
     public virtual void UpdateAttack()
@@ -309,26 +307,26 @@ public class MonsterController : MonoBehaviour, IDamageable
             _lockAttackLook = true;
         }
         agent.isStopped = true;
-        agent.updateRotation = false;  // ���� ȸ�� ����
+        agent.updateRotation = false;
 
         Anim.applyRootMotion = false;
         Anim.SetTrigger(GetAttackTrigger(useRight));
     }
 
     #region Animation Event
-    public virtual void EnableAttack()  // ������ Ȱ��ȭ �� ��
+    public virtual void EnableAttack()
     {
         monsterState = MonsterState.Attack;
         lastAttackTargets.Clear();
     }
-    public virtual void DisableAttack() // ������ ������ ��
+    public virtual void DisableAttack()
     {
         monsterState = MonsterState.Chase;
         agent.isStopped = false;
         _lockAttackLook = false;
         agent.updateRotation = true;
     }
-    public void OnDieAnimEnd() // �״� �ִϸ��̼� �̺�Ʈ
+    public void OnDieAnimEnd()
     {
         Destroy(gameObject);
     }
@@ -348,22 +346,29 @@ public class MonsterController : MonoBehaviour, IDamageable
             return;
         }
 
-        // ���� ������ �ٷ� �÷��̾�� ����
+        // 몬스터 공격 당하면 바로 쫓아가게 설정 
+        if (Player == null)
+        {
+            GameObject player = GameObject.FindGameObjectWithTag("Player");
+            if (player != null)
+                Player = player.GetComponent<CharacterController>();
+        }
         if (Player != null && Player.isActiveAndEnabled && !Player.IsDead)
         {
             if (monsterState == MonsterState.Patrol)
                 monsterState = MonsterState.Chase;
+
             agent.SetDestination(Player.transform.position);
         }
 
         InvokeMonsterData();
-        // �����߿� �˹��� ���� ����
+        // 몬스터 넉백
         if (objectType == ObjectType.Monster && monsterState != MonsterState.Attack)
         {
             if (_coKnockback == null)
                 _coKnockback = StartCoroutine(CoKnockBack());
         }
-        // TODO : ����Ʈ �߰��ؼ� �ֱ�
+        // TODO : Effect Add
 
         if (hitClip != null)
             audioPlayer.PlayOneShot(hitClip, volumeScale: 0.5f);
@@ -373,13 +378,11 @@ public class MonsterController : MonoBehaviour, IDamageable
     {
         OnBossDead?.Invoke();
         InvokeMonsterData();
-        // TODO : ���� ���϶� ����ϴ� ������ (���� ų��, ���ھ� ��)
 
         if (objectType == ObjectType.Boss || objectType == ObjectType.EliteMonster)
             return;
         else
         {
-            // TODO : ��峪 ������ ������ ���
             Vector3 dropPos;
             if (Utils.RandomDropPointOnNavMesh(transform.position, 0.1f, 0.4f, out dropPos))
                 _dropItem.MakeDropItem(dropPos);
@@ -390,16 +393,15 @@ public class MonsterController : MonoBehaviour, IDamageable
         StopAllCoroutines();
         _coKnockback = null;
         agent.enabled = false;
-        if (deathClip != null) audioPlayer.PlayOneShot(deathClip, volumeScale: 0.1f); // ����� ȿ����
+        if (deathClip != null) audioPlayer.PlayOneShot(deathClip, volumeScale: 0.1f);
         Anim.applyRootMotion = true;
-        Anim.SetTrigger("Die"); // �ִϸ��̼� ���
+        Anim.SetTrigger("Die");
     }
     
     IEnumerator CoKnockBack()
     {
         monsterState = MonsterState.OnDamage;
 
-        // �˹� ���� agent ���߱�
         agent.isStopped = true;
         agent.velocity = Vector3.zero;
         agent.ResetPath();
@@ -408,19 +410,19 @@ public class MonsterController : MonoBehaviour, IDamageable
         while (true)
         {
             elapsed += Time.deltaTime;
-            if (elapsed > KNOCKBACK_TIME) // �˹� �Ǵ� �ð�
+            if (elapsed > KNOCKBACK_TIME)
                 break;
 
             Vector3 dir = _moveDir * -1f;
-            Vector3 nextVec = dir.normalized * KNOCKBACK_SPEED * Time.deltaTime; // �˹� �Ǵ� �ӵ�
+            Vector3 nextVec = dir.normalized * KNOCKBACK_SPEED * Time.deltaTime;
             rigid.MovePosition(rigid.position + nextVec);
 
             yield return null;
         }
-        agent.Warp(rigid.position);  // agent ��ġ�� ���� ��ġ�� ����ȭ
+        agent.Warp(rigid.position);
 
         monsterState = MonsterState.Chase;
-        yield return new WaitForSeconds(KNOCKBACK_COOLTIME); // �˹��� �ʹ� ���� ���� �ʵ��� ����
+        yield return new WaitForSeconds(KNOCKBACK_COOLTIME);
 
         _coKnockback = null;
         agent.isStopped = false;
