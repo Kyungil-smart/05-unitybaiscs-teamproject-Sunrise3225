@@ -13,28 +13,28 @@ public class SlowMoveItem : MonoBehaviour
     public ItemType ItemType => itemType;
     private bool _isSlowMove = false;
 
-    //private void OnTriggerEnter(Collider other)
-    //{
-    //    if (!other.CompareTag("Player")) return;
+    private void OnTriggerEnter(Collider other)
+    {
+        if (!other.CompareTag("Player")) return;
 
-    //    플레이어능력치 player = other.GetComponent<플레이어능력치>();
+        CharacterMovement player = other.GetComponent<CharacterMovement>();
 
-    //    if (player == null) return;
+        if (player == null) return;
 
-    //    if (!_isSlowMove)
-    //    {
-    //        StartCoroutine(SlowMove());
-    //    }
+        if (!_isSlowMove)
+        {
+            StartCoroutine(SlowMove(player));
+        }
 
-    //    Destroy(gameObject);
-    //}
+        Destroy(gameObject);
+    }
 
-    //private IEnumerator SlowMove()
-    //{
-    //    _isSlowMove = true;
-    //    player.플레이어스피드 -= _slowMoveVelue;
-    //    yield return new WaitForSeconds(_debuffTime);
-    //    player.플레이어스피드 += _slowMoveVelue;
-    //    _isSlowMove = false;
-    //}
+    private IEnumerator SlowMove(CharacterMovement player)
+    {
+        _isSlowMove = true;
+        player.MoveSpeed -= _slowMoveVelue;
+        yield return new WaitForSeconds(_debuffTime);
+        player.MoveSpeed += _slowMoveVelue;
+        _isSlowMove = false;
+    }
 }
