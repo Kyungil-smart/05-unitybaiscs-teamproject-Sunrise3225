@@ -5,7 +5,6 @@ using static Define;
 
 public class Freeze1SecItem : MonoBehaviour
 {
-    [Tooltip("�̵���� ��ũ��Ʈ�� �߰��� �ּ���.")]
     [SerializeField] private CharacterMovement _player;
 
     [SerializeField] private ItemType itemType = ItemType.FreezeItem;
