@@ -25,7 +25,10 @@ public class DropItem : MonoBehaviour
         pos.y += 0.2f;
 
         if (_goldPrefab != null)
-            Instantiate(_goldPrefab, pos, Quaternion.identity);
+        {
+            GameObject gold = Instantiate(_goldPrefab, pos, Quaternion.identity);
+            AdjustDropY(gold, pos);
+        }
 
         if (Random.value > _dropPercent)
             return;
@@ -36,8 +39,19 @@ public class DropItem : MonoBehaviour
         if (prefab == null)
             return; // 해당 타입 프리팹 없으면 그냥 스킵
 
-        Instantiate(prefab, pos, Quaternion.identity);
+        GameObject item = Instantiate(prefab, pos, Quaternion.identity);
+        AdjustDropY(item, pos);
     }
+
+    private void AdjustDropY(GameObject obj, Vector3 basePos)
+    {
+        Collider col = obj.GetComponent<Collider>();
+        if (col == null) return;
+
+        basePos.y += col.bounds.extents.y;
+        obj.transform.position = basePos;
+    }
+
     private GameObject FindPrefabType(ItemType type)
     {
         if (_itemList == null) return null;
