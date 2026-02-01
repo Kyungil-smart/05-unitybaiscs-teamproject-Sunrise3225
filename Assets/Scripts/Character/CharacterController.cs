@@ -13,17 +13,23 @@ public class CharacterController : MonoBehaviour
      [SerializeField] private int _attackDamage;            // 데미지 입히기
      [SerializeField] private LayerMask _attackTargetLayer; // 적 레이어 
      [SerializeField] private int _maxMagazine;             // 탄창 수
-    [SerializeField] private int _money;
+     [SerializeField] private int _money;
      private int _currentMagazine;                          // 잔탄 수 
 
-     public float GroundDistance = 0.5f;
+    [SerializeField] private LayerMask _rayHitMask; // 벽 + 적 + 장애물(쏴서 맞을 것들)
+
+    private RaycastHit _lastHit;
+    private bool _hasHit;
+    private bool _hitEnemy;
+    private Vector3 _aimPoint;
+
+    public float GroundDistance = 0.5f;
      private Rigidbody _rigidbody;
      private IDamageable _targetDamageable;
      private Transform _targetTransform;
      private CameraController _cameraController;
 
      [SerializeField] private Transform _rayStartPoint;
-     [SerializeField] private Transform _rayEndPoint;
      private Ray _ray;
 
      [SerializeField] private int _playerLife;
@@ -37,6 +43,7 @@ public class CharacterController : MonoBehaviour
      [SerializeField] private GameObject _pauseUI;
      private bool _onShopPanel;
      private bool _isPaused;
+    private Camera _cam;
 
     [SerializeField] private onDamageColor _damageColor; // Hit Flash(맞으면 붉은색)
 
@@ -49,8 +56,8 @@ public class CharacterController : MonoBehaviour
      public int MaxMagazine { get { return _maxMagazine; } set => _maxMagazine = value; }
      // Player Life
      public int PlayerLife { get {return _playerLife; } }
-    public int AttackDamage { get => _attackDamage; set => _attackDamage = value; }
-    public int Money { get => _money; set => _money = value; }
+     public int AttackDamage { get => _attackDamage; set => _attackDamage = value; }
+     public int Money { get => _money; set => _money = value; }
 
      private void Awake()
      {
@@ -65,8 +72,9 @@ public class CharacterController : MonoBehaviour
          if (_rayStartPoint == null)
              _rayStartPoint = transform;
 
-         if (_rayEndPoint == null)
-             _rayEndPoint = transform;
+        _cam = Camera.main;
+         //if (_rayEndPoint == null)
+         //    _rayEndPoint = transform;
      }
 
      private void Start()
@@ -150,48 +158,94 @@ public class CharacterController : MonoBehaviour
      
      private void DetectTarget()
      {
-         if (_rayStartPoint == null || _rayEndPoint == null)
-         {
-             _targetDamageable = null;
-             _targetTransform = null;
-             return;
-         }
-         
-         Vector3 dir = GetDirection(_rayStartPoint, _rayEndPoint);
-         _ray = new Ray(_rayStartPoint.position, dir);
-         
-         RaycastHit hit;
+        if (_rayStartPoint == null)
+        {
+            _targetDamageable = null;
+            _targetTransform = null;
+            _hasHit = false;
+            _hitEnemy = false;
+            return;
+        }
+        // 카메라 없으면 return
+        if (_cam == null) _cam = Camera.main;
+        if (_cam == null) return;
 
-         if (Physics.Raycast(_ray, out hit, _attackRange, _attackTargetLayer))
-         {
-             if (_targetTransform == hit.transform) return;
-             _targetTransform = hit.transform;
-             _targetDamageable = hit.transform.GetComponent<IDamageable>();
-             Debug.Log("타겟 발견");
-         }
-         else
-         {
-             _targetDamageable = null;
-             _targetTransform = null;
-         }
-     }
+        int mask = (_rayHitMask.value | _attackTargetLayer.value) & ~(1 << gameObject.layer);
+
+        // 카메라 중앙 레이(조준점)
+        Ray camRay = _cam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
+
+        // 카메라가 보는 조준점 결정
+        if (Physics.Raycast(camRay, out RaycastHit camHit, _attackRange, mask))
+            _aimPoint = camHit.point;
+        else
+            _aimPoint = camRay.origin + camRay.direction * _attackRange;
+
+        // 시작점에서 조준점으로
+        Vector3 start = _rayStartPoint.position;
+        Vector3 dir = _aimPoint - start;
+
+        dir.Normalize();
+        _ray = new Ray(start, dir);
+
+        _hasHit = Physics.Raycast(_ray, out _lastHit, _attackRange, mask);
+
+        if (_hasHit)
+        {
+            int hitLayer = _lastHit.collider.gameObject.layer;
+            _hitEnemy = ((_attackTargetLayer.value & (1 << hitLayer)) != 0);
+
+            if (_hitEnemy)
+            {
+                if (_targetTransform != _lastHit.transform)
+                {
+                    _targetTransform = _lastHit.transform;
+                    _targetDamageable = _lastHit.transform.GetComponent<IDamageable>();
+                }
+            }
+            else
+            {
+                _targetDamageable = null;
+                _targetTransform = null;
+            }
+        }
+        else
+        {
+            _hitEnemy = false;
+            _targetDamageable = null;
+            _targetTransform = null;
+        }
+    }
      
      private void Fire()
      {
         if (_onShopPanel) return;
-         if (_currentMagazine <= 0)
-         {
-             _currentMagazine = 0;
-             return;
-         }
-         
-         _currentMagazine = Mathf.Max(0, _currentMagazine - 1);
-         //Debug.Log(_currentMagazine);
-         
-         if (_targetDamageable == null) return;
-         
-         _targetDamageable.TakeDamage(_attackDamage); 
-     }
+
+        if (_currentMagazine <= 0)
+        {
+            _currentMagazine = 0;
+            return;
+        }
+
+        _currentMagazine = Mathf.Max(0, _currentMagazine - 1);
+
+        DetectTarget();
+
+        if (!_hasHit) return;
+
+        if (_hitEnemy)
+        {
+            if (_targetDamageable != null)
+                _targetDamageable.TakeDamage(_attackDamage);
+        }
+        else
+        {
+            Vector3 fxPos = _lastHit.point + _lastHit.normal * 0.02f;
+            Quaternion fxRot = Quaternion.LookRotation(_lastHit.normal);
+
+            EffectManager.Instance.SpawnEffect(EffectManager.EffectType.Common, fxPos, fxRot, null);
+        }
+    }
 
      private void CursorLock(bool isLocked)
      {
