@@ -27,6 +27,18 @@ public class CharacterMovement : MonoBehaviour
     private float _originalMoveSpeed;     // SlowMoveItem용 백업 스피드
     private float _fastBuffValue;         // FastMoveItem 버그 해결을 위한 변수
     private float _slowDebuffValue;       // SlowMoveItem 버그 해결을 위한 변수
+    
+    // 달리기 기능
+    [Header("Sprint")]
+    [SerializeField] private float _walkSpeed = 5f;          // 기본 걷기 속도(기존 _moveSpeed 대신 기준값)
+    [SerializeField] private float _sprintMultiplier = 1.2f; // 달리기 배수
+    [SerializeField] private float _sprintDuration = 2.5f;   // 2~3초
+    [SerializeField] private float _sprintCooldown = 10f;    // 10초
+
+    private float _sprintRemain;
+    private float _sprintCooldownRemain;
+    private bool _isSprinting;
+    private float _sprintMul = 1f;
 
     // UI 프로퍼티
     // Speed
@@ -34,7 +46,7 @@ public class CharacterMovement : MonoBehaviour
 
     private void Awake()
     {
-        _originalMoveSpeed = MoveSpeed;   // SlowMoveItem용 원래 스피드 백업 
+        _originalMoveSpeed = _walkSpeed;   // SlowMoveItem용 원래 스피드 백업 
     }
 
     public void Start()
@@ -46,6 +58,7 @@ public class CharacterMovement : MonoBehaviour
     private void Update()
     {
         // Rotation();
+        TickSprint();
         Move();
     }
 
@@ -136,7 +149,54 @@ public class CharacterMovement : MonoBehaviour
     #region UpdateMoveSpeed
     private void UpdateMoveSpeed()
     {
-        MoveSpeed = Mathf.Max(_originalMoveSpeed + _fastBuffValue - _slowDebuffValue, 0f);
+        MoveSpeed = Mathf.Max((_originalMoveSpeed + _fastBuffValue - _slowDebuffValue) * _sprintMul, 0f);
     }
     #endregion
+    
+    private void TickSprint()
+    {
+        // 쿨타임 감소
+        if (_sprintCooldownRemain > 0f)
+            _sprintCooldownRemain -= Time.deltaTime;
+
+        bool shiftHeld = Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift);
+        bool isMovingInput = Mathf.Abs(Input.GetAxisRaw("Horizontal")) > 0.01f ||
+                             Mathf.Abs(Input.GetAxisRaw("Vertical")) > 0.01f;
+
+        // 시작 조건: 쉬프트 + 이동 입력 + 쿨타임 0 + 현재 스프린트 아님
+        if (!_isSprinting)
+        {
+            if (shiftHeld && isMovingInput && _sprintCooldownRemain <= 0f)
+            {
+                _isSprinting = true;
+                _sprintRemain = _sprintDuration;
+                _sprintMul = _sprintMultiplier;
+                UpdateMoveSpeed();
+            }
+            return;
+        }
+
+        // 스프린트 중: 쉬프트 떼거나 이동 입력 없으면 종료
+        if (!shiftHeld || !isMovingInput)
+        {
+            EndSprint();
+            return;
+        }
+
+        _sprintRemain -= Time.deltaTime;
+        if (_sprintRemain <= 0f)
+        {
+            EndSprint();
+            return;
+        }
+    }
+
+    private void EndSprint()
+    {
+        _isSprinting = false;
+        _sprintRemain = 0f;
+        _sprintMul = 1f;
+        _sprintCooldownRemain = _sprintCooldown;
+        UpdateMoveSpeed();
+    }
 }
