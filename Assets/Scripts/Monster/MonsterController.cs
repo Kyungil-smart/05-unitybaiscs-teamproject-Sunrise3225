@@ -439,7 +439,9 @@ public class MonsterController : MonoBehaviour, IDamageable
 
     public virtual void OnDead()
     {
-        OnBossDead?.Invoke();
+        if (objectType == ObjectType.Boss)
+            OnBossDead?.Invoke();
+
         InvokeMonsterData();
         Anim.SetTrigger("Die");
         monsterState = MonsterState.Dead;
