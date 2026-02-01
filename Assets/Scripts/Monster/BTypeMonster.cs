@@ -1,13 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 
 public class BTypeMonster : MonsterController
 {
     protected override void InitStats()
     {
-        PatrolSpeed = 2.5f;
-        ChaseSpeed = 4.2f;
+        PatrolSpeed = 4.5f;
+        ChaseSpeed = 5.6f;
         Attack = 14f;
         Hp = 60f;
         MaxHp = 60f;
