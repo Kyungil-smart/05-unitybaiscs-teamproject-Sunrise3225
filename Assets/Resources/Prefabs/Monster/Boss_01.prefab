@@ -577,13 +577,17 @@ MonoBehaviour:
   attackRadius: 0.9
   attackRoot_R: {fileID: 5030465375465987929}
   attackRoot_L: {fileID: 8145655933811896290}
-  hitClip: {fileID: 0}
-  deathClip: {fileID: 0}
+  hitClip: {fileID: 8300000, guid: 46f548eae7497eb4f8bd6d6120ca98a9, type: 3}
+  deathClip: {fileID: 8300000, guid: 6a4b5965d4ce8114db727c0d05023a78, type: 3}
   Anim: {fileID: 0}
   agent: {fileID: 0}
   monsterSpawn: {fileID: 0}
   randomPattern: 0
   pattern: 000000000100000001000000000000000000000001000000
+  roarStateName: BossRoaring
+  introCamDistance: 6
+  introCamHeight: 2.2
+  camMoveTime: 0.45
   skillGap: 0.15
   approachMaxTime: 5
   slamWindup: 1.35

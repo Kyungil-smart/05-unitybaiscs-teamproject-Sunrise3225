@@ -133,7 +133,7 @@ public class BossSkill_ApproachMelee : BossSkill
                 // µ¹Áø ÈÄ Àá±ñ ¸ØÃã
                 boss.monsterState = MonsterState.Chase;
                 boss.agent.isStopped = false;
-                yield return new WaitForSeconds(0.2f); // ´ÙÀ½ µ¹Áø Àü ÂªÀº ¸ØÃã
+                yield return new WaitForSeconds(1.0f); // ´ÙÀ½ µ¹Áø Àü ÂªÀº ¸ØÃã
             }
         }
     }
