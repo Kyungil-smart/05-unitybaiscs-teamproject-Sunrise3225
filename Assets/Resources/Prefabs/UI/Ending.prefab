@@ -396,12 +396,13 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Ending credits\n\n\n\uB9AC\uB354 - \uC11C\uC815\uC624\n\n\uCE90\uB9AD\uD130,
-    UI - \uC870\uC9C4\uD589\n\nItem - \uC1A1\uADFC\uD615\n\na lot - \uAE40\uC720\uD6C8\n\n\uCE90\uB9AD\uD130
-    - \uACE0\uBCD1\uD76C\n\n\nSpecial Thanks\n\n\nIcons used in this game:\r\n\n-
-    Ammo icon designed by \n\tMuhammad_Usman from Flaticon\r\n\n- Health cross icon
-    designed by \n\t\t        Xinh Studio from Flaticon\r\n\n- Death icon designed
-    by \n\t\t                 Freepik from Flaticon\n\n\n Made by DEVELROCKET.\n\n\n\n\n\n\n\n\n\n\n\n\n\nThank
+  m_text: "Ending credits\n\n\nMonster - \uC11C\uC815\uC624\n\nCharacter, UI - \uC870\uC9C4\uD589\n\nItem
+    - \uC1A1\uADFC\uD615\n\na lot - \uAE40\uC720\uD6C8\n\nCharacter - \uACE0\uBCD1\uD76C\n\n\nSpecial
+    Thanks\n\n\n\uAE40\uC7AC\uC131 \uAC15\uC0AC\uB2D8\n\n\uCD5C\uC601\uBBFC \uAC15\uC0AC\uB2D8\n\n\uC774\uD0DC\uD638
+    \uB9E4\uB2C8\uC800\uB2D8\n\n\nIcons used in this game:\r\n\n- Ammo icon designed
+    by \n\tMuhammad_Usman from Flaticon\r\n\n- Health cross icon designed by \n\t\t       
+    Xinh Studio from Flaticon\r\n\n- Death icon designed by \n\t\t                
+    Freepik from Flaticon\n\n\n Made by DEVELROCKET.\n\n\n\n\n\n\n\n\n\n\n\n\n\nThank
     you for playing our game.\n"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 0c94939397cf8284e8e3464be1bdf9fb, type: 2}
@@ -484,7 +485,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 50
-  stopY: 2050
+  stopY: 2400
 --- !u!1 &7027231875688938335
 GameObject:
   m_ObjectHideFlags: 0
