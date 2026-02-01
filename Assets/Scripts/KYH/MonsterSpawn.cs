@@ -84,18 +84,18 @@ public class MonsterSpawn : MonoBehaviour
     }
     private void Start()
     {
-        // 보스 출현 테스트
-        GameObject go = Instantiate(_bossPrefab, _bossSpawnPos.position, _bossSpawnPos.rotation);
-        BossMonster boss = go.GetComponent<BossMonster>();
-        if (boss == null)
-        {
-            Debug.Log("[MonsterSpawn] BossPrefab에 BossMonster가 없습니다");
-            return;
-        }
-        boss.MonsterInfoUpdate -= _ui.MonsterInfoUpdate;
-        boss.MonsterInfoUpdate += _ui.MonsterInfoUpdate;
-        boss.Init(this);
-        StartCoroutine(boss.CoSpawnIntro());
+        //// 보스 출현 테스트
+        //GameObject go = Instantiate(_bossPrefab, _bossSpawnPos.position, _bossSpawnPos.rotation);
+        //BossMonster boss = go.GetComponent<BossMonster>();
+        //if (boss == null)
+        //{
+        //    Debug.Log("[MonsterSpawn] BossPrefab에 BossMonster가 없습니다");
+        //    return;
+        //}
+        //boss.MonsterInfoUpdate -= _ui.MonsterInfoUpdate;
+        //boss.MonsterInfoUpdate += _ui.MonsterInfoUpdate;
+        //boss.Init(this);
+        //StartCoroutine(boss.CoSpawnIntro());
     }
 
     private void Update()

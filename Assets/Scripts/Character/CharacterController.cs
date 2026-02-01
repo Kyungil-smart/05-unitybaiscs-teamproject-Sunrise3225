@@ -140,8 +140,10 @@ public class CharacterController : MonoBehaviour
 
          _currentMagazine = _maxMagazine;
          _currentHp = _maxHp;
-         
-         _money = Mathf.Max(0, _money);
+
+        _onShopPanel = false;
+
+        _money = Mathf.Max(0, _money);
          _shopPanel.SetActive(false);
          _pauseUI.SetActive(false);
      }
@@ -176,6 +178,7 @@ public class CharacterController : MonoBehaviour
      
      private void Fire()
      {
+        if (_onShopPanel) return;
          if (_currentMagazine <= 0)
          {
              _currentMagazine = 0;
