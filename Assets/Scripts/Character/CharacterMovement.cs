@@ -22,9 +22,18 @@ public class CharacterMovement : MonoBehaviour
     private bool _isWall;
     // private float _pitch;
 
+    private Coroutine _fastMoveCoroutine; // FastMoveItem 코루틴 체크용
+    private Coroutine _slowMoveCoroutine; // SlowMoveItem 코루틴 체크용
+    private float _originalMoveSpeed;     // SlowMoveItem용 백업 스피드
+
     // UI 프로퍼티
     // Speed
     public float MoveSpeed { get { return _moveSpeed;} set => _moveSpeed = value; }
+
+    private void Awake()
+    {
+        _originalMoveSpeed = MoveSpeed;   // SlowMoveItem용 원래 스피드 백업 
+    }
 
     public void Start()
     {
@@ -85,4 +94,42 @@ public class CharacterMovement : MonoBehaviour
         }
         // transform.position += movement * (_moveSpeed * Time.deltaTime);
     }
+
+    #region FastBuffItem
+    public void ApplyFastMove(float value, float duration)
+    {
+        if (_fastMoveCoroutine != null)
+        {
+            StopCoroutine(_fastMoveCoroutine);
+            MoveSpeed -= value;
+        }
+        _fastMoveCoroutine = StartCoroutine(FastMoveCoroutine(value, duration));
+    }
+
+    private IEnumerator FastMoveCoroutine(float value, float duration)
+    {
+        MoveSpeed += value;
+        yield return new WaitForSeconds(duration);
+        MoveSpeed -= value;
+        _fastMoveCoroutine = null;
+    }
+    #endregion
+
+    #region SlowDebuffItem
+    public void ApplySlowMove(float value, float duration)
+    {
+        if (_slowMoveCoroutine != null)
+            StopCoroutine(_slowMoveCoroutine);
+
+        _slowMoveCoroutine = StartCoroutine(SlowMoveCoroutine(value, duration));
+    }
+
+    private IEnumerator SlowMoveCoroutine(float value, float duration)
+    {
+        MoveSpeed = Mathf.Max(_originalMoveSpeed - value, 0f);
+        yield return new WaitForSeconds(duration);
+        MoveSpeed = _originalMoveSpeed;
+        _slowMoveCoroutine = null;
+    }
+    #endregion
 }
