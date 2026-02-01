@@ -207,10 +207,13 @@ MonoBehaviour:
   _effectList:
   - effectType: 4
     effectObject: {fileID: 1218726591950707117, guid: 7fa07ad8afc788845a6ef5461d4f3d31, type: 3}
-    poolSize: 0
+    poolSize: 10
   - effectType: 3
     effectObject: {fileID: 2126182342079093085, guid: ba1cc4e5ec6c58c40b5524e19e62d829, type: 3}
-    poolSize: 0
+    poolSize: 10
+  - effectType: 1
+    effectObject: {fileID: 100008, guid: ed82d947dc150a24fafea2cfce49424b, type: 3}
+    poolSize: 10
 --- !u!4 &688775338
 Transform:
   m_ObjectHideFlags: 0
@@ -344,17 +347,6 @@ MonoBehaviour:
   m_LightCookieSize: {x: 1, y: 1}
   m_LightCookieOffset: {x: 0, y: 0}
   m_SoftShadowQuality: 0
---- !u!114 &763357467 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4382367302188423897, guid: 9a51330422da0c74ba83bdd5b260ab9c, type: 3}
-  m_PrefabInstance: {fileID: 2074489138}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7d23f482415758940a65d2812d1caf68, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1556436170
 GameObject:
   m_ObjectHideFlags: 0
@@ -387,16 +379,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _spawnPrefabs:
   - {fileID: 7024364664093282279, guid: 959886e1c3128a0419adbf4aa4dd872f, type: 3}
+  - {fileID: 8580151715974210510, guid: cec8c74a560a7ef4381258b48eb3a97a, type: 3}
   _spawnPositions:
   - {x: 2.02, y: 0, z: 10.53}
   - {x: 10.03, y: 0, z: -13.19}
   - {x: 9.7, y: 0, z: 16.8}
   _bossPrefab: {fileID: 3572656230780881251, guid: b1bfffb0677d20947a502486dc57e5c1, type: 3}
   _bossSpawnPos: {fileID: 137315188}
-  _ui: {fileID: 763357467}
   _spawnDelay: 1
   _maxSpawnCount: 20
-  _waveStartTime: 3
+  _waveStartTime: 1
   _maxWaveCount: 10
 --- !u!4 &1556436172
 Transform:
@@ -513,7 +505,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2957438258204489918, guid: 9a51330422da0c74ba83bdd5b260ab9c, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2957438258204489918, guid: 9a51330422da0c74ba83bdd5b260ab9c, type: 3}
       propertyPath: m_LocalRotation.x
@@ -521,7 +513,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2957438258204489918, guid: 9a51330422da0c74ba83bdd5b260ab9c, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2957438258204489918, guid: 9a51330422da0c74ba83bdd5b260ab9c, type: 3}
       propertyPath: m_LocalRotation.z
@@ -533,7 +525,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2957438258204489918, guid: 9a51330422da0c74ba83bdd5b260ab9c, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
+      value: 180
       objectReference: {fileID: 0}
     - target: {fileID: 2957438258204489918, guid: 9a51330422da0c74ba83bdd5b260ab9c, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
