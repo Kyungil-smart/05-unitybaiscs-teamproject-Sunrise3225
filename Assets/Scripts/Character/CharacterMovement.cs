@@ -25,6 +25,8 @@ public class CharacterMovement : MonoBehaviour
     private Coroutine _fastMoveCoroutine; // FastMoveItem 코루틴 체크용
     private Coroutine _slowMoveCoroutine; // SlowMoveItem 코루틴 체크용
     private float _originalMoveSpeed;     // SlowMoveItem용 백업 스피드
+    private float _fastBuffValue;         // FastMoveItem 버그 해결을 위한 변수
+    private float _slowDebuffValue;       // SlowMoveItem 버그 해결을 위한 변수
 
     // UI 프로퍼티
     // Speed
@@ -98,19 +100,17 @@ public class CharacterMovement : MonoBehaviour
     #region FastBuffItem
     public void ApplyFastMove(float value, float duration)
     {
-        if (_fastMoveCoroutine != null)
-        {
-            StopCoroutine(_fastMoveCoroutine);
-            MoveSpeed -= value;
-        }
+        if (_fastMoveCoroutine != null) StopCoroutine(_fastMoveCoroutine);
         _fastMoveCoroutine = StartCoroutine(FastMoveCoroutine(value, duration));
     }
 
     private IEnumerator FastMoveCoroutine(float value, float duration)
     {
-        MoveSpeed += value;
+        _fastBuffValue = value;
+        UpdateMoveSpeed();
         yield return new WaitForSeconds(duration);
-        MoveSpeed -= value;
+        _fastBuffValue = 0;
+        UpdateMoveSpeed();
         _fastMoveCoroutine = null;
     }
     #endregion
@@ -118,18 +118,25 @@ public class CharacterMovement : MonoBehaviour
     #region SlowDebuffItem
     public void ApplySlowMove(float value, float duration)
     {
-        if (_slowMoveCoroutine != null)
-            StopCoroutine(_slowMoveCoroutine);
-
+        if (_slowMoveCoroutine != null) StopCoroutine(_slowMoveCoroutine);
         _slowMoveCoroutine = StartCoroutine(SlowMoveCoroutine(value, duration));
     }
 
     private IEnumerator SlowMoveCoroutine(float value, float duration)
     {
-        MoveSpeed = Mathf.Max(_originalMoveSpeed - value, 0f);
+        _slowDebuffValue = value;
+        UpdateMoveSpeed();
         yield return new WaitForSeconds(duration);
-        MoveSpeed = _originalMoveSpeed;
+        _slowDebuffValue = 0;
+        UpdateMoveSpeed();
         _slowMoveCoroutine = null;
+    }
+    #endregion
+
+    #region UpdateMoveSpeed
+    private void UpdateMoveSpeed()
+    {
+        MoveSpeed = Mathf.Max(_originalMoveSpeed + _fastBuffValue - _slowDebuffValue, 0f);
     }
     #endregion
 }
