@@ -12,31 +12,15 @@ public class FastMoveItem : MonoBehaviour
     [SerializeField] private ItemType itemType = ItemType.FastItem;
     public ItemType ItemType => itemType;
 
-    private bool _isFastMove = false;
-
-
     private void OnTriggerEnter(Collider other)
     {
         if (!other.CompareTag("Player")) return;
 
         CharacterMovement player = other.GetComponent<CharacterMovement>();
-
         if (player == null) return;
 
-        if (!_isFastMove)
-        {
-            StartCoroutine(FastMove(player));
-        }
+        player.ApplyFastMove(_fastMoveVelue, _buffTime);
 
         Destroy(gameObject);
-    }
-
-    private IEnumerator FastMove(CharacterMovement player)
-    {
-        _isFastMove = true;
-        player.MoveSpeed += _fastMoveVelue;
-        yield return new WaitForSeconds(_buffTime);
-        player.MoveSpeed -= _fastMoveVelue;
-        _isFastMove = false;
     }
 }
