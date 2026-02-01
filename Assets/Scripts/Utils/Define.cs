@@ -53,8 +53,8 @@ public class Define
     #region 아이템 드랍 확률
     public static readonly float[] ITEM_DROP_PROB = new float[]
     {
-        0.3f,  // Heal 아이템 드랍 확률
-        0.4f,  // Ammo 아이템 드랍 확률
+        0.2f,  // Heal 아이템 드랍 확률
+        0.5f,  // Ammo 아이템 드랍 확률
         0.15f, // Fast 아이템 드랍 확률
         0.14f, // Slow 아이템 드랍 확률
         0.01f, // Freeze 아이템 드랍

@@ -5,10 +5,10 @@ public class ATypeMonster : MonsterController
     protected override void InitStats()
     {
         PatrolSpeed = 4.2f;
-        ChaseSpeed = 6.2f;
+        ChaseSpeed = 6.8f;
         Attack = 14f;
-        Hp = 100f;
-        MaxHp = 100f;
+        Hp = 120f;
+        MaxHp = 120f;
         AttackDistance = 1.8f;
     }
 }

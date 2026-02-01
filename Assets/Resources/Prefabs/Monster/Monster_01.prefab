@@ -2327,7 +2327,7 @@ MonoBehaviour:
   - {fileID: 5763018426558098922, guid: 61fc3835efe4ce648b36e4ed3499ccf4, type: 3}
   - {fileID: 7826311010079741847, guid: 6b723c22f5f91a642bd48bde005072a4, type: 3}
   - {fileID: 5520317825365106281, guid: ea89d43741493f4498341a90c3f3d0eb, type: 3}
-  _dropPercent: 0.3
+  _dropPercent: 0.5
 --- !u!114 &-5820351799584731237
 MonoBehaviour:
   m_ObjectHideFlags: 0

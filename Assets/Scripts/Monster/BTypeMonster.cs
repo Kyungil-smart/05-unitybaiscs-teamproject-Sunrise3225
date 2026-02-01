@@ -4,10 +4,10 @@ public class BTypeMonster : MonsterController
     protected override void InitStats()
     {
         PatrolSpeed = 4.5f;
-        ChaseSpeed = 6.6f;
-        Attack = 14f;
-        Hp = 60f;
-        MaxHp = 60f;
+        ChaseSpeed = 7.2f;
+        Attack = 17f;
+        Hp = 100f;
+        MaxHp = 100f;
         AttackDistance = 1.8f;
     }
     protected override string GetAttackTrigger(bool useRight)
