@@ -8,7 +8,12 @@ public class BombObject : MonoBehaviour, IDamageable
     
     [SerializeField] [Range(0, 10)] private float _explosionRange;
     [SerializeField] private int _explosionDamage;
-    
+    public AudioClip bombClip;
+    AudioSource _audioPlayer;
+    private void Awake()
+    {
+        _audioPlayer = GetComponent<AudioSource>();
+    }
     private void Update()
     {
         if (_health <= 0)
@@ -23,15 +28,21 @@ public class BombObject : MonoBehaviour, IDamageable
 
         foreach (Collider hit in hitColliders)
         {
-            TestMons monster = hit.GetComponent<TestMons>();
+            MonsterController monster = hit.GetComponent<MonsterController>();
 
             if (monster != null)
             {
                 monster.TakeDamage(_explosionDamage);
             }
         }
-        
-        Destroy(gameObject, 0.5f);
+        Vector3 fxPos = transform.position + Vector3.up * 0.2f;
+        Quaternion fxRot = Quaternion.identity;
+        EffectManager.Instance.SpawnEffect(EffectManager.EffectType.Explosion, fxPos, fxRot, null);
+
+        if (bombClip != null) 
+            _audioPlayer.PlayOneShot(bombClip, volumeScale: 1f);
+
+        Destroy(gameObject);
     }
 
     private void OnDrawGizmos()

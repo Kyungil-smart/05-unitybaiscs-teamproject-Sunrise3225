@@ -428,7 +428,7 @@ public class MonsterController : MonoBehaviour, IDamageable
             return;
         }
         if (hitClip != null)
-            audioPlayer.PlayOneShot(hitClip, volumeScale: 0.5f);
+            audioPlayer.PlayOneShot(hitClip, volumeScale: 0.3f);
     }
 
     public virtual void OnDead()
@@ -451,7 +451,7 @@ public class MonsterController : MonoBehaviour, IDamageable
         StopAllCoroutines();
         _coKnockback = null;
         agent.enabled = false;
-        if (deathClip != null) audioPlayer.PlayOneShot(deathClip, volumeScale: 0.1f);
+        if (deathClip != null) audioPlayer.PlayOneShot(deathClip, volumeScale: 0.04f);
         Anim.applyRootMotion = true;
     }
     

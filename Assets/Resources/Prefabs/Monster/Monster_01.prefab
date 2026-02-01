@@ -2304,8 +2304,8 @@ MonoBehaviour:
   attackRadius: 0.25
   attackRoot_R: {fileID: 4048077254118820450}
   attackRoot_L: {fileID: 2632531933954584243}
-  hitClip: {fileID: 0}
-  deathClip: {fileID: 0}
+  hitClip: {fileID: 8300000, guid: 46f548eae7497eb4f8bd6d6120ca98a9, type: 3}
+  deathClip: {fileID: 8300000, guid: 6a4b5965d4ce8114db727c0d05023a78, type: 3}
   Anim: {fileID: 0}
   agent: {fileID: 0}
   monsterSpawn: {fileID: 0}
