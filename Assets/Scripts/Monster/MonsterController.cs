@@ -244,7 +244,7 @@ public class MonsterController : MonoBehaviour, IDamageable
         transform.localScale = new Vector3(1f, 1f, 1f);
 
         _attackRoot = (NextRight ? attackRoot_R : attackRoot_L);
-        ms = monsterSpawn;
+        monsterSpawn = ms;
         return true;
     }
 
