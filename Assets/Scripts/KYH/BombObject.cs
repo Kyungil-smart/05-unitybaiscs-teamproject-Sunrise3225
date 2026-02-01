@@ -9,11 +9,7 @@ public class BombObject : MonoBehaviour, IDamageable
     [SerializeField] [Range(0, 10)] private float _explosionRange;
     [SerializeField] private int _explosionDamage;
     public AudioClip bombClip;
-    AudioSource _audioPlayer;
-    private void Awake()
-    {
-        _audioPlayer = GetComponent<AudioSource>();
-    }
+
     private void Update()
     {
         if (_health <= 0)
@@ -40,7 +36,7 @@ public class BombObject : MonoBehaviour, IDamageable
         EffectManager.Instance.SpawnEffect(EffectManager.EffectType.Explosion, fxPos, fxRot, null);
 
         if (bombClip != null) 
-            _audioPlayer.PlayOneShot(bombClip, volumeScale: 1f);
+            AudioSource.PlayClipAtPoint(bombClip, transform.position, 3f);
 
         Destroy(gameObject);
     }
