@@ -9,32 +9,19 @@ public class SlowMoveItem : MonoBehaviour
     [SerializeField] private float _slowMoveVelue;
     [Tooltip("디버프 지속시간을 넣어주세요.")]
     [SerializeField] private float _debuffTime;
+
     [SerializeField] private ItemType itemType = ItemType.SlowItem;
     public ItemType ItemType => itemType;
-    private bool _isSlowMove = false;
 
     private void OnTriggerEnter(Collider other)
     {
         if (!other.CompareTag("Player")) return;
 
         CharacterMovement player = other.GetComponent<CharacterMovement>();
-
         if (player == null) return;
 
-        if (!_isSlowMove)
-        {
-            StartCoroutine(SlowMove(player));
-        }
+        player.ApplySlowMove(_slowMoveVelue, _debuffTime);
 
         Destroy(gameObject);
-    }
-
-    private IEnumerator SlowMove(CharacterMovement player)
-    {
-        _isSlowMove = true;
-        player.MoveSpeed -= _slowMoveVelue;
-        yield return new WaitForSeconds(_debuffTime);
-        player.MoveSpeed += _slowMoveVelue;
-        _isSlowMove = false;
     }
 }
