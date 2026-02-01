@@ -9,8 +9,6 @@ public class UIManager : MonoBehaviour
 {
     [Header("Components")]
     [SerializeField] private CharacterController _characterController;
-    [SerializeField] private ScoreManager _scoreManager;
-    [SerializeField] private EnemyKillCounter _enemyKillCounter;
     [SerializeField] private MonsterSpawn _monsterSpawn;
     [SerializeField] private GameObject _bossInfoObject;
     [SerializeField] private GameObject _bossHPSliderObject;
@@ -18,22 +16,17 @@ public class UIManager : MonoBehaviour
     [Header("Texts")]
     [SerializeField] private TextMeshProUGUI _hpText;
     [SerializeField] private TextMeshProUGUI _magazineText;
-    [SerializeField] private TextMeshProUGUI _killCountText;
-    [SerializeField] private TextMeshProUGUI _scoreText;
     [SerializeField] private TextMeshProUGUI _bossHpText;
     
     [Header("Icons (Image Components)")]
     [SerializeField] private Image _hpIconImage;
     [SerializeField] private Image _ammoIconImage;
-    [SerializeField] private Image _killIconImage;
     
     [Header("Icon Sprites (PNG -> Sprite)")]
     [SerializeField] private Sprite _hpIconSprite;
     [SerializeField] private Sprite _ammoIconSprite;
-    [SerializeField] private Sprite _killIconSprite;
     
     [Header("UI")]
-    [SerializeField] private TextMeshProUGUI _lifeText;
     [SerializeField] private TextMeshProUGUI _waveText;
     [SerializeField] private TextMeshProUGUI _goldText;
     [SerializeField] private TextMeshProUGUI _enemyLeftText;
@@ -61,7 +54,6 @@ public class UIManager : MonoBehaviour
     {
         if (_hpIconImage != null)   _hpIconImage.sprite = _hpIconSprite;
         if (_ammoIconImage != null) _ammoIconImage.sprite = _ammoIconSprite;
-        if (_killIconImage != null) _killIconImage.sprite = _killIconSprite;
 
         _bossInfoObject.SetActive(false);
     }
@@ -70,12 +62,10 @@ public class UIManager : MonoBehaviour
     {
         RefreshHpUI();
         RefreshMagazineUI();
-        RefreshLifeUI();
-        RefreshKillCountUI();
         
-        RefreshScoreUI();
         RefreshWaveUI();
         RefreshEnemyLeftUI();
+        RefreshMoneyUI();
     }
     
     private void RefreshHpUI()
@@ -88,22 +78,6 @@ public class UIManager : MonoBehaviour
     {
         if (_magazineText == null || _characterController == null) return;
         _magazineText.text = $"{_characterController.CurrentMagazine} / {_characterController.MaxMagazine}";
-    }
-
-    private void RefreshLifeUI()
-    {
-        _lifeText.text = $"LIFE : {_characterController.PlayerLife}";
-    }
-
-    private void RefreshKillCountUI()
-    {
-        if (_killCountText == null || _enemyKillCounter == null) return;
-        _killCountText.text = $"{_enemyKillCounter.Counter}";
-    }
-
-    private void RefreshScoreUI()
-    {
-        _scoreText.text = $"Score : {_scoreManager.Score}";
     }
     
     private void RefreshWaveUI()

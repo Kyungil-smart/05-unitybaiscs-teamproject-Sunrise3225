@@ -32,8 +32,7 @@ public class CharacterController : MonoBehaviour
 
      [SerializeField] private Transform _rayStartPoint;
      private Ray _ray;
-
-     [SerializeField] private int _playerLife;
+     
      public bool _isGrounded;
      private float _currentHp;                                // 현재 체력
      public bool IsDead = false;                          // 생존 여부
@@ -56,8 +55,6 @@ public class CharacterController : MonoBehaviour
      // Magazine
      public int CurrentMagazine { get {return _currentMagazine; } }
      public int MaxMagazine { get { return _maxMagazine; } set => _maxMagazine = value; }
-     // Player Life
-     public int PlayerLife { get {return _playerLife; } }
      public int AttackDamage { get => _attackDamage; set => _attackDamage = value; }
      public int Money { get => _money; set => _money = value; }
 
@@ -74,7 +71,7 @@ public class CharacterController : MonoBehaviour
          if (_rayStartPoint == null)
              _rayStartPoint = transform;
 
-        _cam = Camera.main;
+         _cam = Camera.main;
          //if (_rayEndPoint == null)
          //    _rayEndPoint = transform;
      }
@@ -96,13 +93,13 @@ public class CharacterController : MonoBehaviour
              if (!_isPaused)
              {
                  _isPaused = true;
-                 _pauseUI.SetActive(true);
+                 if (_pauseUI != null) _pauseUI.SetActive(true);
                  Time.timeScale = 0f;
              }
              else
              {
                  _isPaused = false;
-                 _pauseUI.SetActive(false);
+                 if (_pauseUI != null) _pauseUI.SetActive(false);
                  Time.timeScale = 1f;
              }
          }
@@ -123,7 +120,7 @@ public class CharacterController : MonoBehaviour
              CursorLock(true);
          }
 
-         
+         if (_isPaused || _onShopPanel) return;
          
          DetectTarget();
          
@@ -146,16 +143,15 @@ public class CharacterController : MonoBehaviour
      {
          _maxHp = Mathf.Max(0, _maxHp);
          _maxMagazine = Mathf.Max(0, _maxMagazine);
-         _playerLife = Mathf.Max(0, _playerLife);
 
          _currentMagazine = _maxMagazine;
          _currentHp = _maxHp;
-
-        _onShopPanel = false;
-
-        _money = Mathf.Max(0, _money);
-         _shopPanel.SetActive(false);
-         _pauseUI.SetActive(false);
+         
+         _onShopPanel = false;
+         
+         _money = Mathf.Max(0, _money);
+         if (_shopPanel != null) _shopPanel.SetActive(false);
+         if (_pauseUI != null) _pauseUI.SetActive(false);
      }
      
      private void DetectTarget()
@@ -223,7 +219,7 @@ public class CharacterController : MonoBehaviour
      {
          _isFiring = true;
 
-         while (Input.GetMouseButton(0))
+         while (!IsDead && !_isPaused && !_onShopPanel && Input.GetMouseButton(0))
          {
              Fire();
              yield return new WaitForSeconds(_fireRate);
@@ -290,27 +286,17 @@ public class CharacterController : MonoBehaviour
 
          // 음수 데미지 들어오면 회복이 되므로(의도 아니면) 하한 0 처리
          damage = Mathf.Max(0f, damage);
-
-        if (_damageColor != null) _damageColor.OnDamage(); // Hit Flash(맞으면 붉은색)
-
-        _currentHp -= damage;
+         
+         if (_damageColor != null) _damageColor.OnDamage(); // Hit Flash(맞으면 붉은색)
+         
+         _currentHp -= damage;
          _currentHp = Mathf.Max(0f, _currentHp);
 
          if (_currentHp <= 0f)
          {
-             // 라이프 0 밑으로 떨어지지 않게 고정
-             _playerLife = Mathf.Max(0, _playerLife - 1);
-
-             if (_playerLife > 0)
-             {
-                 // 리스폰 체력: 100 고정 대신 maxHp로 복구(일관성)
-                 _currentHp = _maxHp;
-             }
-         }
-
-         if (_playerLife <= 0)
-         {
              IsDead = true;
+             StopAllCoroutines();   // 현재 스크립트에서 돌던 AutoFire 포함 즉시 중단
+             _isFiring = false;
              GameOver();
          }
      }
