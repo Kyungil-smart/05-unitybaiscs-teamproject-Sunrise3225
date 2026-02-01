@@ -2040,6 +2040,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8af21d8cc6d3aee4ba401f1f1ed7d469, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _onDamageColor: {r: 1, g: 0, b: 0, a: 1}
+  _colorChangeTime: 0.1
   objectType: 0
   monsterState: 0
   OnTakeDamage:
@@ -2077,13 +2079,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46a1463357a67444690f5168320bf60e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _goldPrefab: {fileID: 6274776712118073419, guid: 4946694cc27b4194e817866a1ca830b4, type: 3}
+  _goldPrefab: {fileID: 1070286046608029465, guid: 6d5523a863121a3419f1a03b413e2f5b, type: 3}
   _itemList:
   - {fileID: 5763018426558098922, guid: 61fc3835efe4ce648b36e4ed3499ccf4, type: 3}
   - {fileID: 5416913622167093794, guid: 7f65e11ce323a654d9e4ae3b03a06678, type: 3}
-  - {fileID: 6535657686057132526, guid: ad9cc8497902e874e98c3240ae85902a, type: 3}
-  - {fileID: 2636893168337905891, guid: ec46469b41673be47bd6624176cb2661, type: 3}
-  _dropPercent: 1
+  - {fileID: 5520317825365106281, guid: ea89d43741493f4498341a90c3f3d0eb, type: 3}
+  - {fileID: 7826311010079741847, guid: 6b723c22f5f91a642bd48bde005072a4, type: 3}
+  _dropPercent: 0.3
 --- !u!114 &-3295020330480333343
 MonoBehaviour:
   m_ObjectHideFlags: 0

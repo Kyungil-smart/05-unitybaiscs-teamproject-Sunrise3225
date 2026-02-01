@@ -200,7 +200,18 @@ public class MonsterController : MonoBehaviour, IDamageable
         if (CanAutoAttack())
             UpdateAttack();
 
-        Anim.SetFloat("Speed", agent.desiredVelocity.magnitude);
+        if (agent != null && agent.enabled && agent.isOnNavMesh)
+        {
+            float spd = agent.velocity.magnitude;
+            if (agent.isStopped) 
+                spd = 0f;
+
+            Anim.SetFloat("Speed", spd);
+        }
+        else
+        {
+            Anim.SetFloat("Speed", 0f);
+        }
     }
     private void Awake()
     {

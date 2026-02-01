@@ -55,13 +55,6 @@ public class BossMonster : MonsterController
         AttackDistance = 3.0f;
     }
 
-    private void Start()
-    {
-        //if (_coPattern != null)
-        //    StopCoroutine(_coPattern);
-
-        //_coPattern = StartCoroutine(CoPatternLoop());
-    }
     private void OnDestroy()
     {
         if (_coPattern != null)
@@ -75,7 +68,6 @@ public class BossMonster : MonsterController
         if (_coPattern != null)
             StopCoroutine(_coPattern);
         _coPattern = StartCoroutine(CoPatternLoop());
-        Anim.SetFloat("Speed", agent.desiredVelocity.magnitude);
     }
 
     public override bool Init(MonsterSpawn monsterSpawn)
@@ -238,11 +230,16 @@ public class BossMonster : MonsterController
             agent.updatePosition = false;   // 이게 있어야 Roaring 중에 안 밀림
             agent.updateRotation = false;
         }
+        if (agent != null && agent.enabled && agent.isOnNavMesh)
+            agent.Warp(transform.position);
 
         // 현재 카메라가 있는 방향 기준으로 보스 쪽으로 붙여서, 보스만 바라보게
         Vector3 flatDir = camStartPos - transform.position;
         flatDir.y = 0f;
-        if (flatDir.sqrMagnitude < 0.0001f) flatDir = -transform.forward;
+
+        if (flatDir.sqrMagnitude < 0.0001f) 
+            flatDir = -transform.forward;
+
         flatDir.Normalize();
 
         Vector3 lookTarget = transform.position + Vector3.up * introCamHeight;
@@ -253,7 +250,7 @@ public class BossMonster : MonsterController
 
         // Roaring 재생
         if (Anim != null)
-            Anim.Play(roarStateName, 0, 0f);
+            Anim.CrossFade(roarStateName, 0.05f, 0);
 
         float roarLen = GetClipLength(roarStateName);
         if (roarLen <= 0f) roarLen = 3.0f;
