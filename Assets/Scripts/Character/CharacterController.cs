@@ -16,14 +16,14 @@ public class CharacterController : MonoBehaviour
      [SerializeField] private int _money;
      private int _currentMagazine;                          // 잔탄 수 
 
-    [SerializeField] private LayerMask _rayHitMask; // 벽 + 적 + 장애물(쏴서 맞을 것들)
+     [SerializeField] private LayerMask _rayHitMask; // 벽 + 적 + 장애물(쏴서 맞을 것들)
 
-    private RaycastHit _lastHit;
-    private bool _hasHit;
-    private bool _hitEnemy;
-    private Vector3 _aimPoint;
+     private RaycastHit _lastHit;
+     private bool _hasHit;
+     private bool _hitEnemy;
+     private Vector3 _aimPoint;
 
-    public float GroundDistance = 0.5f;
+     public float GroundDistance = 0.5f;
      private Rigidbody _rigidbody;
      private IDamageable _targetDamageable;
      private Transform _targetTransform;
@@ -43,13 +43,13 @@ public class CharacterController : MonoBehaviour
      [SerializeField] private GameObject _pauseUI;
      private bool _onShopPanel;
      private bool _isPaused;
-    private Camera _cam;
+     private Camera _cam;
 
     [SerializeField] private onDamageColor _damageColor; // Hit Flash(맞으면 붉은색)
 
     // UI 프로퍼티
     // HP
-    public float CurrentHp { get {return _currentHp; } }
+     public float CurrentHp { get {return _currentHp; } }
      public int MaxHp { get { return _maxHp; } set => _maxHp = value; }
      // Magazine
      public int CurrentMagazine { get {return _currentMagazine; } }
@@ -242,7 +242,6 @@ public class CharacterController : MonoBehaviour
         {
             Vector3 fxPos = _lastHit.point + _lastHit.normal * 0.02f;
             Quaternion fxRot = Quaternion.LookRotation(_lastHit.normal);
-
             EffectManager.Instance.SpawnEffect(EffectManager.EffectType.Common, fxPos, fxRot, null);
         }
     }
