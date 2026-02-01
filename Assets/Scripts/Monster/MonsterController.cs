@@ -215,9 +215,9 @@ public class MonsterController : MonoBehaviour, IDamageable
     }
     private void Awake()
     {
-        Init(monsterSpawn);
+        Init();
     }
-    public virtual bool Init(MonsterSpawn ms)
+    public virtual bool Init()
     {
         if (_init) return false;
         _init = true;
@@ -243,9 +243,14 @@ public class MonsterController : MonoBehaviour, IDamageable
         monsterState = MonsterState.Patrol;
         transform.localScale = new Vector3(1f, 1f, 1f);
 
+
         _attackRoot = (NextRight ? attackRoot_R : attackRoot_L);
-        monsterSpawn = ms;
         return true;
+    }
+
+    public void InitMonster(MonsterSpawn ms)
+    {
+        monsterSpawn = ms;
     }
 
     Vector3 _moveDir;
@@ -424,6 +429,7 @@ public class MonsterController : MonoBehaviour, IDamageable
         if (hp <= 0)
         {
             IsDead = true;
+            monsterSpawn.OnMonsterSpawn();
             OnDead();
             return;
         }
@@ -447,7 +453,7 @@ public class MonsterController : MonoBehaviour, IDamageable
             else
                 _dropItem.MakeDropItem(transform.position);
         }
-
+        
         StopAllCoroutines();
         _coKnockback = null;
         agent.enabled = false;

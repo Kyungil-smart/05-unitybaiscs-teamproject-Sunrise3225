@@ -23,7 +23,7 @@ public class BossMonster : MonsterController
     [Header("Skill Timing")]
     public float skillGap = 0.35f;
     [Header("Approach Melee Skill Setting")]
-    public float approachMaxTime = 5.0f; // ÀÌ ½Ã°£¿¡ ¸ø ºÙÀ¸¸é ´ÙÀ½ ½ºÅ³·Î ³Ñ¾î°¨
+    public float approachMaxTime = 5.0f; // ï¿½ï¿½ ï¿½Ã°ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Å³ï¿½ï¿½ ï¿½Ñ¾î°¨
     [Header("Slam Skill Setting")]
     public float slamWindup = 1.3f;
     public float slamRadius = 20f;
@@ -40,7 +40,7 @@ public class BossMonster : MonsterController
     bool _doingSkill = false;
     bool _introPlaying = false;
 
-    // ½ºÅ³ º¸°ü
+    // ï¿½ï¿½Å³ ï¿½ï¿½ï¿½ï¿½
     Dictionary<BossSkillType, BossSkill> _skills;
 
     protected override bool CanAutoAttack() => false;
@@ -73,25 +73,26 @@ public class BossMonster : MonsterController
     {
         InvokeMonsterData();
     }
-    public override bool Init(MonsterSpawn monsterSpawn)
+    public override bool Init()
     {
-        base.Init(monsterSpawn);
+        base.Init();
         objectType = ObjectType.Boss;
         transform.localScale = new Vector3(1.8f, 1.8f, 1.8f);
         BuildSkills();
         return true;
     }
+    
 #if UNITY_EDITOR
     private void OnDrawGizmosSelected()
     {
-        // Slam ¹üÀ§
+        // Slam ï¿½ï¿½ï¿½ï¿½
         Gizmos.color = new Color(1f, 0.5f, 0f, 0.25f);
         Gizmos.DrawSphere(transform.position, slamRadius);
 
         Gizmos.color = new Color(1f, 0.5f, 0f, 0.9f);
         Gizmos.DrawWireSphere(transform.position, slamRadius);
 
-        // Windup µ¿¾È "ÇöÀç ¹üÀ§" È®ÀÎ¿ë ÅØ½ºÆ®
+        // Windup ï¿½ï¿½ï¿½ï¿½ "ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½" È®ï¿½Î¿ï¿½ ï¿½Ø½ï¿½Æ®
         UnityEditor.Handles.color = new Color(1f, 0.8f, 0.2f, 1f);
         UnityEditor.Handles.Label(transform.position + Vector3.up * 2.0f,
             $"SLAM R={slamRadius:0.0}  Windup={slamWindup:0.0}s  Dmg={Attack * slamDamageMul:0}");
@@ -189,7 +190,7 @@ public class BossMonster : MonsterController
             yield break;
         }
 
-        // Ä«¸Þ¶ó ÃßÀû ½ºÅ©¸³Æ® ²ô±â(ÀÌ°Ô ÀÖ¾î¾ß Ä«¸Þ¶ó°¡ ¾È µÇµ¹¾Æ°¨)
+        // Ä«ï¿½Þ¶ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Å©ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½(ï¿½Ì°ï¿½ ï¿½Ö¾ï¿½ï¿½ Ä«ï¿½Þ¶ï¿½ ï¿½ï¿½ ï¿½Çµï¿½ï¿½Æ°ï¿½)
         CameraController camFollow = cam.GetComponent<CameraController>();
         if (camFollow == null) 
             camFollow = cam.GetComponentInParent<CameraController>();
@@ -201,7 +202,7 @@ public class BossMonster : MonsterController
         Vector3 camStartPos = cam.transform.position;
         Quaternion camStartRot = cam.transform.rotation;
 
-        // º¸½º °íÁ¤(ÇÙ½É: updatePosition = false)
+        // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½(ï¿½Ù½ï¿½: updatePosition = false)
         bool prevRootMotion = false;
         float prevSpeed = 0f;
         if (Anim != null)
@@ -229,13 +230,13 @@ public class BossMonster : MonsterController
                 agent.velocity = Vector3.zero;
             }
 
-            agent.updatePosition = false;   // ÀÌ°Ô ÀÖ¾î¾ß Roaring Áß¿¡ ¾È ¹Ð¸²
+            agent.updatePosition = false;   // ï¿½Ì°ï¿½ ï¿½Ö¾ï¿½ï¿½ Roaring ï¿½ß¿ï¿½ ï¿½ï¿½ ï¿½Ð¸ï¿½
             agent.updateRotation = false;
         }
         if (agent != null && agent.enabled && agent.isOnNavMesh)
             agent.Warp(transform.position);
 
-        // ÇöÀç Ä«¸Þ¶ó°¡ ÀÖ´Â ¹æÇâ ±âÁØÀ¸·Î º¸½º ÂÊÀ¸·Î ºÙ¿©¼­, º¸½º¸¸ ¹Ù¶óº¸°Ô
+        // ï¿½ï¿½ï¿½ï¿½ Ä«ï¿½Þ¶ï¿½ ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ù¿ï¿½ï¿½ï¿½, ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ù¶óº¸°ï¿½
         Vector3 flatDir = camStartPos - transform.position;
         flatDir.y = 0f;
 
@@ -250,7 +251,7 @@ public class BossMonster : MonsterController
 
         yield return MoveCamera(cam.transform, camStartPos, camStartRot, camTargetPos, camTargetRot, camMoveTime);
 
-        // Roaring Àç»ý
+        // Roaring ï¿½ï¿½ï¿½
         if (Anim != null)
             Anim.CrossFade(roarStateName, 0.05f, 0);
 
@@ -258,10 +259,10 @@ public class BossMonster : MonsterController
         if (roarLen <= 0f) roarLen = 3.0f;
         yield return new WaitForSeconds(roarLen);
 
-        // Ä«¸Þ¶ó º¹±Í
+        // Ä«ï¿½Þ¶ï¿½ ï¿½ï¿½ï¿½ï¿½
         yield return MoveCamera(cam.transform, cam.transform.position, cam.transform.rotation, camStartPos, camStartRot, camMoveTime);
 
-        // ¿øº¹
+        // ï¿½ï¿½ï¿½ï¿½
         if (camFollow != null) camFollow.enabled = prevCamFollow;
         if (Anim != null)
         {
@@ -275,7 +276,7 @@ public class BossMonster : MonsterController
             if (agent.isOnNavMesh) agent.isStopped = prevStopped;
         }
 
-        //  ÆÐÅÏ ½ÃÀÛ Àü¿¡ Player È®º¸
+        //  ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Player È®ï¿½ï¿½
         GameObject player = GameObject.FindGameObjectWithTag("Player");
         if (player != null)
         {
