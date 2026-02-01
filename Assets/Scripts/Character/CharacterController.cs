@@ -34,7 +34,9 @@ public class CharacterController : MonoBehaviour
      [SerializeField] private bool _useAnimationTimingFire = true;
      
      [SerializeField] private GameObject _shopPanel;
+     [SerializeField] private GameObject _pauseUI;
      private bool _onShopPanel;
+     private bool _isPaused;
 
     [SerializeField] private onDamageColor _damageColor; // Hit Flash(맞으면 붉은색)
 
@@ -79,18 +81,39 @@ public class CharacterController : MonoBehaviour
      {
          if (IsDead) return;
 
+         if (!_onShopPanel && Input.GetKeyDown(KeyCode.Escape))
+         {
+             if (!_isPaused)
+             {
+                 _isPaused = true;
+                 _pauseUI.SetActive(true);
+                 Time.timeScale = 0f;
+             }
+             else
+             {
+                 _isPaused = false;
+                 _pauseUI.SetActive(false);
+                 Time.timeScale = 1f;
+             }
+         }
+         
          if (Input.GetKeyDown(KeyCode.K))
          {
              _shopPanel.SetActive(true);
              _onShopPanel = true;
+             _cameraController._canRotate = false;
              CursorLock(false);
          }
 
          if (_onShopPanel && Input.GetKeyDown(KeyCode.Escape))
          {
              _shopPanel.SetActive(false);
+             _onShopPanel = false;
+             _cameraController._canRotate = true;
              CursorLock(true);
          }
+
+         
          
          DetectTarget();
          
@@ -101,7 +124,7 @@ public class CharacterController : MonoBehaviour
          
          if (!_useAnimationTimingFire)
          {
-             if (Input.GetMouseButtonDown(0)) Fire();
+             if (Input.GetMouseButtonDown(0) && !_onShopPanel) Fire();
          }
          // if (Input.GetMouseButtonDown(0)) Fire();
          
@@ -120,6 +143,7 @@ public class CharacterController : MonoBehaviour
          
          _money = Mathf.Max(0, _money);
          _shopPanel.SetActive(false);
+         _pauseUI.SetActive(false);
      }
      
      private void DetectTarget()
