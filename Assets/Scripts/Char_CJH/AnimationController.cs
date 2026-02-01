@@ -16,11 +16,8 @@ public class AnimationController : MonoBehaviour
     // 점프 전이 파라미터 (Trigger)
     private readonly int _isJumpHash     = Animator.StringToHash("Jump");
 
-    // 발사 전이 파라미터 (Trigger)
-    private readonly int _fireHash       = Animator.StringToHash("Fire");
-
-    // 재장전 전이 파라미터 (Trigger)
-    private readonly int _reloadHash     = Animator.StringToHash("Reload");
+    // 발사 전이 파라미터 (Bool)
+    private readonly int _isFireHash = Animator.StringToHash("IsFire");
     
     // 죽음 전이 파라미터 (Trigger)
     private readonly int _dieHash = Animator.StringToHash("Die");
@@ -51,7 +48,6 @@ public class AnimationController : MonoBehaviour
         UpdateRun();
         UpdateJump();
         UpdateFire();
-        UpdateReload();
     }
     
     // 게임 오버
@@ -97,37 +93,38 @@ public class AnimationController : MonoBehaviour
         }
     }
 
-    // 단발 사격 입력 시 발사 트리거 발동
+    // 사격 입력 시 발사 Bool 발동
     private void UpdateFire()
     {
         if (Input.GetMouseButtonDown(0))
         {
-            if (_fireRoutine != null) return;
+            _animator.SetBool(_isFireHash, true);
 
-            _animator.SetTrigger(_fireHash);
-            _fireRoutine = StartCoroutine(CoFireAfterDelay());
+            if (_fireRoutine == null)
+                _fireRoutine = StartCoroutine(CoAutoFire());
+        }
+
+        if (Input.GetMouseButtonUp(0))
+        {
+            _animator.SetBool(_isFireHash, false);
         }
     }
     
-    private IEnumerator CoFireAfterDelay()
+    private IEnumerator CoAutoFire()
     {
-        yield return new WaitForSeconds(_fireDelaySeconds);
-
-        if (_characterController != null && _characterController.enabled && !_characterController.IsDead)
+        while (_animator != null && _animator.GetBool(_isFireHash))
         {
-            _characterController.FireFromTiming();
+            yield return new WaitForSeconds(_fireDelaySeconds);
+
+            if (_characterController != null &&
+                _characterController.enabled &&
+                !_characterController.IsDead)
+            {
+                _characterController.FireFromTiming();
+            }
         }
-        
+
         _fireRoutine = null;
-    }
-
-    // 재장전 입력 순간 1회 트리거 발동
-    private void UpdateReload()
-    {
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            _animator.SetTrigger(_reloadHash);
-        }
     }
     
     // 죽음 트리거 발동 (로직은 CharacterController에서)
