@@ -50,8 +50,8 @@ public class BossMonster : MonsterController
         PatrolSpeed = 2.5f;
         ChaseSpeed = 4.2f;
         Attack = 50f;
-        Hp = 200f;
-        MaxHp = 200f;
+        Hp = 5000f;
+        MaxHp = 5000f;
         AttackDistance = 3.0f;
     }
 
@@ -69,7 +69,10 @@ public class BossMonster : MonsterController
             StopCoroutine(_coPattern);
         _coPattern = StartCoroutine(CoPatternLoop());
     }
-
+    private void Start()
+    {
+        InvokeMonsterData();
+    }
     public override bool Init(MonsterSpawn monsterSpawn)
     {
         base.Init(monsterSpawn);
@@ -118,7 +121,6 @@ public class BossMonster : MonsterController
     public override void OnDead()
     {
         base.OnDead();
-
     }
     #region Skill Sequence
     IEnumerator CoPatternLoop()

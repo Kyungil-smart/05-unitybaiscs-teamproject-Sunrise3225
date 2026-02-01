@@ -39,7 +39,8 @@ public class MonsterSpawn : MonoBehaviour
     private bool _isPlayerInside;
     private bool _onMonsterWave;
     private bool _isFirstWave = true;
-    
+
+    UIManager _ui;
     // Kill을 스포너 기준으로 계산해주는 프로퍼티
     private int _totalSpawnedCount;
     public int TotalSpawnedCount
@@ -78,19 +79,23 @@ public class MonsterSpawn : MonoBehaviour
     private void Awake()
     {
         Init();
+        
+
     }
     private void Start()
     {
-        //// 보스 출현 테스트
-        //GameObject go = Instantiate(_bossPrefab, _bossSpawnPos.position, _bossSpawnPos.rotation);
-        //BossMonster boss = go.GetComponent<BossMonster>();
-        //if (boss == null)
-        //{
-        //    Debug.Log("[MonsterSpawn] BossPrefab에 BossMonster가 없습니다");
-        //    return;
-        //}
-        //boss.Init(this);
-        //StartCoroutine(boss.CoSpawnIntro());
+        // 보스 출현 테스트
+        GameObject go = Instantiate(_bossPrefab, _bossSpawnPos.position, _bossSpawnPos.rotation);
+        BossMonster boss = go.GetComponent<BossMonster>();
+        if (boss == null)
+        {
+            Debug.Log("[MonsterSpawn] BossPrefab에 BossMonster가 없습니다");
+            return;
+        }
+        boss.MonsterInfoUpdate -= _ui.MonsterInfoUpdate;
+        boss.MonsterInfoUpdate += _ui.MonsterInfoUpdate;
+        boss.Init(this);
+        StartCoroutine(boss.CoSpawnIntro());
     }
 
     private void Update()
@@ -120,6 +125,8 @@ public class MonsterSpawn : MonoBehaviour
     {
         RandomSpawn();
         _collider = GetComponent<SphereCollider>();
+        if (_ui == null)
+            _ui = FindFirstObjectByType<UIManager>();
     }
     
     private void RandomSpawn()
