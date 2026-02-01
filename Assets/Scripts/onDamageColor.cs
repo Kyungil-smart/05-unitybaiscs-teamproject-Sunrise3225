@@ -22,12 +22,6 @@ public class onDamageColor : MonoBehaviour
         onDamageColorInit();
     }
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.E))
-            OnDamage();
-    }
-
     #region onDamageColorMethod
     public void onDamageColorInit()
     {
