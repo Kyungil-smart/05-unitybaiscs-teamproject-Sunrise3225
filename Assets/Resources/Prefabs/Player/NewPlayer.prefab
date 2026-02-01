@@ -698,6 +698,7 @@ MonoBehaviour:
   _attackRange: 100
   _jumpForce: 6
   _attackDamage: 30
+  _fireRate: 0.7
   _attackTargetLayer:
     serializedVersion: 2
     m_Bits: 512

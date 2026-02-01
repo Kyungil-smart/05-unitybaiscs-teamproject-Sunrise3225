@@ -207,10 +207,13 @@ MonoBehaviour:
   _effectList:
   - effectType: 4
     effectObject: {fileID: 1218726591950707117, guid: 7fa07ad8afc788845a6ef5461d4f3d31, type: 3}
-    poolSize: 0
+    poolSize: 10
   - effectType: 3
     effectObject: {fileID: 2126182342079093085, guid: ba1cc4e5ec6c58c40b5524e19e62d829, type: 3}
-    poolSize: 0
+    poolSize: 10
+  - effectType: 1
+    effectObject: {fileID: 100008, guid: ed82d947dc150a24fafea2cfce49424b, type: 3}
+    poolSize: 10
 --- !u!4 &688775338
 Transform:
   m_ObjectHideFlags: 0
@@ -384,9 +387,9 @@ MonoBehaviour:
   _bossPrefab: {fileID: 3572656230780881251, guid: b1bfffb0677d20947a502486dc57e5c1, type: 3}
   _bossSpawnPos: {fileID: 137315188}
   _spawnDelay: 1
-  _maxSpawnCount: 20
+  _maxSpawnCount: 1
   _waveStartTime: 1
-  _maxWaveCount: 10
+  _maxWaveCount: 2
 --- !u!4 &1556436172
 Transform:
   m_ObjectHideFlags: 0
