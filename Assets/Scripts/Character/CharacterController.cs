@@ -11,6 +11,7 @@ public class CharacterController : MonoBehaviour
      [SerializeField] private float _attackRange;           // 사거리
      [SerializeField] private float _jumpForce;             // 점프력
      [SerializeField] private int _attackDamage;            // 데미지 입히기
+     [SerializeField] private float _fireRate;              // 발사 쿨타임
      [SerializeField] private LayerMask _attackTargetLayer; // 적 레이어 
      [SerializeField] private int _maxMagazine;             // 탄창 수
      [SerializeField] private int _money;
@@ -44,6 +45,7 @@ public class CharacterController : MonoBehaviour
      private bool _onShopPanel;
      private bool _isPaused;
      private Camera _cam;
+     private bool _isFiring;
 
     [SerializeField] private onDamageColor _damageColor; // Hit Flash(맞으면 붉은색)
 
@@ -130,9 +132,9 @@ public class CharacterController : MonoBehaviour
          
          // Debug.DrawRay(rayStartPos, Vector3.down * 0.2f, _isGrounded ? Color.green : Color.red);
          
-         if (!_useAnimationTimingFire)
+         if (Input.GetMouseButtonDown(0) && !_isFiring)
          {
-             if (Input.GetMouseButtonDown(0) && !_onShopPanel) Fire();
+             StartCoroutine(AutoFire());
          }
          // if (Input.GetMouseButtonDown(0)) Fire();
          
@@ -216,6 +218,19 @@ public class CharacterController : MonoBehaviour
             _targetTransform = null;
         }
     }
+
+     private IEnumerator AutoFire()
+     {
+         _isFiring = true;
+
+         while (Input.GetMouseButton(0))
+         {
+             Fire();
+             yield return new WaitForSeconds(_fireRate);
+         }
+
+         _isFiring = false;
+     }
      
      private void Fire()
      {

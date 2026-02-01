@@ -9,6 +9,7 @@ public class MonsterSpawn : MonoBehaviour
     // 몬스터 프리팹의 종류와 스폰 위치를 설정하는 리스트
     [SerializeField] private List<GameObject> _spawnPrefabs = new List<GameObject>();
     [SerializeField] private List<Vector3> _spawnPositions = new List<Vector3>();
+    
     // 보스 출현 테스트
     [SerializeField] private GameObject _bossPrefab;
     [SerializeField] private Transform _bossSpawnPos;
@@ -79,23 +80,11 @@ public class MonsterSpawn : MonoBehaviour
     private void Awake()
     {
         Init();
-        
-
     }
+    
     private void Start()
     {
-        //// 보스 출현 테스트
-        //GameObject go = Instantiate(_bossPrefab, _bossSpawnPos.position, _bossSpawnPos.rotation);
-        //BossMonster boss = go.GetComponent<BossMonster>();
-        //if (boss == null)
-        //{
-        //    Debug.Log("[MonsterSpawn] BossPrefab에 BossMonster가 없습니다");
-        //    return;
-        //}
-        //boss.MonsterInfoUpdate -= _ui.MonsterInfoUpdate;
-        //boss.MonsterInfoUpdate += _ui.MonsterInfoUpdate;
-        //boss.Init(this);
-        //StartCoroutine(boss.CoSpawnIntro());
+        
     }
 
     private void Update()
@@ -123,6 +112,7 @@ public class MonsterSpawn : MonoBehaviour
 
     private void Init()
     {
+        _waveCount = 1;
         RandomSpawn();
         _collider = GetComponent<SphereCollider>();
         if (_ui == null)
@@ -167,32 +157,40 @@ public class MonsterSpawn : MonoBehaviour
         StartCoroutine(Spawn());
     }
     
-    public void WaveStop()
-    {
-        StopCoroutine(Spawn());
-    }
-    
     private IEnumerator Spawn()
     {
         while (_waveCount < _maxWaveCount)
         {
-            _waveCount++;
-            
             while (_spawnCount < _maxSpawnCount)
             {
                 SpawnMonster();
-                _spawnCount++;
+                _spawnCount++; 
                 yield return new WaitForSeconds(_spawnDelay);
             }
 
             yield return new WaitUntil(() => _aliveMonsterCount <= 0);
-        
+            
             _onMonsterWave = false;
             _collider.enabled = true;
             _maxSpawnCount = (int)(_maxSpawnCount * 1.5f);
             _spawnCount = 0;
+                
             yield return new WaitUntil(() => _onMonsterWave);
+            
+            _waveCount++;
         }
+                    
+        // 보스 출현 테스트
+        GameObject go = Instantiate(_bossPrefab, _bossSpawnPos.position, _bossSpawnPos.rotation);
+        BossMonster boss = go.GetComponent<BossMonster>();
+        if (boss == null)
+        {
+            Debug.Log("[MonsterSpawn] BossPrefab에 BossMonster가 없습니다");
+        }
+        boss.MonsterInfoUpdate -= _ui.MonsterInfoUpdate;
+        boss.MonsterInfoUpdate += _ui.MonsterInfoUpdate;
+        boss.InitMonster(this);
+        StartCoroutine(boss.CoSpawnIntro());
     }
 
     private void SpawnMonster()
@@ -201,7 +199,7 @@ public class MonsterSpawn : MonoBehaviour
         _aliveMonsterCount++;
         TotalSpawnedCount++;
 
-        monster.GetComponent<MonsterController>().Init(this);
+        monster.GetComponent<MonsterController>().InitMonster(this);
     }
 
     public void OnMonsterSpawn()
