@@ -24,7 +24,7 @@ public class MonsterController : MonoBehaviour, IDamageable
     #endregion
 
     #region Action
-    public event Action OnBossDead;   // ������ ���� ��쿡
+    public event Action OnBossDead;
     public event Action<MonsterController> MonsterInfoUpdate;
     #endregion
 
@@ -380,7 +380,8 @@ public class MonsterController : MonoBehaviour, IDamageable
         if (IsDead) return;
         hp -= Mathf.RoundToInt(damage);
         OnTakeDamage?.Invoke(damage); // 몬스터가 맞은 경우 신호 전달
-        
+
+        monsterState = MonsterState.OnDamage;
         // 몬스터 공격 당하면 바로 쫓아가게 설정 
         if (Player == null)
         {
@@ -435,7 +436,7 @@ public class MonsterController : MonoBehaviour, IDamageable
         OnBossDead?.Invoke();
         InvokeMonsterData();
         Anim.SetTrigger("Die");
-
+        monsterState = MonsterState.Dead;
         if (objectType == ObjectType.Boss || objectType == ObjectType.EliteMonster)
             return;
         else

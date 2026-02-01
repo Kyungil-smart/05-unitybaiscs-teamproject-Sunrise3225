@@ -344,6 +344,17 @@ MonoBehaviour:
   m_LightCookieSize: {x: 1, y: 1}
   m_LightCookieOffset: {x: 0, y: 0}
   m_SoftShadowQuality: 0
+--- !u!114 &763357467 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4382367302188423897, guid: 9a51330422da0c74ba83bdd5b260ab9c, type: 3}
+  m_PrefabInstance: {fileID: 2074489138}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d23f482415758940a65d2812d1caf68, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1556436170
 GameObject:
   m_ObjectHideFlags: 0
@@ -382,6 +393,7 @@ MonoBehaviour:
   - {x: 9.7, y: 0, z: 16.8}
   _bossPrefab: {fileID: 3572656230780881251, guid: b1bfffb0677d20947a502486dc57e5c1, type: 3}
   _bossSpawnPos: {fileID: 137315188}
+  _ui: {fileID: 763357467}
   _spawnDelay: 1
   _maxSpawnCount: 20
   _waveStartTime: 3
@@ -487,10 +499,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1264980273717373141, guid: 9a51330422da0c74ba83bdd5b260ab9c, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: -60.949463
-      objectReference: {fileID: 0}
     - target: {fileID: 2957438258204489918, guid: 9a51330422da0c74ba83bdd5b260ab9c, type: 3}
       propertyPath: m_LocalPosition.x
       value: 6.11
@@ -535,6 +543,14 @@ PrefabInstance:
       propertyPath: _monsterSpawn
       value: 
       objectReference: {fileID: 1556436171}
+    - target: {fileID: 5393585184839021138, guid: 9a51330422da0c74ba83bdd5b260ab9c, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5393585184839021138, guid: 9a51330422da0c74ba83bdd5b260ab9c, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6373973502576014981, guid: 9a51330422da0c74ba83bdd5b260ab9c, type: 3}
       propertyPath: _monsterSpawn
       value: 
