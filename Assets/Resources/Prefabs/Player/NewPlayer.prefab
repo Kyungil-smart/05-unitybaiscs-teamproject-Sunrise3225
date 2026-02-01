@@ -703,9 +703,11 @@ MonoBehaviour:
     m_Bits: 512
   _maxMagazine: 200
   _money: 0
+  _rayHitMask:
+    serializedVersion: 2
+    m_Bits: 1664
   GroundDistance: 0.5
   _rayStartPoint: {fileID: 1978809354600836703}
-  _rayEndPoint: {fileID: 3768590805595408670}
   _playerLife: 10
   _isGrounded: 0
   IsDead: 0
