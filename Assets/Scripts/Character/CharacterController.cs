@@ -226,7 +226,7 @@ public class CharacterController : MonoBehaviour
          _isFiring = false;
      }
      
-     private void Fire()
+     private void Fire() // 애니메이션에서 또 Fire를 사용해서 중복 적용됨
      {
         if (_onShopPanel) return;
 
@@ -338,6 +338,7 @@ public class CharacterController : MonoBehaviour
     
     public void FireFromTiming()
     {
+        if (_useAnimationTimingFire == false) return;
         Fire();
     }
 }
