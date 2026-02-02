@@ -437,7 +437,7 @@ MonoBehaviour:
   GroundLayer:
     serializedVersion: 2
     m_Bits: 128
-  _maxHp: 100
+  _maxHp: 150
   _attackRange: 100
   _jumpForce: 6
   _attackDamage: 30
@@ -445,7 +445,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 512
   _maxMagazine: 200
-  _money: 0
+  _money: 4000
   _rayHitMask:
     serializedVersion: 2
     m_Bits: 1664
@@ -454,7 +454,7 @@ MonoBehaviour:
   _isGrounded: 0
   IsDead: 0
   _useAnimationTimingFire: 1
-  _pauseUI: {fileID: 0}
+  _pauseUI: {fileID: 4598107520420781111}
   _onShopPanel: 0
   _attackSound: {fileID: 8300000, guid: 08f78eba48bb21c44ac5a74ca84efc83, type: 3}
   _damageColor: {fileID: 7412526397953319416}
@@ -501,10 +501,10 @@ MonoBehaviour:
   _bossHpText: {fileID: 7718259997047308211}
   _hpIconImage: {fileID: 4086353871794422389}
   _ammoIconImage: {fileID: 7187487341980907176}
-  _skullIconImage: {fileID: 0}
+  _skullIconImage: {fileID: 3386122933869972892}
   _hpIconSprite: {fileID: 21300000, guid: 568fa03f969c4be4ba75a02058f6b387, type: 3}
   _ammoIconSprite: {fileID: 21300000, guid: 44b2a4fa1cde5cc47b0d0ac6aa620914, type: 3}
-  _skullIconSprite: {fileID: 0}
+  _skullIconSprite: {fileID: 21300000, guid: beb9064c2b0377e44b7d944266db9fd3, type: 3}
   _waveText: {fileID: 14073400360354870}
   _goldText: {fileID: 2302203574833053361}
   _enemyLeftText: {fileID: 3764407489633623406}
@@ -521,8 +521,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _animator: {fileID: 590422000361599741}
-  _fireDelaySeconds: 0.3
-  controller: {fileID: 9100000, guid: 23863607a18726047aaa1a8835aa38b6, type: 2}
+  _fireDelaySeconds: 0.2
 --- !u!136 &6054406545752589210
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -1317,6 +1316,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &4598107520420781111 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5395814328571573499, guid: 3cc2a3a900879534183f0b9bc0745c19, type: 3}
+  m_PrefabInstance: {fileID: 8443698337441589452}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &4949455904690180917 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3567401806361771001, guid: 3cc2a3a900879534183f0b9bc0745c19, type: 3}
