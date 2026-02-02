@@ -441,6 +441,8 @@ public class MonsterController : MonoBehaviour, IDamageable
         if (objectType == ObjectType.Boss)
             OnBossDead?.Invoke();
 
+        PlayOneShotSafe(deathClip, 0.04f);
+
         InvokeMonsterData();
         Anim.SetTrigger("Die");
         monsterState = MonsterState.Dead;
@@ -458,7 +460,6 @@ public class MonsterController : MonoBehaviour, IDamageable
         StopAllCoroutines();
         _coKnockback = null;
         agent.enabled = false;
-        PlayOneShotSafe(deathClip, 0.04f);
         Anim.applyRootMotion = true;
     }
     
