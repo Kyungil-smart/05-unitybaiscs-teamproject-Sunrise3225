@@ -48,13 +48,19 @@ public class MineDropSystem : MonoBehaviour
 
     private Vector3 GetRandomPositionAroundDropper()
     {
-        Vector2 randCircle = Random.insideUnitCircle.normalized * Random.Range(_dropMinRange, _dropMaxRange);
-        Vector3 pos = transform.position + new Vector3(randCircle.x, 0, randCircle.y);
+        for (int i = 0; i < 10; i++)
+        {
+            Vector2 rand = Random.insideUnitCircle;
+            if (rand.sqrMagnitude < 0.0001f) continue;
 
-        if (NavMesh.SamplePosition(pos, out NavMeshHit hit, 2f, NavMesh.AllAreas))
-            pos = hit.position;
+            rand = rand.normalized * Random.Range(_dropMinRange, _dropMaxRange);
+            Vector3 pos = transform.position + new Vector3(rand.x, 0, rand.y);
 
-        return pos;
+            if (NavMesh.SamplePosition(pos, out NavMeshHit hit, 3f, NavMesh.AllAreas))
+                return hit.position;
+        }
+
+        return transform.position;
     }
 
     public GameObject GetMine()
@@ -75,5 +81,17 @@ public class MineDropSystem : MonoBehaviour
     {
         mineObj.SetActive(false);
         _mineQPool.Enqueue(mineObj);
+
+        StartCoroutine(RespawnMineAfterDelay(3f));
+    }
+
+    private IEnumerator RespawnMineAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+
+        GameObject newMine = GetMine();
+        if (newMine == null) yield break;
+
+        newMine.transform.position = GetRandomPositionAroundDropper();
     }
 }
