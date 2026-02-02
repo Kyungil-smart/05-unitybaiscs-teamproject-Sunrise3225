@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.Rendering;
 using static Define;
 
@@ -103,45 +104,49 @@ public class BossSkill_ApproachMelee : BossSkill
 
         public override IEnumerator Execute(BossMonster boss)
         {
-            if (boss.Player == null || boss.Player.IsDead) yield break;
+            float time = 0f;
 
-            int rushCount = 3;
-            float speed = boss.rushSpeed * 2.5f;
-            float maxDistance = boss.rushDistance;
+            // NavMesh로 추적
+            boss.monsterState = MonsterState.Chase;
+            boss.agent.isStopped = false;
+            boss.agent.speed = boss.ChaseSpeed; // 러시는 아직 이동 안 하니까 chase로만 붙기
 
-            for (int i = 0; i < rushCount; i++)
+            while (time < boss.approachMaxTime && !boss.IsDead)
             {
-                // 돌진 시작 전 플레이어 방향으로 몸 회전
-                if (boss.Player != null && !boss.Player.IsDead)
-                {
-                    Vector3 lookDir = boss.Player.transform.position - boss.transform.position;
-                    lookDir.y = 0;
-                    if (lookDir != Vector3.zero)
-                        boss.transform.rotation = Quaternion.LookRotation(lookDir);
-                }
+                CharacterController player = boss.Player;
+                if (player == null || player.IsDead) yield break;
 
-                // 돌진 애니메이션 트리거
-                boss.monsterState = MonsterState.AttackBegin;
-                boss.agent.isStopped = true;
-                boss.Anim.SetTrigger("Rush");
+                boss.agent.SetDestination(player.transform.position);
 
-                Vector3 dir = boss.transform.forward; // 몸 방향 기준 돌진
-                float traveled = 0f;
-                while (traveled < maxDistance && !boss.IsDead)
-                {
-                    Vector3 move = dir * speed * Time.deltaTime;
-                    boss.transform.position += move;
-                    traveled += speed * Time.deltaTime;
+                float dist = Vector3.Distance(player.transform.position, boss.transform.position);
+                if (dist <= boss.AttackDistance)
+                    break;
 
-                    boss.DoRushDamage(boss.transform.position, dir, 0.5f, boss.Attack * boss.rushDamageMul);
-                    yield return null;
-                }
-
-                // 돌진 후 잠깐 멈춤
-                boss.monsterState = MonsterState.Chase;
-                boss.agent.isStopped = false;
-                yield return new WaitForSeconds(1.0f); // 다음 돌진 전 짧은 멈춤
+                time += 0.1f;
+                yield return new WaitForSeconds(0.1f);
             }
+
+            //  범위 밖이면 러시 발동 안 하고 종료 (다른 스킬이랑 동일한 느낌)
+            CharacterController p = boss.Player;
+            if (p == null || p.IsDead) yield break;
+            if (Vector3.Distance(p.transform.position, boss.transform.position) > boss.AttackDistance)
+                yield break;
+
+            //  범위 안이면 BossRush 애니메이션만 실행
+            boss.monsterState = MonsterState.AttackBegin;
+            boss.agent.isStopped = true;
+            boss.agent.ResetPath();
+
+            boss.Anim.ResetTrigger("BossRush");
+            boss.Anim.SetTrigger("BossRush");
+
+            // 준비시간(애니 윈드업)만 기다리고 끝
+            if (boss.rushWindup > 0f)
+                yield return new WaitForSeconds(boss.rushWindup);
+
+            // 다시 추적으로 복귀
+            boss.monsterState = MonsterState.Chase;
+            boss.agent.isStopped = false;
         }
     }
 }

@@ -29,11 +29,9 @@ public class BossMonster : MonsterController
     public float slamRadius = 20f;
     public float slamDamageMul = 1.5f;
     [Header("RushAttack")]
-    public float rushWindup = 1f;
-    public float rushDistance = 40f;
-    public float rushSpeed = 30f;
-    public float rushDamageMul = 3f;
-    public float launchForce = 0.1f;
+    public float rushWindup = 2f;
+    public float rushDistance = 5f;
+    public float rushSpeed = 7f;
     [Header("Boss Sound")]
     [SerializeField] public AudioClip skillClip;
     [SerializeField] public AudioClip attackClip;
@@ -410,24 +408,6 @@ public class BossMonster : MonsterController
             {
                 cc.PlayerTakeDamage(damage);
                 return;
-            }
-        }
-    }
-
-    public void DoRushDamage(Vector3 start, Vector3 direction, float distance, float damage)
-    {
-        if (Physics.Raycast(start + Vector3.up, direction, out RaycastHit hit, distance))
-        {
-            CharacterController cc = hit.collider.GetComponentInParent<CharacterController>();
-            if (cc != null && cc.isActiveAndEnabled && !cc.IsDead)
-            {
-                cc.PlayerTakeDamage(damage);
-                Rigidbody rb = hit.collider.GetComponentInParent<Rigidbody>();
-                if (rb != null)
-                {
-                    Vector3 force = (Vector3.up * 0.2f + direction).normalized * launchForce;
-                    rb.AddForce(force, ForceMode.Impulse);
-                }
             }
         }
     }
