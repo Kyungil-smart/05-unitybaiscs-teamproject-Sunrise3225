@@ -40,12 +40,6 @@ public class MonsterSpawn : MonoBehaviour
     private bool _isPlayerInside;
     private bool _onMonsterWave;
     private bool _isFirstWave = true;
-    
-    // 스폰포인트 Text UI 메서드
-    [SerializeField] private Canvas _uiSpawnpointText;
-    private Camera _camera;
-    
-    private MeshRenderer _meshRenderer;
 
     UIManager _ui;
     // Kill을 스포너 기준으로 계산해주는 프로퍼티
@@ -82,6 +76,14 @@ public class MonsterSpawn : MonoBehaviour
             _waveCount = value;
         }
     }
+    
+    // 스폰포인트 Text UI 접근 필드
+    [SerializeField] private Canvas _uiSpawnpointText;
+    private Camera _camera;
+    private MeshRenderer _meshRenderer;
+    
+    // ShopArea 접근 필드
+    [SerializeField] private GameObject _shopArea;
 
     private void Awake()
     {
@@ -102,6 +104,7 @@ public class MonsterSpawn : MonoBehaviour
                 }
                 
                 _collider.enabled = false;
+                _shopArea.SetActive(false);
                 _meshRenderer.enabled = false;
                 _uiSpawnpointText.enabled = false;
                 _isPlayerInside = false;
@@ -180,6 +183,7 @@ public class MonsterSpawn : MonoBehaviour
             
             _onMonsterWave = false;
             _collider.enabled = true;
+            _shopArea.SetActive(true);
             _meshRenderer.enabled = true;
             _uiSpawnpointText.enabled = true;
             _maxSpawnCount = (int)(_maxSpawnCount * 1.5f);

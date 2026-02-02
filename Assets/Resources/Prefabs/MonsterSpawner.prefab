@@ -176,8 +176,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4288782753
-  m_fontColor: {r: 0.6320754, g: 0.6320754, b: 0.6320754, a: 1}
+    rgba: 4278236340
+  m_fontColor: {r: 0.7075472, g: 0.7059736, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -296,8 +296,9 @@ MonoBehaviour:
   _spawnDelay: 1
   _maxSpawnCount: 10
   _waveStartTime: 3
-  _uiSpawnpointText: {fileID: 4813449145215244415}
   _maxWaveCount: 2
+  _uiSpawnpointText: {fileID: 4813449145215244415}
+  _shopArea: {fileID: 0}
 --- !u!135 &3109389069793047190
 SphereCollider:
   m_ObjectHideFlags: 0
