@@ -30,6 +30,7 @@ public class AnimationController : MonoBehaviour
     
     private CharacterController _characterController;
     private Coroutine _fireRoutine;
+    private bool _dieTriggered;
 
     private void Awake()
     {
@@ -42,8 +43,31 @@ public class AnimationController : MonoBehaviour
 
     private void Update()
     {
-        if (_animator != null && _animator.GetBool(_isGameOverHash)) return;
-        
+        if (!_dieTriggered && _characterController != null && _characterController.IsDead)
+        {
+            _dieTriggered = true;
+
+            // (1) 발사 코루틴 중단(있으면)
+            if (_fireRoutine != null)
+            {
+                StopCoroutine(_fireRoutine);
+                _fireRoutine = null;
+            }
+
+            // (2) 발사 Bool 정리 (IsFire가 계속 true면 다른 전이에 영향 가능)
+            if (_animator != null)
+                _animator.SetBool(_isFireHash, false);
+
+            // (3) 죽음 트리거 1회
+            TriggerDie();
+
+            // (4) 죽은 프레임부터는 더 이상 다른 파라미터 갱신하지 않음
+            return;
+        }
+
+        // 죽음 이후 프레임에서도 파라미터 갱신을 막고 싶으면(안전):
+        if (_dieTriggered) return;
+
         UpdateMoveBlendTree();
         UpdateRun();
         UpdateJump();

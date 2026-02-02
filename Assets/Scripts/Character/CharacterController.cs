@@ -300,6 +300,9 @@ public class CharacterController : MonoBehaviour
              StopAllCoroutines();   // 현재 스크립트에서 돌던 AutoFire 포함 즉시 중단
              _isFiring = false;
              GameOver();
+             var movement = GetComponent<CharacterMovement>();
+             if (movement != null) movement.enabled = false;
+             if (_cameraController != null) _cameraController.enabled = false;
 
             #region for Retry
             if (retryUI != null)
@@ -308,8 +311,8 @@ public class CharacterController : MonoBehaviour
                 retryUI.SetActive(true);
             }
             #endregion
-        }
-    }
+         }
+     }
 
      private void Jump()
      {
