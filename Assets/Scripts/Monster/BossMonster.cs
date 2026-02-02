@@ -145,6 +145,23 @@ public class BossMonster : MonsterController
         // 이거 왜 인지는 모르겠지만 ESC는 못막는데 버그를 해결해준다.
         if (isEnding && Input.GetKeyDown(KeyCode.Escape)) return;
         #endregion
+
+        StartCoroutine(CoDeathSlowMotion());
+    }
+    IEnumerator CoDeathSlowMotion()
+    {
+        float prevScale = Time.timeScale;
+        float prevFixed = Time.fixedDeltaTime;
+
+        yield return new WaitForSecondsRealtime(1.0f);
+
+        Time.timeScale = 0.2f; // 슬로우 모션
+        Time.fixedDeltaTime = prevFixed * Time.timeScale;
+
+        yield return new WaitForSecondsRealtime(3.5f);
+
+        Time.timeScale = prevScale;
+        Time.fixedDeltaTime = prevFixed;
     }
     #region Skill Sequence
     IEnumerator CoPatternLoop()
@@ -247,7 +264,6 @@ public class BossMonster : MonsterController
 
         Vector3 camStartPos = cam.transform.position;
         Quaternion camStartRot = cam.transform.rotation;
-
 
         // ���� ����(�ٽ�: updatePosition = false)
         bool prevRootMotion = false;

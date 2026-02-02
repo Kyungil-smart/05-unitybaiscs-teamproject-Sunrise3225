@@ -428,6 +428,7 @@ public class MonsterController : MonoBehaviour, IDamageable
 
         if (hp <= 0)
         {
+            hp = 0;
             IsDead = true;
             monsterSpawn.OnMonsterSpawn();
             OnDead();
