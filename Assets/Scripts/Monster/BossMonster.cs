@@ -34,6 +34,9 @@ public class BossMonster : MonsterController
     public float rushSpeed = 30f;
     public float rushDamageMul = 3f;
     public float launchForce = 0.1f;
+    [Header("Boss Sound")]
+    [SerializeField] public AudioClip skillClip;
+    [SerializeField] public AudioClip attackClip;
 
     Coroutine _coPattern;
     int _patternIndex = 0;

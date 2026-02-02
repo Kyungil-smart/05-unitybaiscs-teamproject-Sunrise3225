@@ -69,7 +69,7 @@ public class MonsterController : MonoBehaviour, IDamageable
     #endregion
 
     [Header("Audio Player")]
-    AudioSource audioPlayer;
+    public AudioSource audioPlayer;
     public AudioClip hitClip;
     public AudioClip deathClip;
 

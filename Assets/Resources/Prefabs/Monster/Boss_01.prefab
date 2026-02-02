@@ -600,6 +600,8 @@ MonoBehaviour:
   rushSpeed: 30
   rushDamageMul: 3
   launchForce: 0.1
+  skillClip: {fileID: 8300000, guid: f0c70845ba05fb449add508f013ddbe2, type: 3}
+  attackClip: {fileID: 0}
   endingUI: {fileID: 6190069043456495518}
 --- !u!114 &3439211739925598100
 MonoBehaviour:

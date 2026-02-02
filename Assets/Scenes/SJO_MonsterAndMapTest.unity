@@ -214,6 +214,9 @@ MonoBehaviour:
   - effectType: 1
     effectObject: {fileID: 100008, guid: ed82d947dc150a24fafea2cfce49424b, type: 3}
     poolSize: 10
+  - effectType: 0
+    effectObject: {fileID: 100004, guid: 8912195b7321ea24ab459fc2211d70a9, type: 3}
+    poolSize: 10
 --- !u!4 &688775338
 Transform:
   m_ObjectHideFlags: 0
@@ -493,7 +496,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2787498028150819556, guid: 9a51330422da0c74ba83bdd5b260ab9c, type: 3}
       propertyPath: _maxHp
-      value: 100
+      value: 1000
       objectReference: {fileID: 0}
     - target: {fileID: 2787498028150819556, guid: 9a51330422da0c74ba83bdd5b260ab9c, type: 3}
       propertyPath: _money

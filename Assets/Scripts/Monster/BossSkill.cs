@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Rendering;
 using static Define;
 
 public abstract class BossSkill
@@ -81,6 +82,12 @@ public class BossSkill_ApproachMelee : BossSkill
             boss.Anim.SetTrigger("Slam");
 
             yield return new WaitForSeconds(boss.slamWindup);
+            Vector3 fxPos = boss.transform.position;
+            Quaternion rot = Quaternion.identity;
+
+            EffectManager.Instance.SpawnEffect(EffectManager.EffectType.BossSkill, fxPos, rot, null);
+            if (boss.audioPlayer != null)
+                boss.audioPlayer.PlayOneShot(boss.skillClip, volumeScale: 1f);
 
             boss.DoAoeDamage(boss.transform.position, boss.slamRadius, boss.Attack * boss.slamDamageMul);
 
