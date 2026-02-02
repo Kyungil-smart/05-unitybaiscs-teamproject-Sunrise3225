@@ -446,6 +446,8 @@ public class MonsterController : MonoBehaviour, IDamageable
 
         InvokeMonsterData();
         Anim.SetTrigger("Die");
+        Destroy(gameObject, 4f);
+
         monsterState = MonsterState.Dead;
         if (objectType == ObjectType.Boss || objectType == ObjectType.EliteMonster)
             return;
