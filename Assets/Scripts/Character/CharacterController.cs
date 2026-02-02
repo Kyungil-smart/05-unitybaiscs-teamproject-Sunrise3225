@@ -48,9 +48,13 @@ public class CharacterController : MonoBehaviour
 
     [SerializeField] private onDamageColor _damageColor; // Hit Flash(맞으면 붉은색)
 
+    #region for Retry
+    [SerializeField] private GameObject retryUI;
+    #endregion
+
     // UI 프로퍼티
     // HP
-     public float CurrentHp { get {return _currentHp; } }
+    public float CurrentHp { get {return _currentHp; } }
      public int MaxHp { get { return _maxHp; } set => _maxHp = value; }
      // Magazine
      public int CurrentMagazine { get {return _currentMagazine; } }
@@ -296,8 +300,16 @@ public class CharacterController : MonoBehaviour
              StopAllCoroutines();   // 현재 스크립트에서 돌던 AutoFire 포함 즉시 중단
              _isFiring = false;
              GameOver();
-         }
-     }
+
+            #region for Retry
+            if (retryUI != null)
+            {
+                retryUI.transform.SetParent(null);
+                retryUI.SetActive(true);
+            }
+            #endregion
+        }
+    }
 
      private void Jump()
      {
