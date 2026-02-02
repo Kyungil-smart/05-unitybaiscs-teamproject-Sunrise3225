@@ -313,7 +313,7 @@ public class CharacterController : MonoBehaviour
     
     public void FireFromTiming()
     {
-        if (_useAnimationTimingFire == false) return;
+        // if (_useAnimationTimingFire == false) return;
         Fire();
     }
 }

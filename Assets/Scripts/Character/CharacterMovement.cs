@@ -39,6 +39,8 @@ public class CharacterMovement : MonoBehaviour
     private float _sprintCooldownRemain;
     private bool _isSprinting;
     private float _sprintMul = 1f;
+    
+    public bool IsSprinting { get { return _isSprinting; } }
 
     // UI 프로퍼티
     // Speed
