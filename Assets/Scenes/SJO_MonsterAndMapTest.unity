@@ -387,9 +387,9 @@ MonoBehaviour:
   _bossPrefab: {fileID: 3572656230780881251, guid: b1bfffb0677d20947a502486dc57e5c1, type: 3}
   _bossSpawnPos: {fileID: 137315188}
   _spawnDelay: 1
-  _maxSpawnCount: 20
+  _maxSpawnCount: 1
   _waveStartTime: 1
-  _maxWaveCount: 10
+  _maxWaveCount: 2
 --- !u!4 &1556436172
 Transform:
   m_ObjectHideFlags: 0
@@ -491,6 +491,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2787498028150819556, guid: 9a51330422da0c74ba83bdd5b260ab9c, type: 3}
+      propertyPath: _maxHp
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 2787498028150819556, guid: 9a51330422da0c74ba83bdd5b260ab9c, type: 3}
+      propertyPath: _money
+      value: 20000
+      objectReference: {fileID: 0}
     - target: {fileID: 2957438258204489918, guid: 9a51330422da0c74ba83bdd5b260ab9c, type: 3}
       propertyPath: m_LocalPosition.x
       value: 6.11
@@ -501,7 +509,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2957438258204489918, guid: 9a51330422da0c74ba83bdd5b260ab9c, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 18.32
+      value: 20.63
       objectReference: {fileID: 0}
     - target: {fileID: 2957438258204489918, guid: 9a51330422da0c74ba83bdd5b260ab9c, type: 3}
       propertyPath: m_LocalRotation.w
@@ -543,10 +551,6 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6373973502576014981, guid: 9a51330422da0c74ba83bdd5b260ab9c, type: 3}
-      propertyPath: _monsterSpawn
-      value: 
-      objectReference: {fileID: 1556436171}
     - target: {fileID: 7152837385196687413, guid: 9a51330422da0c74ba83bdd5b260ab9c, type: 3}
       propertyPath: m_Name
       value: NewPlayer

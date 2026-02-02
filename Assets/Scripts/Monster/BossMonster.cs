@@ -202,7 +202,7 @@ public class BossMonster : MonsterController
     {
         _introPlaying = true;
 
-        Camera cam = Camera.main;
+        Camera cam = Camera.main; // 카메라 세팅
         if (cam == null)
         {
             _introPlaying = false;
@@ -210,17 +210,41 @@ public class BossMonster : MonsterController
             yield break;
         }
 
-        // ī�޶� ���� ��ũ��Ʈ ����(�̰� �־�� ī�޶� �� �ǵ��ư�)
+        CharacterController player = null;
+        if (playerTransform != null)
+            player = playerTransform.GetComponent<CharacterController>();
+
+        if (player == null)
+        {
+            GameObject go = GameObject.FindGameObjectWithTag("Player");
+            if (go != null)
+                player = go.GetComponent<CharacterController>();
+        }
+
+        if (player != null)
+            player.enabled = false; // 캐릭터 공격 비활성화
+
+        // 캠 고정 부분
         CameraController camFollow = cam.GetComponent<CameraController>();
-        if (camFollow == null) 
-            camFollow = cam.GetComponentInParent<CameraController>();
+        if (camFollow == null)
+            camFollow = cam.GetComponentInParent<CameraController>(); // 카메라 정보 가져오기
 
         bool prevCamFollow = (camFollow != null) ? camFollow.enabled : false;
-        if (camFollow != null) 
+        if (camFollow != null)
             camFollow.enabled = false;
+
+        // 캠의 현재 위치 정보 저장
+        Transform camParent = cam.transform.parent;
+        Vector3 camLocalPos = cam.transform.localPosition;
+        Quaternion camLocalRot = cam.transform.localRotation;
+
+        // 부모가 있으면 분리 (안하면 캐릭터를 따라감)
+        if (camParent != null)
+            cam.transform.SetParent(null, true);
 
         Vector3 camStartPos = cam.transform.position;
         Quaternion camStartRot = cam.transform.rotation;
+
 
         // ���� ����(�ٽ�: updatePosition = false)
         bool prevRootMotion = false;
@@ -296,17 +320,17 @@ public class BossMonster : MonsterController
             if (agent.isOnNavMesh) agent.isStopped = prevStopped;
         }
 
-        //  ���� ���� ���� Player Ȯ��
-        GameObject player = GameObject.FindGameObjectWithTag("Player");
-        if (player != null)
+        if (camFollow != null) 
+            camFollow.enabled = prevCamFollow; // 캠 위치를 기존의 캐릭터 위치로 복구
+
+        if (camParent != null)
         {
-            CharacterController pc = player.GetComponent<CharacterController>();
-            if (pc != null)
-            {
-                pc.enabled = true;
-                Player = pc;
-            }
+            cam.transform.SetParent(camParent, true);
+            cam.transform.localPosition = camLocalPos;
+            cam.transform.localRotation = camLocalRot;
         }
+
+        if (player != null) player.enabled = true; // 캐릭터 공격 활성화
 
         _introPlaying = false;
         StartPattern();
