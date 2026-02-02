@@ -579,6 +579,7 @@ MonoBehaviour:
   attackRadius: 0.9
   attackRoot_R: {fileID: 5030465375465987929}
   attackRoot_L: {fileID: 8145655933811896290}
+  audioPlayer: {fileID: 0}
   hitClip: {fileID: 8300000, guid: 46f548eae7497eb4f8bd6d6120ca98a9, type: 3}
   deathClip: {fileID: 8300000, guid: 6a4b5965d4ce8114db727c0d05023a78, type: 3}
   Anim: {fileID: 0}
@@ -595,11 +596,9 @@ MonoBehaviour:
   slamWindup: 1.35
   slamRadius: 5
   slamDamageMul: 1.5
-  rushWindup: 1
-  rushDistance: 40
-  rushSpeed: 30
-  rushDamageMul: 3
-  launchForce: 0.1
+  rushWindup: 2
+  rushDistance: 20
+  rushSpeed: 7
   skillClip: {fileID: 8300000, guid: f0c70845ba05fb449add508f013ddbe2, type: 3}
   attackClip: {fileID: 0}
   endingUI: {fileID: 6190069043456495518}
