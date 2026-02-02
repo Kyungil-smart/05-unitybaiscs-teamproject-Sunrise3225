@@ -2055,6 +2055,7 @@ GameObject:
   - component: {fileID: 6412755294140480135}
   - component: {fileID: -7317302816219613735}
   - component: {fileID: -5820351799584731237}
+  - component: {fileID: 4766340773271096396}
   m_Layer: 9
   m_Name: Monster_01
   m_TagString: Monster
@@ -2304,6 +2305,7 @@ MonoBehaviour:
   attackRadius: 0.25
   attackRoot_R: {fileID: 4048077254118820450}
   attackRoot_L: {fileID: 2632531933954584243}
+  audioPlayer: {fileID: 0}
   hitClip: {fileID: 8300000, guid: 46f548eae7497eb4f8bd6d6120ca98a9, type: 3}
   deathClip: {fileID: 8300000, guid: 6a4b5965d4ce8114db727c0d05023a78, type: 3}
   Anim: {fileID: 0}
@@ -2342,6 +2344,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hudDamageText: {fileID: 565716195302112302, guid: 1ff5516a56bc10d41aa32ce45f8392df, type: 3}
   hudPos: {fileID: 4613059788045555400}
+--- !u!114 &4766340773271096396
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7024364664093282279}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 0
+  outlineColor: {r: 1, g: 1, b: 1, a: 1}
+  outlineWidth: 0
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
 --- !u!1 &7057061280205685587
 GameObject:
   m_ObjectHideFlags: 0
