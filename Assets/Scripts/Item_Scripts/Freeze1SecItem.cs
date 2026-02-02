@@ -6,6 +6,7 @@ using static Define;
 public class Freeze1SecItem : MonoBehaviour
 {
     private MineDropSystem _dropSystem;
+    [SerializeField] private AudioClip _mineSound;
 
     [SerializeField] private CharacterMovement _player;
 
@@ -23,8 +24,12 @@ public class Freeze1SecItem : MonoBehaviour
 
         var player = other.GetComponent<CharacterMovement>();
         if (player == null || !player.enabled) return;
-        
-            StartCoroutine(Freeze1SecMove(player));
+
+        // Grenade3Short
+        AudioSource.PlayClipAtPoint(_mineSound, transform.position, 0.2f);
+        // WFX_SmokeGrenade Blue
+        EffectManager.Instance.SpawnEffect(EffectManager.EffectType.Mine, transform.position, transform.rotation, transform);
+        StartCoroutine(Freeze1SecMove(player));
         
     }
 
