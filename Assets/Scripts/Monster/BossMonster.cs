@@ -40,6 +40,11 @@ public class BossMonster : MonsterController
     bool _doingSkill = false;
     bool _introPlaying = false;
 
+    #region for Ending
+    [SerializeField] private GameObject endingUI;
+    private bool isEnding = false;
+    #endregion
+
     // ��ų ����
     Dictionary<BossSkillType, BossSkill> _skills;
 
@@ -122,6 +127,21 @@ public class BossMonster : MonsterController
     public override void OnDead()
     {
         base.OnDead();
+
+        #region for Ending
+        if (endingUI != null)
+        {
+            endingUI.transform.SetParent(null);
+            endingUI.SetActive(true);
+        }
+
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+
+        isEnding = true;
+        // 이거 왜 인지는 모르겠지만 ESC는 못막는데 버그를 해결해준다.
+        if (isEnding && Input.GetKeyDown(KeyCode.Escape)) return;
+        #endregion
     }
     #region Skill Sequence
     IEnumerator CoPatternLoop()
