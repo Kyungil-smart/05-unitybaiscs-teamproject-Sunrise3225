@@ -21,10 +21,12 @@ public class UIManager : MonoBehaviour
     [Header("Icons (Image Components)")]
     [SerializeField] private Image _hpIconImage;
     [SerializeField] private Image _ammoIconImage;
+    [SerializeField] private Image _skullIconImage;
     
     [Header("Icon Sprites (PNG -> Sprite)")]
     [SerializeField] private Sprite _hpIconSprite;
     [SerializeField] private Sprite _ammoIconSprite;
+    [SerializeField] private Sprite _skullIconSprite;
     
     [Header("UI")]
     [SerializeField] private TextMeshProUGUI _waveText;
@@ -54,6 +56,7 @@ public class UIManager : MonoBehaviour
     {
         if (_hpIconImage != null)   _hpIconImage.sprite = _hpIconSprite;
         if (_ammoIconImage != null) _ammoIconImage.sprite = _ammoIconSprite;
+        if (_skullIconImage != null) _skullIconImage.sprite = _skullIconSprite;
 
         _bossInfoObject.SetActive(false);
     }
@@ -87,7 +90,8 @@ public class UIManager : MonoBehaviour
 
     private void RefreshEnemyLeftUI()
     {
-        _enemyLeftText.text = $"Enemy Left : {_monsterSpawn.AliveMonsterCount}";
+        if (_enemyLeftText == null || _monsterSpawn == null) return;
+        _enemyLeftText.text = $"{_monsterSpawn.AliveMonsterCount}";
     }
     
     private void RefreshMoneyUI()
