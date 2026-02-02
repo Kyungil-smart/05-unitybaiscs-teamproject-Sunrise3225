@@ -5,10 +5,17 @@ using static Define;
 
 public class Freeze1SecItem : MonoBehaviour
 {
+    private MineDropSystem _dropSystem;
+
     [SerializeField] private CharacterMovement _player;
 
     [SerializeField] private ItemType itemType = ItemType.FreezeItem;
     public ItemType ItemType => itemType;
+
+    private void Awake()
+    {
+        _dropSystem = FindObjectOfType<MineDropSystem>();
+    }
 
     private void OnTriggerEnter(Collider other)
     {
@@ -26,6 +33,6 @@ public class Freeze1SecItem : MonoBehaviour
         player.enabled = false;
         yield return new WaitForSeconds(2f);
         player.enabled = true;
-        Destroy(gameObject);
+        _dropSystem.ReturnMine(gameObject);
     }
 }

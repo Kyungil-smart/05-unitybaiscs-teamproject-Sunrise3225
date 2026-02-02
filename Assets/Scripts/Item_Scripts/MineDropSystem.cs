@@ -75,5 +75,10 @@ public class MineDropSystem : MonoBehaviour
     {
         mineObj.SetActive(false);
         _mineQPool.Enqueue(mineObj);
+
+        GameObject newMine = GetMine();
+        if (newMine == null) return;
+
+        mineObj.transform.position = GetRandomPositionAroundDropper();
     }
 }
