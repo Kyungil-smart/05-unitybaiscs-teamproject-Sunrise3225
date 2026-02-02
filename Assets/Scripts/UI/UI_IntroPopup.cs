@@ -15,18 +15,20 @@ public class UI_IntroPopup : MonoBehaviour
     [SerializeField] private GameObject introText1Obj;
     [SerializeField] private GameObject introText2Obj;
     [SerializeField] private GameObject introText3Obj;
+    [SerializeField] private GameObject introText4Obj;
 
     [Header("페이지 인덱스 지정")]
-    [SerializeField] private int text1PageIndex = 0; // 예: Intro1
-    [SerializeField] private int text2PageIndex = 1; // 예: Intro2
-    [SerializeField] private int text3PageIndex = 2; // 예: Intro3
+    [SerializeField] private int text1PageIndex = 0;
+    [SerializeField] private int text2PageIndex = 1;
+    [SerializeField] private int text3PageIndex = 2;
+    [SerializeField] private int text4PageIndex = 3; 
 
 
     Action _onEndCallback;
 
     int _selectedIndex;
     int _startIndex = 0;
-    int _lastIndex = 2; // pages 마지막 인덱스
+    int _lastIndex; // pages 마지막 인덱스
 
     void Awake()
     {
@@ -34,6 +36,10 @@ public class UI_IntroPopup : MonoBehaviour
             clickButton.onClick.AddListener(OnClickImage);
 
         _selectedIndex = _startIndex;
+
+        if (pages != null && pages.Length > 0)
+        _lastIndex = pages.Length - 1;
+
         RefreshUI();
     }
     public void SetInfo(int startIndex, int endIndex, Action onEndCallback)
@@ -55,28 +61,25 @@ public class UI_IntroPopup : MonoBehaviour
         introText1Obj.gameObject.SetActive(false);
         introText2Obj.gameObject.SetActive(false);
         introText3Obj.gameObject.SetActive(false);
+        introText4Obj.gameObject.SetActive(false);
 
         // 인덱스 범위 방어
         if (_selectedIndex < 0) _selectedIndex = 0;
         if (_selectedIndex >= pages.Length) _selectedIndex = pages.Length - 1;
 
-        if (_selectedIndex <= 3)
-        {
-            for (int i = 0; i <= _selectedIndex; i++)
-                pages[i].SetActive(true);
-        }
-        else
-            pages[_selectedIndex].SetActive(true);
+        for (int i = 0; i <= _selectedIndex; i++)
+            pages[i].SetActive(true);
 
         if (_selectedIndex == text1PageIndex && introText1Obj != null) introText1Obj.gameObject.SetActive(true);
         if (_selectedIndex == text2PageIndex && introText2Obj != null) introText2Obj.gameObject.SetActive(true);
         if (_selectedIndex == text3PageIndex && introText3Obj != null) introText3Obj.gameObject.SetActive(true);
+        if (_selectedIndex == text4PageIndex && introText4Obj != null) introText4Obj.gameObject.SetActive(true);
     }
 
     void OnClickImage()
     {
         // 끝났으면 닫는다
-        if (_selectedIndex == _lastIndex)
+        if (_selectedIndex >= _lastIndex)
         {
             Close();
             _onEndCallback?.Invoke();

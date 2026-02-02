@@ -35,7 +35,7 @@ public class SceneManagement : MonoBehaviour
         UI_IntroPopup popup = Instantiate(introPopupPrefab, null);
         popup.gameObject.SetActive(true);
 
-        popup.SetInfo(0, 2, () =>
+        popup.SetInfo(0, 3, () =>
         {
             if (!string.IsNullOrEmpty(gameSceneName))
                 SceneManager.LoadScene(gameSceneName);

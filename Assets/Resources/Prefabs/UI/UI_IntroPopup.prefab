@@ -674,9 +674,11 @@ MonoBehaviour:
   introText1Obj: {fileID: 283875718765608326}
   introText2Obj: {fileID: 7476965406030727879}
   introText3Obj: {fileID: 3472900737231669195}
+  introText4Obj: {fileID: 6470719694634680519}
   text1PageIndex: 0
   text2PageIndex: 1
   text3PageIndex: 2
+  text4PageIndex: 3
 --- !u!1 &5257562030341009669
 GameObject:
   m_ObjectHideFlags: 0
