@@ -133,18 +133,7 @@ public class BossMonster : MonsterController
         StartCoroutine(CoDeathSlowMotion());
 
         #region for Ending
-        if (endingUI != null)
-        {
-            endingUI.transform.SetParent(null);
-            endingUI.SetActive(true);
-        }
-
-        Cursor.lockState = CursorLockMode.None;
-        Cursor.visible = true;
-
-        isEnding = true;
-        // 이거 왜 인지는 모르겠지만 ESC는 못막는데 버그를 해결해준다.
-        if (isEnding && Input.GetKeyDown(KeyCode.Escape)) return;
+        StartCoroutine(ShowEndingUIAfterDelay(3f));
         #endregion
 
         
@@ -392,6 +381,25 @@ public class BossMonster : MonsterController
         return 0f;
     }
     #endregion
+
+    #region for Ending
+    private IEnumerator ShowEndingUIAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+
+        if (endingUI != null)
+        {
+            endingUI.transform.SetParent(null);
+            endingUI.SetActive(true);
+        }
+
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+
+        isEnding = true;
+    }
+    #endregion
+
     public void DoAoeDamage(Vector3 center, float radius, float damage)
     {
         Collider[] cols = Physics.OverlapSphere(center, radius, IsTarget);
