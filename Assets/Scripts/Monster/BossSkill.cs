@@ -87,7 +87,7 @@ public class BossSkill_ApproachMelee : BossSkill
 
             EffectManager.Instance.SpawnEffect(EffectManager.EffectType.BossSkill, fxPos, rot, null);
             if (boss.audioPlayer != null)
-                boss.audioPlayer.PlayOneShot(boss.skillClip, volumeScale: 1f);
+                boss.audioPlayer.PlayOneShot(boss.skillClip, volumeScale: .7f);
 
             boss.DoAoeDamage(boss.transform.position, boss.slamRadius, boss.Attack * boss.slamDamageMul);
 

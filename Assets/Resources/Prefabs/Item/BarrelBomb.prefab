@@ -100,7 +100,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _health: 30
   _explosionRange: 4.5
-  _explosionDamage: 30
+  _explosionDamage: 200
   bombClip: {fileID: 8300000, guid: 419cf7df6a4eb104e94adcf6dd48bd9f, type: 3}
 --- !u!136 &5690743428274097329
 CapsuleCollider:
