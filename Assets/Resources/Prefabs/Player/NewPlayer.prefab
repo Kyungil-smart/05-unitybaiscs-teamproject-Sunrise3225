@@ -714,6 +714,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _moveSpeed: 3.5
+  _walkSpeed: 3
+  _sprintMultiplier: 2
+  _sprintDuration: 2.5
+  _sprintCooldown: 10
 --- !u!114 &2787498028150819556
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -748,7 +752,7 @@ MonoBehaviour:
   IsDead: 0
   _useAnimationTimingFire: 1
   _shopPanel: {fileID: 1465213257241932079}
-  _pauseUI: {fileID: 3834132137945357216, guid: e3d828ab16561df4da46f3f4537e4343, type: 3}
+  _pauseUI: {fileID: 8470523746771567933}
   _damageColor: {fileID: 7412526397953319416}
 --- !u!95 &590422000361599741
 Animator:
@@ -1412,6 +1416,11 @@ PrefabInstance:
 --- !u!224 &8204224673716232699 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 3558838192241721190, guid: e3d828ab16561df4da46f3f4537e4343, type: 3}
+  m_PrefabInstance: {fileID: 4663700226374164125}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &8470523746771567933 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3834132137945357216, guid: e3d828ab16561df4da46f3f4537e4343, type: 3}
   m_PrefabInstance: {fileID: 4663700226374164125}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &5036908102867580251

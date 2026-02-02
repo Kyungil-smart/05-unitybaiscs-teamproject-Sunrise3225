@@ -72,8 +72,6 @@ public class CharacterController : MonoBehaviour
              _rayStartPoint = transform;
 
          _cam = Camera.main;
-         //if (_rayEndPoint == null)
-         //    _rayEndPoint = transform;
      }
 
      private void Start()

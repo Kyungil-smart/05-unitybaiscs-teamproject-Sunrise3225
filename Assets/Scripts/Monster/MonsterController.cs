@@ -433,10 +433,9 @@ public class MonsterController : MonoBehaviour, IDamageable
             OnDead();
             return;
         }
-        if (hitClip != null)
-            audioPlayer.PlayOneShot(hitClip, volumeScale: 0.3f);
+        PlayOneShotSafe(hitClip, 0.3f);
     }
-
+    
     public virtual void OnDead()
     {
         if (objectType == ObjectType.Boss)
@@ -459,7 +458,7 @@ public class MonsterController : MonoBehaviour, IDamageable
         StopAllCoroutines();
         _coKnockback = null;
         agent.enabled = false;
-        if (deathClip != null) audioPlayer.PlayOneShot(deathClip, volumeScale: 0.04f);
+        PlayOneShotSafe(deathClip, 0.04f);
         Anim.applyRootMotion = true;
     }
     
@@ -565,7 +564,12 @@ public class MonsterController : MonoBehaviour, IDamageable
 
         return false;
     }
-
+    void PlayOneShotSafe(AudioClip clip, float volume)
+    {
+        if (clip == null) return;
+        if (audioPlayer == null) return;
+        audioPlayer.PlayOneShot(clip, volume);
+    }
     public void InvokeMonsterData()
     {
         if (this.isActiveAndEnabled && gameObject.activeInHierarchy && objectType != ObjectType.Monster)
