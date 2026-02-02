@@ -31,8 +31,10 @@ public class AnimationController : MonoBehaviour
     private CharacterController _characterController;
     private Coroutine _fireRoutine;
     private bool _dieTriggered;
+    
+    private CharacterMovement _characterMovement;
 
-    [SerializeField] private RuntimeAnimatorController controller;
+    // [SerializeField] private RuntimeAnimatorController controller;
 
     private void Awake()
     {
@@ -43,9 +45,12 @@ public class AnimationController : MonoBehaviour
 
         if (_characterController == null)
             _characterController = GetComponent<CharacterController>();
+        
+        if (_characterMovement == null)
+            _characterMovement = GetComponent<CharacterMovement>();
 
-        if (controller != null)
-            _animator.runtimeAnimatorController = controller;
+        // if (controller != null)
+        //     _animator.runtimeAnimatorController = controller;
     }
 
     private void Update()
@@ -108,11 +113,8 @@ public class AnimationController : MonoBehaviour
             (horizontal > MoveThreshold) || (horizontal < -MoveThreshold) ||
             (vertical   > MoveThreshold) || (vertical   < -MoveThreshold);
 
-        bool shiftHeld =
-            Input.GetKey(KeyCode.LeftShift) ||
-            Input.GetKey(KeyCode.RightShift);
-
-        _animator.SetBool(_isRunHash, shiftHeld && isMoving);
+        bool canRunAnim = (_characterMovement != null && _characterMovement.IsSprinting);
+        _animator.SetBool(_isRunHash, canRunAnim && isMoving);
     }
 
     // 점프 입력 순간 1회 트리거 발동
