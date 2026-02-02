@@ -229,7 +229,7 @@ public class MonsterController : MonoBehaviour, IDamageable
         audioPlayer = GetComponent<AudioSource>();
         _dropItem = GetComponent<DropItem>();
         if (coll != null) coll.enabled = true;
-        Anim = GetComponentInChildren<Animator>();
+        Anim = GetComponentInChildren<Animator>(true);
         // changes color when damaged
         _renderers = GetComponentsInChildren<Renderer>();
         _mpb = new MaterialPropertyBlock();
@@ -443,11 +443,11 @@ public class MonsterController : MonoBehaviour, IDamageable
             OnBossDead?.Invoke();
 
         PlayOneShotSafe(deathClip, 0.04f);
+        Destroy(gameObject, 4f);
 
         InvokeMonsterData();
         Anim.SetTrigger("Die");
-        Destroy(gameObject, 4f);
-
+        
         monsterState = MonsterState.Dead;
         if (objectType == ObjectType.Boss || objectType == ObjectType.EliteMonster)
             return;

@@ -212,7 +212,7 @@ public class CharacterController : MonoBehaviour
 
         if (_attackSound != null)
         {
-            AudioSource.PlayClipAtPoint(_attackSound, transform.position, 3f);
+            AudioSource.PlayClipAtPoint(_attackSound, transform.position, 2f);
         }
 
         _currentMagazine = Mathf.Max(0, _currentMagazine - 1);
