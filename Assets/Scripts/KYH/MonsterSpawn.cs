@@ -40,6 +40,12 @@ public class MonsterSpawn : MonoBehaviour
     private bool _isPlayerInside;
     private bool _onMonsterWave;
     private bool _isFirstWave = true;
+    
+    // 스폰포인트 Text UI 메서드
+    [SerializeField] private Canvas _uiSpawnpointText;
+    private Camera _camera;
+    
+    private MeshRenderer _meshRenderer;
 
     UIManager _ui;
     // Kill을 스포너 기준으로 계산해주는 프로퍼티
@@ -81,11 +87,6 @@ public class MonsterSpawn : MonoBehaviour
     {
         Init();
     }
-    
-    private void Start()
-    {
-        
-    }
 
     private void Update()
     {
@@ -101,13 +102,19 @@ public class MonsterSpawn : MonoBehaviour
                 }
                 
                 _collider.enabled = false;
+                _meshRenderer.enabled = false;
+                _uiSpawnpointText.enabled = false;
                 _isPlayerInside = false;
                 _onMonsterWave = true;
             }
         }
         
         RandomSpawn();
-        
+    }
+
+    private void LateUpdate()
+    {
+        _uiSpawnpointText.transform.forward = _camera.transform.forward;
     }
 
     private void Init()
@@ -115,8 +122,9 @@ public class MonsterSpawn : MonoBehaviour
         _waveCount = 1;
         RandomSpawn();
         _collider = GetComponent<SphereCollider>();
-        if (_ui == null)
-            _ui = FindFirstObjectByType<UIManager>();
+        if (_ui == null) _ui = FindFirstObjectByType<UIManager>();
+        _camera = Camera.main;
+        _meshRenderer = GetComponent<MeshRenderer>();
     }
     
     private void RandomSpawn()
@@ -172,6 +180,8 @@ public class MonsterSpawn : MonoBehaviour
             
             _onMonsterWave = false;
             _collider.enabled = true;
+            _meshRenderer.enabled = true;
+            _uiSpawnpointText.enabled = true;
             _maxSpawnCount = (int)(_maxSpawnCount * 1.5f);
             _spawnCount = 0;
                 
