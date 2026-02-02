@@ -39,9 +39,8 @@ public class CharacterController : MonoBehaviour
      
      [SerializeField] private bool _useAnimationTimingFire = true;
      
-     [SerializeField] private GameObject _shopPanel;
      [SerializeField] private GameObject _pauseUI;
-     private bool _onShopPanel;
+     public bool _onShopPanel;
      private bool _isPaused;
      private Camera _cam;
      private bool _isFiring;
@@ -105,22 +104,6 @@ public class CharacterController : MonoBehaviour
                  Time.timeScale = 1f;
              }
          }
-         
-         if (Input.GetKeyDown(KeyCode.K))
-         {
-             _shopPanel.SetActive(true);
-             _onShopPanel = true;
-             _cameraController._canRotate = false;
-             CursorLock(false);
-         }
-
-         if (_onShopPanel && Input.GetKeyDown(KeyCode.Escape))
-         {
-             _shopPanel.SetActive(false);
-             _onShopPanel = false;
-             _cameraController._canRotate = true;
-             CursorLock(true);
-         }
 
          if (_isPaused || _onShopPanel) return;
          
@@ -152,7 +135,6 @@ public class CharacterController : MonoBehaviour
          _onShopPanel = false;
          
          _money = Mathf.Max(0, _money);
-         if (_shopPanel != null) _shopPanel.SetActive(false);
          if (_pauseUI != null) _pauseUI.SetActive(false);
      }
      
@@ -259,7 +241,7 @@ public class CharacterController : MonoBehaviour
         }
     }
 
-     private void CursorLock(bool isLocked)
+     public void CursorLock(bool isLocked)
      {
          Cursor.lockState = isLocked ? CursorLockMode.Locked : CursorLockMode.None;
          Cursor.visible = !isLocked;
