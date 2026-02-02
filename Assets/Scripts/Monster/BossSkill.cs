@@ -104,66 +104,109 @@ public class BossSkill_ApproachMelee : BossSkill
 
         public override IEnumerator Execute(BossMonster boss)
         {
-            float time = 0f;
+            float rushTriggerDistance = boss.AttackDistance + 3.0f;
 
-            // NavMesh로 추적
-            boss.monsterState = MonsterState.Chase;
-            boss.agent.isStopped = false;
-            boss.agent.speed = boss.ChaseSpeed;
-
-            while (time < boss.approachMaxTime && !boss.IsDead)
+            while (!boss.IsDead)
             {
-                CharacterController player = boss.Player;
-                if (player == null || player.IsDead) yield break;
+                CharacterController p = boss.Player;
+                if (p == null || p.IsDead) yield break;
 
-                boss.agent.SetDestination(player.transform.position);
-
-                float dist = Vector3.Distance(player.transform.position, boss.transform.position);
-                if (dist <= boss.AttackDistance)
+                if (Vector3.Distance(p.transform.position, boss.transform.position) <= rushTriggerDistance)
                     break;
 
-                time += 0.1f;
                 yield return new WaitForSeconds(0.1f);
             }
 
-            //  범위 밖이면 러시 발동 안 하고 종료
-            CharacterController p = boss.Player;
-            if (p == null || p.IsDead) yield break;
-            if (Vector3.Distance(p.transform.position, boss.transform.position) > boss.AttackDistance)
-                yield break;
-
-            //  범위 안이면 BossRush 애니메이션 실행
             boss.monsterState = MonsterState.AttackBegin;
-            boss.agent.isStopped = true;
-            boss.agent.ResetPath();
 
-            boss.Anim.ResetTrigger("BossRush");
-            boss.Anim.SetTrigger("BossRush");
+            if (boss.agent != null && boss.agent.enabled)
+            {
+                boss.agent.isStopped = true;
+                boss.agent.ResetPath();
+            }
 
-            yield return new WaitForSeconds(boss.rushWindup);
+            // Trigger 대신 Bool로 러시 상태 유지
+            if (boss.Anim != null)
+            {
+                boss.Anim.applyRootMotion = false;
+                boss.Anim.SetBool("IsRushing", true);
+            }
 
-            boss.agent.isStopped = true;
-            boss.agent.ResetPath();
-            boss.agent.enabled = false; 
+            // 애니 시작 후 던지는 타이밍
+            float launchDelay = boss.rushLaunchDelay;
+            if (launchDelay > 0f)
+                yield return new WaitForSeconds(launchDelay);
+
+            CharacterController player = boss.Player;
+            if (player == null || player.IsDead || boss.IsDead)
+            {
+                if (boss.Anim != null) boss.Anim.SetBool("IsRushing", false);
+                yield break;
+            }
 
             Rigidbody rb = boss.GetComponent<Rigidbody>();
-            Vector3 dir = (p.transform.position - boss.transform.position);
+            if (rb == null)
+            {
+                if (boss.Anim != null) boss.Anim.SetBool("IsRushing", false);
+                boss.monsterState = MonsterState.Chase;
+                if (boss.agent != null && boss.agent.enabled) boss.agent.isStopped = false;
+                yield break;
+            }
+
+            Vector3 dir = (player.transform.position - boss.transform.position);
             dir.y = 0f;
             dir = dir.sqrMagnitude < 0.0001f ? boss.transform.forward : dir.normalized;
 
-            float traveled = 0f;
-            while (traveled < boss.rushDistance && !boss.IsDead)
+            // agent 끄기 전에 멈춤/리셋
+            if (boss.agent != null && boss.agent.enabled)
             {
-                float step = boss.rushSpeed * Time.deltaTime;
-                rb.MovePosition(rb.position + dir * step);
-                traveled += step;
+                boss.agent.isStopped = true;
+                boss.agent.ResetPath();
+                boss.agent.enabled = false;
+            }
+
+            rb.isKinematic = false;
+            rb.velocity = Vector3.zero;
+
+            // 속도 / 거리 분리
+            float launchSpeed = boss.rushLaunchSpeed;
+            float travelDistance = boss.rushTravelDistance;
+
+            rb.AddForce(dir * launchSpeed, ForceMode.VelocityChange);
+
+            Vector3 start = rb.position;
+            float elapsed = 0f;
+            float maxTime = 1.0f;
+
+            while (!boss.IsDead)
+            {
+                elapsed += Time.deltaTime;
+
+                if (Vector3.Distance(start, rb.position) >= travelDistance)
+                    break;
+
+                if (elapsed >= maxTime)
+                    break;
+
                 yield return null;
             }
 
-            // 러시 끝
-            boss.agent.enabled = true;
-            boss.agent.Warp(boss.transform.position);
-            boss.agent.isStopped = false;
+            // 종료 처리
+            rb.velocity = Vector3.zero;
+            rb.isKinematic = true;
+
+            if (boss.agent != null)
+            {
+                boss.agent.enabled = true;
+                boss.agent.Warp(rb.position);
+                boss.agent.isStopped = false;
+            }
+
+            boss.monsterState = MonsterState.Chase;
+
+            // 러시 애니 종료
+            if (boss.Anim != null)
+                boss.Anim.SetBool("IsRushing", false);
         }
     }
 }

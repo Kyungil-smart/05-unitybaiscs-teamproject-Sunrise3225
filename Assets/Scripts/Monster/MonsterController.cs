@@ -282,6 +282,12 @@ public class MonsterController : MonoBehaviour, IDamageable
     {
         while (!IsDead)
         {
+            if (agent == null || !agent.enabled || !agent.isOnNavMesh)
+            {
+                yield return null;
+                continue;
+            }
+
             if (Player != null && Player.isActiveAndEnabled && !Player.IsDead)
             {
                 if (monsterState == MonsterState.Patrol)
@@ -289,11 +295,7 @@ public class MonsterController : MonoBehaviour, IDamageable
                     monsterState = MonsterState.Chase;
                     agent.speed = chaseSpeed;
                 }
-                if (!agent.enabled || !agent.isOnNavMesh)
-                {
-                    yield return null;
-                    continue;
-                }
+                
                 agent.SetDestination(Player.transform.position);
             }
             else
@@ -396,6 +398,9 @@ public class MonsterController : MonoBehaviour, IDamageable
         }
         if (Player != null && Player.isActiveAndEnabled && !Player.IsDead)
         {
+            if (agent != null && agent.enabled && agent.isOnNavMesh)
+                agent.SetDestination(Player.transform.position);
+
             if (monsterState == MonsterState.Patrol)
                 monsterState = MonsterState.Chase;
 

@@ -7,8 +7,8 @@ public class ATypeMonster : MonsterController
         PatrolSpeed = 4.2f;
         ChaseSpeed = 6.8f;
         Attack = 14f;
-        Hp = 120f;
-        MaxHp = 120f;
+        Hp = 125f;
+        MaxHp = 125f;
         AttackDistance = 1.8f;
     }
 }
