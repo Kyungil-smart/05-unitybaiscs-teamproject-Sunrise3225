@@ -172,6 +172,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 631b347ec6a6b904e9e7b88a795dc578, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _slowMoveVelue: 4
+  _slowMoveVelue: 2
   _debuffTime: 5
   itemType: 3
