@@ -109,7 +109,7 @@ public class BossSkill_ApproachMelee : BossSkill
             // NavMesh로 추적
             boss.monsterState = MonsterState.Chase;
             boss.agent.isStopped = false;
-            boss.agent.speed = boss.ChaseSpeed; // 러시는 아직 이동 안 하니까 chase로만 붙기
+            boss.agent.speed = boss.ChaseSpeed;
 
             while (time < boss.approachMaxTime && !boss.IsDead)
             {
@@ -126,13 +126,13 @@ public class BossSkill_ApproachMelee : BossSkill
                 yield return new WaitForSeconds(0.1f);
             }
 
-            //  범위 밖이면 러시 발동 안 하고 종료 (다른 스킬이랑 동일한 느낌)
+            //  범위 밖이면 러시 발동 안 하고 종료
             CharacterController p = boss.Player;
             if (p == null || p.IsDead) yield break;
             if (Vector3.Distance(p.transform.position, boss.transform.position) > boss.AttackDistance)
                 yield break;
 
-            //  범위 안이면 BossRush 애니메이션만 실행
+            //  범위 안이면 BossRush 애니메이션 실행
             boss.monsterState = MonsterState.AttackBegin;
             boss.agent.isStopped = true;
             boss.agent.ResetPath();
@@ -140,12 +140,29 @@ public class BossSkill_ApproachMelee : BossSkill
             boss.Anim.ResetTrigger("BossRush");
             boss.Anim.SetTrigger("BossRush");
 
-            // 준비시간(애니 윈드업)만 기다리고 끝
-            if (boss.rushWindup > 0f)
-                yield return new WaitForSeconds(boss.rushWindup);
+            yield return new WaitForSeconds(boss.rushWindup);
 
-            // 다시 추적으로 복귀
-            boss.monsterState = MonsterState.Chase;
+            boss.agent.isStopped = true;
+            boss.agent.ResetPath();
+            boss.agent.enabled = false; 
+
+            Rigidbody rb = boss.GetComponent<Rigidbody>();
+            Vector3 dir = (p.transform.position - boss.transform.position);
+            dir.y = 0f;
+            dir = dir.sqrMagnitude < 0.0001f ? boss.transform.forward : dir.normalized;
+
+            float traveled = 0f;
+            while (traveled < boss.rushDistance && !boss.IsDead)
+            {
+                float step = boss.rushSpeed * Time.deltaTime;
+                rb.MovePosition(rb.position + dir * step);
+                traveled += step;
+                yield return null;
+            }
+
+            // 러시 끝
+            boss.agent.enabled = true;
+            boss.agent.Warp(boss.transform.position);
             boss.agent.isStopped = false;
         }
     }

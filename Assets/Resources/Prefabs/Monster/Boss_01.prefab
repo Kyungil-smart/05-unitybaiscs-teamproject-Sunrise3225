@@ -596,9 +596,9 @@ MonoBehaviour:
   slamWindup: 1.35
   slamRadius: 5
   slamDamageMul: 1.5
-  rushWindup: 1
-  rushDistance: 40
-  rushSpeed: 30
+  rushWindup: 2
+  rushDistance: 20
+  rushSpeed: 7
   skillClip: {fileID: 8300000, guid: f0c70845ba05fb449add508f013ddbe2, type: 3}
   attackClip: {fileID: 0}
   endingUI: {fileID: 6190069043456495518}
