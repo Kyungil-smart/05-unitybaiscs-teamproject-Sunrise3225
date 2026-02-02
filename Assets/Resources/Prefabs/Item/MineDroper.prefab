@@ -45,6 +45,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _mine: {fileID: 5675359777314098110, guid: d366d012bc9a499429e467d439a7622d, type: 3}
-  poolSize: 30
+  poolSize: 25
   _dropMaxRange: 50
-  _dropMinRange: 3
+  _dropMinRange: 6
