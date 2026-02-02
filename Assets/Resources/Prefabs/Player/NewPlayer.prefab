@@ -362,7 +362,7 @@ MonoBehaviour:
   GroundLayer:
     serializedVersion: 2
     m_Bits: 128
-  _maxHp: 5000
+  _maxHp: 100
   _attackRange: 100
   _jumpForce: 6
   _attackDamage: 30
@@ -371,7 +371,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 512
   _maxMagazine: 200
-  _money: 50000
+  _money: 0
   _rayHitMask:
     serializedVersion: 2
     m_Bits: 1664
