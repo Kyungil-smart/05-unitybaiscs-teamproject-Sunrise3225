@@ -32,13 +32,20 @@ public class AnimationController : MonoBehaviour
     private Coroutine _fireRoutine;
     private bool _dieTriggered;
 
+    [SerializeField] private RuntimeAnimatorController controller;
+
     private void Awake()
     {
         if (_animator == null)
+        {
             _animator = GetComponent<Animator>();
-        
+        }
+
         if (_characterController == null)
             _characterController = GetComponent<CharacterController>();
+
+        if (controller != null)
+            _animator.runtimeAnimatorController = controller;
     }
 
     private void Update()

@@ -460,6 +460,7 @@ public class MonsterController : MonoBehaviour, IDamageable
         
         StopAllCoroutines();
         _coKnockback = null;
+        coll.enabled = false;
         agent.enabled = false;
         Anim.applyRootMotion = true;
     }
