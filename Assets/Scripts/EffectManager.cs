@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class EffectManager : MonoBehaviour
 {
-    public enum EffectType { Hit, Explosion, Healing, Common, Blood}
+    public enum EffectType { BossSkill, Explosion, Healing, Common, Blood}
 
     private static EffectManager _instance;
     public static EffectManager Instance
