@@ -454,8 +454,9 @@ MonoBehaviour:
   _isGrounded: 0
   IsDead: 0
   _useAnimationTimingFire: 1
-  _pauseUI: {fileID: 4598107520420781111}
+  _pauseUI: {fileID: 0}
   _onShopPanel: 0
+  _attackSound: {fileID: 8300000, guid: 08f78eba48bb21c44ac5a74ca84efc83, type: 3}
   _damageColor: {fileID: 7412526397953319416}
   retryUI: {fileID: 2382204344383571014}
 --- !u!95 &590422000361599741
@@ -1316,11 +1317,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1 &4598107520420781111 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5395814328571573499, guid: 3cc2a3a900879534183f0b9bc0745c19, type: 3}
-  m_PrefabInstance: {fileID: 8443698337441589452}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &4949455904690180917 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3567401806361771001, guid: 3cc2a3a900879534183f0b9bc0745c19, type: 3}

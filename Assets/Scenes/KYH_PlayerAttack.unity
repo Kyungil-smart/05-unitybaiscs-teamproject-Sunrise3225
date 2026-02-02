@@ -317,11 +317,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
---- !u!4 &905928537 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 1978809354600836703, guid: 9a51330422da0c74ba83bdd5b260ab9c, type: 3}
-  m_PrefabInstance: {fileID: 1006553536}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1006028052
 GameObject:
   m_ObjectHideFlags: 0
@@ -398,26 +393,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1465213257241932079, guid: 9a51330422da0c74ba83bdd5b260ab9c, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 2787498028150819556, guid: 9a51330422da0c74ba83bdd5b260ab9c, type: 3}
       propertyPath: _pauseUI
       value: 
       objectReference: {fileID: 179061432}
-    - target: {fileID: 2787498028150819556, guid: 9a51330422da0c74ba83bdd5b260ab9c, type: 3}
-      propertyPath: _fireRate
-      value: 0.2
-      objectReference: {fileID: 0}
-    - target: {fileID: 2787498028150819556, guid: 9a51330422da0c74ba83bdd5b260ab9c, type: 3}
-      propertyPath: _shopPanel
-      value: 
-      objectReference: {fileID: 1021967346}
-    - target: {fileID: 2787498028150819556, guid: 9a51330422da0c74ba83bdd5b260ab9c, type: 3}
-      propertyPath: _rayStartPoint
-      value: 
-      objectReference: {fileID: 905928537}
     - target: {fileID: 2957438258204489918, guid: 9a51330422da0c74ba83bdd5b260ab9c, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -470,10 +449,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: NewPlayer
       objectReference: {fileID: 0}
-    - target: {fileID: 8470523746771567933, guid: 9a51330422da0c74ba83bdd5b260ab9c, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -490,11 +465,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 73a11576cda66cf468c79aada847b868, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1 &1021967346 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5887271833495684212, guid: 4bd1cf4e740440f499ba428c260fcf98, type: 3}
-  m_PrefabInstance: {fileID: 2580557977233451056}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1278629901
 GameObject:
   m_ObjectHideFlags: 0
@@ -762,6 +732,8 @@ MonoBehaviour:
   _maxSpawnCount: 10
   _waveStartTime: 3
   _maxWaveCount: 3
+  _uiSpawnpointText: {fileID: 0}
+  _shopArea: {fileID: 0}
 --- !u!4 &1894091473
 Transform:
   m_ObjectHideFlags: 0
