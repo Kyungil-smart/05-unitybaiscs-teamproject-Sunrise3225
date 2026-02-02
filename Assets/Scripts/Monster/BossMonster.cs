@@ -130,6 +130,7 @@ public class BossMonster : MonsterController
     public override void OnDead()
     {
         base.OnDead();
+        StartCoroutine(CoDeathSlowMotion());
 
         #region for Ending
         if (endingUI != null)
@@ -146,7 +147,7 @@ public class BossMonster : MonsterController
         if (isEnding && Input.GetKeyDown(KeyCode.Escape)) return;
         #endregion
 
-        StartCoroutine(CoDeathSlowMotion());
+        
     }
     IEnumerator CoDeathSlowMotion()
     {
