@@ -235,6 +235,17 @@ public class BossMonster : MonsterController
             if (playerGO != null)
                 player = playerGO.GetComponentInChildren<CharacterController>(true);
         }
+        if (player != null)
+            player.enabled = false;
+
+        if (playerGO != null)
+        {
+            animCtrl = playerGO.GetComponentInChildren<AnimationController>(true);
+            if (animCtrl != null)
+            {
+                animCtrl.enabled = false;
+            }
+        }
 
 
         // 캠 고정 부분

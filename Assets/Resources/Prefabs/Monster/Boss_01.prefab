@@ -596,7 +596,7 @@ MonoBehaviour:
   slamWindup: 1.35
   slamRadius: 5
   slamDamageMul: 1.5
-  rushLaunchDelay: 1
+  rushLaunchDelay: 1.4
   rushLaunchSpeed: 9
   rushTravelDistance: 10
   skillClip: {fileID: 8300000, guid: f0c70845ba05fb449add508f013ddbe2, type: 3}
