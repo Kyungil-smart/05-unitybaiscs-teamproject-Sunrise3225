@@ -1,27 +1,22 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using static Define;
 
 public class AmmoItem : MonoBehaviour
 {
     [Tooltip("탄창수 회복량")]
     [SerializeField] private int _ammoValue;
+    [SerializeField] private ItemType itemType = ItemType.AmmoItem;
+    public ItemType ItemType => itemType;
 
-    //private void OnTriggerEnter(Collider other)
-    //{
-    //    if (!other.CompareTag("Player")) return;
+    private void OnTriggerEnter(Collider other)
+    {
+        if (!other.CompareTag("Player")) return;
 
-    //    무기정보 weapon = other.GetComponent<무기정보>();
+        CharacterController weapon = other.GetComponent<CharacterController>();
 
-    //    if (weapon == null) return;
+        if (weapon == null) return;
 
-    //    weapon.현재탄창수 += _ammoValue;
-
-    //    if (weapon.현재탄창수 > weapon.최대탄창수)
-    //    {
-    //        weapon.현재탄창수 = weapon.최대탄창수;
-    //    }
-
-    //    Destroy(gameObject);
-    //}
+        weapon.RefillAmmo(_ammoValue);
+        Destroy(gameObject);
+    }
 }

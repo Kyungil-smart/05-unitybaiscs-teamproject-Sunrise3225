@@ -1,27 +1,43 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static Define;
 
 public class Freeze1SecItem : MonoBehaviour
 {
-    //[Tooltip("이동기능 스크립트를 추가해 주세요.")]
-    //[SerializeField] private CharacterMovement _player;
+    private MineDropSystem _dropSystem;
+    [SerializeField] private AudioClip _mineSound;
 
-    //private void OnTriggerEnter(Collider other)
-    //{
-    //    if (!other.CompareTag("Player")) return;
+    [SerializeField] private CharacterMovement _player;
 
-    //    if (_player.enabled == true)
-    //    {
-    //        StartCoroutine(Freeze1SecMove());
-    //    }
-    //}
+    [SerializeField] private ItemType itemType = ItemType.FreezeItem;
+    public ItemType ItemType => itemType;
 
-    //private IEnumerator Freeze1SecMove()
-    //{
-    //    _player.enabled = false;
-    //    yield return new WaitForSeconds(1f);
-    //    _player.enabled = true;
-    //    Destroy(gameObject);
-    //}
+    private void Awake()
+    {
+        _dropSystem = FindObjectOfType<MineDropSystem>();
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (!other.CompareTag("Player")) return;
+
+        var player = other.GetComponent<CharacterMovement>();
+        if (player == null || !player.enabled) return;
+
+        // Grenade3Short
+        AudioSource.PlayClipAtPoint(_mineSound, transform.position, 0.2f);
+        // WFX_SmokeGrenade Blue
+        EffectManager.Instance.SpawnEffect(EffectManager.EffectType.Mine, transform.position, transform.rotation, transform);
+        StartCoroutine(Freeze1SecMove(player));
+        
+    }
+
+    private IEnumerator Freeze1SecMove(CharacterMovement player)
+    {
+        player.enabled = false;
+        yield return new WaitForSeconds(2f);
+        player.enabled = true;
+        _dropSystem.ReturnMine(gameObject);
+    }
 }

@@ -15,10 +15,11 @@ public class CameraController : MonoBehaviour
     private float _pitch;
     private Ray _ray;
     private float _rayDistance;
-    private Camera _camera;
+    public Camera _camera;
     private float _maxCameraDistance;
     private float _cameraTargetDistance;
     private float _currentCameraDistance;
+    public bool _canRotate;
 
     private void Awake()
     {
@@ -27,7 +28,10 @@ public class CameraController : MonoBehaviour
 
     private void Update()
     {
-        Rotation();
+        if (_canRotate)
+        {
+            Rotation();
+        }
     }
 
     private void LateUpdate()
@@ -44,6 +48,7 @@ public class CameraController : MonoBehaviour
         _rayDistance = _maxCameraDistance;
         _currentCameraDistance = _maxCameraDistance;
         _cameraTargetDistance = _maxCameraDistance;
+        _canRotate = true;
     }
     
     private void Rotation()

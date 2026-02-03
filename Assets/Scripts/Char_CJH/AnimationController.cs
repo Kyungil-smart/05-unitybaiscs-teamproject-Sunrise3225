@@ -1,36 +1,169 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class AnimationController : MonoBehaviour
 {
     [SerializeField] private Animator _animator;
+    [SerializeField] private float _fireDelaySeconds = 0.12f;
 
-    private readonly int _walkForwardHash = Animator.StringToHash("Walk_Forward");
-    private readonly int _walkBackHash    = Animator.StringToHash("Walk_Back");
-    private readonly int _walkLeftHash    = Animator.StringToHash("Walk_Left");
-    private readonly int _walkRightHash   = Animator.StringToHash("Walk_Right");
+    // Blend Tree 파라미터 (Float)
+    private readonly int _horizontalHash = Animator.StringToHash("Horizontal");
+    private readonly int _verticalHash   = Animator.StringToHash("Vertical");
+
+    // 달리기 전이 파라미터 (Bool)
+    private readonly int _isRunHash      = Animator.StringToHash("IsRun");
+
+    // 점프 전이 파라미터 (Trigger)
+    private readonly int _isJumpHash     = Animator.StringToHash("Jump");
+
+    // 발사 전이 파라미터 (Bool)
+    private readonly int _isFireHash = Animator.StringToHash("IsFire");
+    
+    // 죽음 전이 파라미터 (Trigger)
+    private readonly int _dieHash = Animator.StringToHash("Die");
+    
+    // 목숨 관련 전이 파라미터 (Bool)
+    private readonly int _isGameOverHash = Animator.StringToHash("IsGameOver");
+
+    // 이동 판정 임계값
+    private const float MoveThreshold = 0.01f;
+    
+    private CharacterController _characterController;
+    private Coroutine _fireRoutine;
+    private bool _dieTriggered;
+    
+    private CharacterMovement _characterMovement;
+
+    // [SerializeField] private RuntimeAnimatorController controller;
 
     private void Awake()
     {
         if (_animator == null)
+        {
             _animator = GetComponent<Animator>();
+        }
+
+        if (_characterController == null)
+            _characterController = GetComponent<CharacterController>();
+        
+        if (_characterMovement == null)
+            _characterMovement = GetComponent<CharacterMovement>();
+
+        // if (controller != null)
+        //     _animator.runtimeAnimatorController = controller;
     }
 
     private void Update()
     {
-        float horizontal = Input.GetAxisRaw("Horizontal");
-        float vertical = Input.GetAxisRaw("Vertical");
+        if (!_dieTriggered && _characterController != null && _characterController.IsDead)
+        {
+            _dieTriggered = true;
 
-        // 임계값
-        bool walkForward = vertical > 0.01f;
-        bool walkBack    = vertical < -0.01f;
-        bool walkRight   = horizontal > 0.01f;
-        bool walkLeft    = horizontal < -0.01f;
+            // (1) 발사 코루틴 중단(있으면)
+            if (_fireRoutine != null)
+            {
+                StopCoroutine(_fireRoutine);
+                _fireRoutine = null;
+            }
 
-        _animator.SetBool(_walkForwardHash, walkForward);
-        _animator.SetBool(_walkBackHash, walkBack);
-        _animator.SetBool(_walkLeftHash, walkLeft);
-        _animator.SetBool(_walkRightHash, walkRight);
+            // (2) 발사 Bool 정리 (IsFire가 계속 true면 다른 전이에 영향 가능)
+            if (_animator != null)
+                _animator.SetBool(_isFireHash, false);
+
+            // (3) 죽음 트리거 1회
+            TriggerDie();
+
+            // (4) 죽은 프레임부터는 더 이상 다른 파라미터 갱신하지 않음
+            return;
+        }
+
+        // 죽음 이후 프레임에서도 파라미터 갱신을 막고 싶으면(안전):
+        if (_dieTriggered) return;
+
+        UpdateMoveBlendTree();
+        UpdateRun();
+        UpdateJump();
+        UpdateFire();
     }
+    
+    // 게임 오버
+    public void SetGameOver(bool isGameOver)
+    {
+        if (_animator == null) return;
+        _animator.SetBool(_isGameOverHash, isGameOver);
+    }
+
+    // 이동 입력을 2D Blend Tree 파라미터로 전달
+    private void UpdateMoveBlendTree()
+    {
+        float horizontal = Input.GetAxisRaw("Horizontal");
+        float vertical   = Input.GetAxisRaw("Vertical");
+
+        _animator.SetFloat(_horizontalHash, horizontal);
+        _animator.SetFloat(_verticalHash, vertical);
+    }
+
+    // 이동 중 Shift 입력 시 달리기 상태 전이
+    private void UpdateRun()
+    {
+        float horizontal = _animator.GetFloat(_horizontalHash);
+        float vertical   = _animator.GetFloat(_verticalHash);
+
+        bool isMoving =
+            (horizontal > MoveThreshold) || (horizontal < -MoveThreshold) ||
+            (vertical   > MoveThreshold) || (vertical   < -MoveThreshold);
+
+        bool canRunAnim = (_characterMovement != null && _characterMovement.IsSprinting);
+        _animator.SetBool(_isRunHash, canRunAnim && isMoving);
+    }
+
+    // 점프 입력 순간 1회 트리거 발동
+    private void UpdateJump()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            _animator.SetTrigger(_isJumpHash);
+        }
+    }
+
+    // 사격 입력 시 발사 Bool 발동
+    private void UpdateFire()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+            _animator.SetBool(_isFireHash, true);
+
+            if (_fireRoutine == null)
+                _fireRoutine = StartCoroutine(CoAutoFire());
+        }
+
+        if (Input.GetMouseButtonUp(0))
+        {
+            _animator.SetBool(_isFireHash, false);
+        }
+    }
+    
+    private IEnumerator CoAutoFire()
+    {
+        while (_animator != null && _animator.GetBool(_isFireHash))
+        {
+            yield return new WaitForSeconds(_fireDelaySeconds);
+
+            if (_characterController != null &&
+                _characterController.enabled &&
+                !_characterController.IsDead)
+            {
+                _characterController.FireFromTiming();
+            }
+        }
+
+        _fireRoutine = null;
+    }
+    
+    // 죽음 트리거 발동 (로직은 CharacterController에서)
+    public void TriggerDie()
+    {
+        _animator.SetTrigger(_dieHash);
+    }
+
 }

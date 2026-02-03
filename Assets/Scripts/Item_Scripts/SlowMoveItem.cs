@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static Define;
 
 public class SlowMoveItem : MonoBehaviour
 {
@@ -8,30 +9,19 @@ public class SlowMoveItem : MonoBehaviour
     [SerializeField] private float _slowMoveVelue;
     [Tooltip("디버프 지속시간을 넣어주세요.")]
     [SerializeField] private float _debuffTime;
-    private bool _isSlowMove = false;
 
-    //private void OnTriggerEnter(Collider other)
-    //{
-    //    if (!other.CompareTag("Player")) return;
+    [SerializeField] private ItemType itemType = ItemType.SlowItem;
+    public ItemType ItemType => itemType;
 
-    //    플레이어능력치 player = other.GetComponent<플레이어능력치>();
+    private void OnTriggerEnter(Collider other)
+    {
+        if (!other.CompareTag("Player")) return;
 
-    //    if (player == null) return;
+        CharacterMovement player = other.GetComponent<CharacterMovement>();
+        if (player == null) return;
 
-    //    if (!_isSlowMove)
-    //    {
-    //        StartCoroutine(SlowMove());
-    //    }
+        player.ApplySlowMove(_slowMoveVelue, _debuffTime);
 
-    //    Destroy(gameObject);
-    //}
-
-    //private IEnumerator SlowMove()
-    //{
-    //    _isSlowMove = true;
-    //    player.플레이어스피드 -= _slowMoveVelue;
-    //    yield return new WaitForSeconds(_debuffTime);
-    //    player.플레이어스피드 += _slowMoveVelue;
-    //    _isSlowMove = false;
-    //}
+        Destroy(gameObject);
+    }
 }

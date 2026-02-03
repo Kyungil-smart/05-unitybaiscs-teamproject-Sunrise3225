@@ -2,60 +2,115 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 using Unity.VisualScripting;
 
 public class UIManager : MonoBehaviour
 {
+    [Header("Components")]
     [SerializeField] private CharacterController _characterController;
-    [SerializeField] private ScoreManager _scoreManager;
-    [SerializeField] private EnemyKillCounter _enemyKillCounter;
+    [SerializeField] private MonsterSpawn _monsterSpawn;
+    [SerializeField] private GameObject _bossInfoObject;
+    [SerializeField] private GameObject _bossHPSliderObject;
     
+    [Header("Texts")]
     [SerializeField] private TextMeshProUGUI _hpText;
     [SerializeField] private TextMeshProUGUI _magazineText;
-    [SerializeField] private TextMeshProUGUI _lifeText;
-    [SerializeField] private TextMeshProUGUI _killCountText;
-    [SerializeField] private TextMeshProUGUI _scoreText;
+    [SerializeField] private TextMeshProUGUI _bossHpText;
     
+    [Header("Icons (Image Components)")]
+    [SerializeField] private Image _hpIconImage;
+    [SerializeField] private Image _ammoIconImage;
+    [SerializeField] private Image _skullIconImage;
+    
+    [Header("Icon Sprites (PNG -> Sprite)")]
+    [SerializeField] private Sprite _hpIconSprite;
+    [SerializeField] private Sprite _ammoIconSprite;
+    [SerializeField] private Sprite _skullIconSprite;
+    
+    [Header("UI")]
     [SerializeField] private TextMeshProUGUI _waveText;
     [SerializeField] private TextMeshProUGUI _goldText;
     [SerializeField] private TextMeshProUGUI _enemyLeftText;
 
+    private Slider _bossHpSlider;
+
+    private void Awake()
+    {
+        ApplyIconSprites();
+
+        if (_bossHPSliderObject != null)
+        {
+            _bossHpSlider = _bossHPSliderObject.GetComponent<Slider>();
+            _bossHpSlider.minValue = 0f;
+            _bossHpSlider.maxValue = 1f;
+        }
+    }
+    
     private void Update()
     {
         RefreshAll();
+    }
+    
+    private void ApplyIconSprites()
+    {
+        if (_hpIconImage != null)   _hpIconImage.sprite = _hpIconSprite;
+        if (_ammoIconImage != null) _ammoIconImage.sprite = _ammoIconSprite;
+        if (_skullIconImage != null) _skullIconImage.sprite = _skullIconSprite;
+
+        _bossInfoObject.SetActive(false);
     }
     
     private void RefreshAll()
     {
         RefreshHpUI();
         RefreshMagazineUI();
-        RefreshLifeUI();
-        RefreshKillCountUI();
-        RefreshScoreUI();
+        
+        RefreshWaveUI();
+        RefreshEnemyLeftUI();
+        RefreshMoneyUI();
     }
     
     private void RefreshHpUI()
     {
-        _hpText.text = $"HP : {(int)_characterController.CurrentHp}";
+        if (_hpText == null || _characterController == null) return;
+        _hpText.text = $"{(int)_characterController.CurrentHp}";
     }
     
     private void RefreshMagazineUI()
     {
-        _magazineText.text = $"AMMO : {_characterController.CurrentMagazine} / {_characterController.MaxMagazine}";
+        if (_magazineText == null || _characterController == null) return;
+        _magazineText.text = $"{_characterController.CurrentMagazine} / {_characterController.MaxMagazine}";
+    }
+    
+    private void RefreshWaveUI()
+    {
+        _waveText.text = $"Wave : {_monsterSpawn.WaveCount}";
     }
 
-    private void RefreshLifeUI()
+    private void RefreshEnemyLeftUI()
     {
-        _lifeText.text = $"LIFE : {_characterController.PlayerLife}";
+        if (_enemyLeftText == null || _monsterSpawn == null) return;
+        _enemyLeftText.text = $"{_monsterSpawn.AliveMonsterCount}";
+    }
+    
+    private void RefreshMoneyUI()
+    {
+        _goldText.text = $"Money : {_characterController.Money}";
     }
 
-    private void RefreshKillCountUI()
+    public void MonsterInfoUpdate(MonsterController monster)
     {
-        _killCountText.text = $"{_enemyKillCounter.Counter} : Kill";
-    }
-
-    private void RefreshScoreUI()
-    {
-        _scoreText.text = $"Score : {_scoreManager.Score}";
+        if (monster.objectType == Define.ObjectType.Boss)
+        {
+            if (monster.monsterState != Define.MonsterState.Dead)
+            {
+                _bossInfoObject.SetActive(true);
+                _bossHPSliderObject.GetComponent<Slider>().value = monster.Hp / monster.MaxHp;
+                _bossHpText.text = $"{monster.Hp} / {monster.MaxHp}";
+            }
+            else
+                _bossInfoObject.SetActive(false);
+        }
     }
 }

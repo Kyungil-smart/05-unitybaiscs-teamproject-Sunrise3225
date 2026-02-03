@@ -1,32 +1,109 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
+using static Define;
 
-// ÀÌ ½ºÅ©¸³Æ®¸¦ ÄÄÆ÷³ÍÆ®ÇÑ ¿ÀºêÁ§Æ®¸¦ ¸ó½ºÅÍ ÇÁ¸®ÆéÀÇ ÀÚ½Ä ¿ÀºêÁ§Æ®·Î µî·Ï
-// Á×À½ °ü·Ã ÇÔ¼ö ½ºÅ©¸³Æ®¿¡¼­
+// ì´ ìŠ¤í¬ë¦½íŠ¸ë¥¼ ì»´í¬ë„ŒíŠ¸í•œ ì˜¤ë¸Œì íŠ¸ë¥¼ ëª¬ìŠ¤í„° í”„ë¦¬í©ì˜ ìì‹ ì˜¤ë¸Œì íŠ¸ë¡œ ë“±ë¡
+// ì£½ìŒ ê´€ë ¨ í•¨ìˆ˜ ìŠ¤í¬ë¦½íŠ¸ì—ì„œ
 // [SerializeField] private DropItem _dropItem;
-// ÇÊµå·Î ¼±¾ğ
-// ¸ó½ºÅÍ Á×À½ °ü·Ã ÇÔ¼ö¿¡(È¤Àº ÄÚµå¿¡) 
+// í•„ë“œë¡œ ì„ ì–¸
+// ëª¬ìŠ¤í„° ì£½ìŒ ê´€ë ¨ í•¨ìˆ˜ì—(í˜¹ì€ ì½”ë“œì—) 
 // _dropItem.MakeDropItem();
-// ¸Ş¼­µå¸¦
+// ë©”ì„œë“œë¥¼
 // Destroy();
-// Àü¿¡ È£Ãâ ÇÏµµ·Ï ÇÏ¸é ÀÛµ¿ÇÒ °ÍÀ¸·Î ¿¹»ó.
+// ì „ì— í˜¸ì¶œ í•˜ë„ë¡ í•˜ë©´ ì‘ë™í•  ê²ƒìœ¼ë¡œ ì˜ˆìƒ.
 
 public class DropItem : MonoBehaviour
 {
-    [Tooltip("µå¶øµÉ ¾ÆÀÌÅÛÀÇ ¿ÀºêÁ§Æ®¸¦ µî·ÏÇØ ÁÖ¼¼¿ä.")]
-    [SerializeField] private GameObject[] _itemList;
-    [Tooltip("¾ÆÀÌÅÛ µå¶ø È®·üÀ» Á¶Á¤ÇØ ÁÖ¼¼¿ä.")]
-    [SerializeField][Range(0, 1)] private float _dropPercent;
-    private int _inDex;
+    [SerializeField] private GameObject _goldPrefab; // ëˆì€ ë¬´ì¡°ê±´ ë“œë
 
-    public void MakeDropItem()
+    [Tooltip("ë“œëë  ì•„ì´í…œì˜ ì˜¤ë¸Œì íŠ¸ë¥¼ ë“±ë¡í•´ ì£¼ì„¸ìš”.")]
+    [SerializeField] private GameObject[] _itemList;
+    [Tooltip("ì•„ì´í…œ ë“œë í™•ë¥ ì„ ì¡°ì •í•´ ì£¼ì„¸ìš”.")]
+    [SerializeField][Range(0, 1)] private float _dropPercent;
+
+    public void MakeDropItem(Vector3 pos)
     {
-        if (Random.value <= _dropPercent)
+        pos.y += 0.2f;
+
+        if (_goldPrefab != null)
         {
-            _inDex = Random.Range(0, _itemList.Length);
-            Instantiate(_itemList[_inDex], transform.position, Quaternion.identity);
+            GameObject gold = Instantiate(_goldPrefab, pos, Quaternion.identity);
+            AdjustDropY(gold, pos);
         }
+
+        if (Random.value > _dropPercent)
+            return;
+
+        ItemType type = GetRandomItem();
+
+        GameObject prefab = FindPrefabType(type);
+        if (prefab == null)
+            return; // í•´ë‹¹ íƒ€ì… í”„ë¦¬íŒ¹ ì—†ìœ¼ë©´ ê·¸ëƒ¥ ìŠ¤í‚µ
+
+        GameObject item = Instantiate(prefab, pos, Quaternion.identity);
+        AdjustDropY(item, pos);
+    }
+
+    private void AdjustDropY(GameObject obj, Vector3 basePos)
+    {
+        Collider col = obj.GetComponent<Collider>();
+        if (col == null) return;
+
+        basePos.y += col.bounds.extents.y;
+        obj.transform.position = basePos;
+    }
+
+    private GameObject FindPrefabType(ItemType type)
+    {
+        if (_itemList == null) return null;
+
+        for (int i = 0; i < _itemList.Length; i++)
+        {
+            GameObject prefab = _itemList[i];
+            if (prefab == null) continue;
+
+            // í”„ë¦¬íŒ¹ì— ë¶™ì–´ìˆëŠ” ì•„ì´í…œ ìŠ¤í¬ë¦½íŠ¸ì—ì„œ ItemType í”„ë¡œí¼í‹° ì½ê¸°
+            AmmoItem ammo = prefab.GetComponent<AmmoItem>();
+            if (ammo != null && ammo.ItemType == type) 
+                return prefab;
+
+            HealItem heal = prefab.GetComponent<HealItem>();
+            if (heal != null && heal.ItemType == type) 
+                return prefab;
+
+            Freeze1SecItem freeze = prefab.GetComponent<Freeze1SecItem>();
+            if (freeze != null && freeze.ItemType == type) 
+                return prefab;
+
+            FastMoveItem fast = prefab.GetComponent<FastMoveItem>();
+            if (fast != null && fast.ItemType == type)
+                return prefab;
+
+            SlowMoveItem slow = prefab.GetComponent<SlowMoveItem>();
+            if (slow != null && slow.ItemType == type)
+                return prefab;
+        }
+
+        return null;
+    }
+
+    public static ItemType GetRandomItem()
+    {
+        float randomValue = Random.value;
+        float healChance = ITEM_DROP_PROB[(int)ItemType.HealItem];
+        float ammoChance = ITEM_DROP_PROB[(int)ItemType.AmmoItem] + healChance;
+        float fastChance = ITEM_DROP_PROB[(int)ItemType.FastItem] + ammoChance;
+        float slowChance = ITEM_DROP_PROB[(int)ItemType.SlowItem] + fastChance;
+        float freezeChance = ITEM_DROP_PROB[(int)ItemType.FreezeItem] + slowChance;
+
+        if (randomValue < healChance)
+            return ItemType.HealItem;
+        else if (randomValue < ammoChance)
+            return ItemType.AmmoItem;
+        else if (randomValue < fastChance)
+            return ItemType.FastItem;
+        else if (randomValue < slowChance)
+            return ItemType.SlowItem;
+        else
+            return ItemType.FreezeItem;
     }
 }

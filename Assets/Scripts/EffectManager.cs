@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class EffectManager : MonoBehaviour
 {
-    public enum EffectType { Hit, Explosion, Healing }
+    public enum EffectType { BossSkill, Explosion, Healing, Common, Blood, Mine }
 
     private static EffectManager _instance;
     public static EffectManager Instance
@@ -72,7 +72,7 @@ public class EffectManager : MonoBehaviour
     /// 풀에 여유가 없으면 새로 생성합니다.
     /// </summary>
     /// <param name="effectType">EffectManager.EffectType.(이펙트 타입)</param>
-    public GameObject SpawnEffect(EffectType effectType, Vector3 position, Quaternion rotation)
+    public GameObject SpawnEffect(EffectType effectType, Vector3 position, Quaternion rotation, Transform parent = null)
     {
         if (!_effectPools.ContainsKey(effectType)) return null;
 
@@ -90,15 +90,29 @@ public class EffectManager : MonoBehaviour
 
         effect.transform.position = position;
         effect.transform.rotation = rotation;
+        if (parent != null)
+            effect.transform.SetParent(parent);
+
         effect.SetActive(true);
+
+        StartCoroutine(CoReturnEffect(effectType, effect, 2.5f));
         return effect;
     }
 
     public void ReturnEffect(EffectType effectType, GameObject effect)
     {
         if (!_effectPools.ContainsKey(effectType)) return;
+        if (effect == null) return;
 
+        effect.transform.SetParent(transform);
         effect.SetActive(false);
         _effectPools[effectType].Enqueue(effect);
+    }
+
+    IEnumerator CoReturnEffect(EffectType type, GameObject effect, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        if (effect != null)
+            ReturnEffect(type, effect);
     }
 }
