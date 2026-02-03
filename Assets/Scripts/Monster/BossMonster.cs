@@ -42,7 +42,6 @@ public class BossMonster : MonsterController
     bool _introPlaying = false;
 
     AnimationController animCtrl = null;
-    bool prevAnimCtrlEnabled = false;
 
     #region for Ending
     [SerializeField] private GameObject endingUI;
@@ -221,28 +220,22 @@ public class BossMonster : MonsterController
             yield break;
         }
 
+        GameObject playerGO = null;
+
         CharacterController player = null;
         if (playerTransform != null)
-            player = playerTransform.GetComponent<CharacterController>();
+        {
+            playerGO = playerTransform.gameObject;
+            player = playerTransform.GetComponentInChildren<CharacterController>(true);
+        }
 
         if (player == null)
         {
-            GameObject go = GameObject.FindGameObjectWithTag("Player");
-            if (go != null)
-                player = go.GetComponent<CharacterController>();
+            playerGO = GameObject.FindGameObjectWithTag("Player");
+            if (playerGO != null)
+                player = playerGO.GetComponentInChildren<CharacterController>(true);
         }
 
-        if (player != null)
-        {
-            player.enabled = false; // 캐릭터 공격 비활성화
-            animCtrl = player.GetComponent<AnimationController>();
-            if (animCtrl != null)
-            {
-                prevAnimCtrlEnabled = animCtrl.enabled;
-                animCtrl.enabled = false;
-            }
-        }
-            
 
         // 캠 고정 부분
         CameraController camFollow = cam.GetComponent<CameraController>();
@@ -350,7 +343,7 @@ public class BossMonster : MonsterController
         }
 
         if (player != null) player.enabled = true; // 캐릭터 공격 활성화
-        if (animCtrl != null) animCtrl.enabled = prevAnimCtrlEnabled;
+        if (animCtrl != null) animCtrl.enabled = true;
 
         _introPlaying = false;
         StartPattern();

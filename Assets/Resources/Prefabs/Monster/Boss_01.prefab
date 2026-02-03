@@ -586,7 +586,7 @@ MonoBehaviour:
   agent: {fileID: 0}
   monsterSpawn: {fileID: 0}
   randomPattern: 0
-  pattern: 02000000
+  pattern: 02000000000000000100000001000000000000000000000001000000020000000000000000000000
   roarStateName: BossRoaring
   introCamDistance: 6
   introCamHeight: 2.2
@@ -596,8 +596,8 @@ MonoBehaviour:
   slamWindup: 1.35
   slamRadius: 5
   slamDamageMul: 1.5
-  rushLaunchDelay: 2
-  rushLaunchSpeed: 8
+  rushLaunchDelay: 1
+  rushLaunchSpeed: 9
   rushTravelDistance: 10
   skillClip: {fileID: 8300000, guid: f0c70845ba05fb449add508f013ddbe2, type: 3}
   attackClip: {fileID: 0}

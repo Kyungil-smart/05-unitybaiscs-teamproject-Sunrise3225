@@ -403,8 +403,6 @@ public class MonsterController : MonoBehaviour, IDamageable
 
             if (monsterState == MonsterState.Patrol)
                 monsterState = MonsterState.Chase;
-
-            agent.SetDestination(Player.transform.position);
         }
         // Change color when receiving monster damage
         if (_damageCoroutine != null)

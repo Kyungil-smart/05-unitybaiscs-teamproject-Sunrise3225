@@ -133,9 +133,8 @@ public class BossSkill_ApproachMelee : BossSkill
             }
 
             // 애니 시작 후 던지는 타이밍
-            float launchDelay = boss.rushLaunchDelay;
-            if (launchDelay > 0f)
-                yield return new WaitForSeconds(launchDelay);
+            if (boss.rushLaunchDelay > 0f)
+                yield return new WaitForSeconds(boss.rushLaunchDelay);
 
             CharacterController player = boss.Player;
             if (player == null || player.IsDead || boss.IsDead)
