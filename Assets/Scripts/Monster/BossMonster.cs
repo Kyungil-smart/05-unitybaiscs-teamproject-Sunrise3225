@@ -58,8 +58,8 @@ public class BossMonster : MonsterController
         PatrolSpeed = 2.5f;
         ChaseSpeed = 4.2f;
         Attack = 50f;
-        Hp = 22000f;
-        MaxHp = 22000f;
+        Hp = 25000f;
+        MaxHp = 25000f;
         AttackDistance = 3.0f;
     }
 
