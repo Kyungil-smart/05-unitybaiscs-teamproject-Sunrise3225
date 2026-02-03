@@ -55,11 +55,11 @@ public class BossMonster : MonsterController
 
     protected override void InitStats()
     {
-        PatrolSpeed = 2.5f;
-        ChaseSpeed = 4.2f;
+        PatrolSpeed = 5.5f;
+        ChaseSpeed = 6.5f;
         Attack = 50f;
-        Hp = 25000f;
-        MaxHp = 25000f;
+        Hp = 40000f;
+        MaxHp = 40000f;
         AttackDistance = 3.0f;
     }
 
